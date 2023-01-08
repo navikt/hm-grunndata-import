@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.register
+package no.nav.hm.grunndata.importapi
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
