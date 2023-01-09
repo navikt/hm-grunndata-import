@@ -1,7 +1,6 @@
 package no.nav.hm.grunndata.importapi.rest
 
 import no.nav.hm.grunndata.importapi.rest.transfers.AgreementInfo
-import no.nav.hm.grunndata.importapi.rest.transfers.Description
 import no.nav.hm.grunndata.importapi.rest.transfers.Media
 import no.nav.hm.grunndata.importapi.rest.transfers.MediaSourceType
 import no.nav.hm.grunndata.importapi.rest.transfers.MediaType
@@ -33,16 +32,11 @@ data class ProductDTO (
     val expired: LocalDateTime?=null,
     val agreementInfo: AgreementInfo?,
     val hasAgreement: Boolean = (agreementInfo!=null),
-    val createdBy: String = no.nav.hm.grunndata.importapi.rest.transfers.IMPORT,
-    val updatedBy: String = no.nav.hm.grunndata.importapi.rest.transfers.IMPORT
+    val createdBy: String = IMPORT,
+    val updatedBy: String = IMPORT
 )
 
 const val IMPORT = "IMPORT"
-
-data class Description(val name: String?=null,
-                       val shortDescription: String?=null,
-                       val text: String?=null)
-
 
 data class AgreementInfo (
     val id: Long,
