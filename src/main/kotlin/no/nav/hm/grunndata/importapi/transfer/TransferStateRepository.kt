@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.importapi.rest.transfers
+package no.nav.hm.grunndata.importapi.transfer
 
 import io.micronaut.data.annotation.Repository
 import io.micronaut.data.repository.kotlin.CoroutineCrudRepository

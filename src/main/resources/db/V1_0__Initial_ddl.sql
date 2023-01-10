@@ -15,17 +15,17 @@ CREATE TABLE IF NOT EXISTS supplier_v1 (
 CREATE TABLE IF NOT EXISTS transferstate_v1 (
     id uuid NOT NULL PRIMARY KEY,
     supplier_id uuid NOT NULL,
-    supplier_ref VARCHAR(255) NOT NULL,
+    transfer_ref VARCHAR(255) NOT NULL,
     md5 VARCHAR(32) NOT NULL,
     items INTEGER NOT NULL,
     type VARCHAR(32) NOT NULL,
-    payload BLOB NOT NULL,
+    json_payload JSONB NOT NULL,
     status VARCHAR(32) NOT NULL,
     message VARCHAR(255),
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(md5),
-    UNIQUE(supplierId, supplierRef),
+    UNIQUE(supplierId, transfer_ref),
     CONSTRAINT fk_supplier_transferstate FOREIGN KEY (supplier_id) REFERENCES supplier_v1(id)
 );
 
