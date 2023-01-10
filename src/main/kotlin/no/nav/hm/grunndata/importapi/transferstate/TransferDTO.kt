@@ -1,14 +1,12 @@
-package no.nav.hm.grunndata.importapi.transfer
+package no.nav.hm.grunndata.importapi.transferstate
 
 import java.time.LocalDateTime
 import java.util.*
 
-data class ProductDTO (
-    val id: UUID = UUID.randomUUID(),
-    val supplierId: UUID,
+data class ProductTransferDTO (
     val title: String, // Iphone 14 Pro Max (256Gb) Blå
     val name: String, // Iphone 14 Pro Max
-    val attributes: HashMap<String, String>,
+    val attributes: Map<String, String>,
     val HMSArtNr: String?=null,
     val identifier: String?=null,
     val supplierRef: String,
@@ -19,14 +17,10 @@ data class ProductDTO (
     val compatibleWith: List<String> = emptyList(), // if accessory/sparepart. The names of products that this is designed for.
     val techData: List<TechData> = emptyList(),
     val media: List<Media> = emptyList(),
-    val created: LocalDateTime = LocalDateTime.now(),
-    val updated: LocalDateTime = LocalDateTime.now(),
     val published: LocalDateTime?=null,
     val expired: LocalDateTime?=null,
-    val agreementInfo: AgreementInfo?,
+    val agreementInfo: AgreementInfo?=null,
     val hasAgreement: Boolean = (agreementInfo!=null),
-    val createdBy: String = IMPORT,
-    val updatedBy: String = IMPORT
 )
 
 // TODO add more later

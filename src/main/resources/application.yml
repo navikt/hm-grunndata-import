@@ -55,8 +55,8 @@ datasources:
   default:
     url: ${DB_JDBC_URL:`jdbc:tc:postgresql:14:///gdb?TC_INITSCRIPT=file:src/test/resources/postgres/postgres-init.sql`}
     driverClassName: ${DB_DRIVER:org.testcontainers.jdbc.ContainerDatabaseDriver}
-    username: ${DB_USERNAME:import}
-    password: ${DB_PASSWORD:import}
+    username: ${DB_USERNAME:importapi}
+    password: ${DB_PASSWORD:importapi}
     maximum-pool-size: 8
     minimum-idle: 0
     pool-name: default

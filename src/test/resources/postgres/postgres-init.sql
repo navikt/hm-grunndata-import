@@ -1,2 +1,2 @@
-CREATE USER register with password 'import';
-CREATE DATABASE register owner 'import';
+CREATE USER importapi with password 'importapi';
+CREATE DATABASE importapi owner importapi;
