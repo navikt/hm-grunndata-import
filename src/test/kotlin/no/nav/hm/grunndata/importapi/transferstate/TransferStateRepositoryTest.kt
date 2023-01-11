@@ -21,7 +21,7 @@ class TransferStateRepositoryTest(private val transferStateRepository: TransferS
     @Test
     fun crudRepositoryTest() {
         val supplier = Supplier(id= supplierId, identifier = "medema_as", jwtid = UUID.randomUUID())
-        val product = ProductTransferDTO(title = "", name = "",  isoCategory = "12230301" , HMSArtNr = "250464",
+        val product = ProductTransferDTO(title = "Mini Crosser X1 4W", name = "Mini Crosser X1",  isoCategory = "12230301" , HMSArtNr = "250464",
             supplierRef = "mini-crosser-x1-x2-4w", seriesId = "mini-crosser-x1-x2",
             attributes = mapOf(Pair("manufacturer", "Medema AS"),
                 Pair("shortdescription", "4-hjuls scooter med manuell regulering av seteløft, ryggvinkel og seterotasjon. Leveres som standard med Ergo2 sitteenhet."),
@@ -44,6 +44,16 @@ class TransferStateRepositoryTest(private val transferStateRepository: TransferS
             savedSup.id shouldBe supplierId
             val saved = transferStateRepository.save(transfer)
             saved.id.shouldNotBeNull()
+
+            val db = transferStateRepository.findById(saved.id)
+            db.shouldNotBeNull()
+            db.json_payload.shouldNotBeNull()
+            db.json_payload.title shouldBe "Mini Crosser X1 4W"
+
+            transferStateRepository.update(db.copy(status = Status.DONE))
+            val done = transferStateRepository.findById(saved.id)
+            done.shouldNotBeNull()
+            done.status shouldBe Status.DONE
         }
     }
 }

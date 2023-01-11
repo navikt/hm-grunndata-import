@@ -17,9 +17,6 @@ data class TransferState(
     @field:TypeDef(type = DataType.JSON)
     val json_payload: ProductTransferDTO,
     val status: Status = Status.RECEIVED,
-    val message: String? = null,
-    @field:Version
-    val version: Long = 0L,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now()
 )
