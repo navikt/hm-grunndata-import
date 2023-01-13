@@ -2,7 +2,6 @@ package no.nav.hm.grunndata.importapi.transferstate
 
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.TypeDef
-import io.micronaut.data.annotation.Version
 import io.micronaut.data.model.DataType
 import jakarta.persistence.Id
 import java.time.LocalDateTime
