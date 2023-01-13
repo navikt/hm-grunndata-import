@@ -6,7 +6,7 @@ import java.util.*
 data class ProductTransferDTO (
     val title: String, // Iphone 14 Pro Max (256Gb) Blå
     val name: String, // Iphone 14 Pro Max
-    val attributes: Map<String, String>,
+    val attributes: Map<String, List<String>>,
     val HMSArtNr: String?=null,
     val identifier: String?=null,
     val supplierRef: String,
@@ -14,7 +14,6 @@ data class ProductTransferDTO (
     val accessory: Boolean = false,
     val sparepart: Boolean = false,
     val seriesId: String?=null,
-    val compatibleWith: List<String> = emptyList(), // if accessory/sparepart. The names of products that this is designed for.
     val techData: List<TechData> = emptyList(),
     val media: List<Media> = emptyList(),
     val published: LocalDateTime?=null,
@@ -24,17 +23,13 @@ data class ProductTransferDTO (
 )
 
 // TODO add more later
-val attributes_key = listOf("manufacturer","description", "shortdescription", "externalurl")
+val attributes_key = listOf("manufacturer","description", "shortdescription", "externalurl", "compatibility")
 
 const val IMPORT = "IMPORT"
 
 data class AgreementInfo (
-    val id: Long,
-    val identifier: String?=null,
-    val rank: Int,
-    val postId: Long,
-    val postNr: Int,
-    val postIdentifier: String?=null,
+    val rank: Int?=null,
+    val postNr: Int?=null,
     val reference: String?=null,
 )
 
@@ -61,5 +56,5 @@ enum class MediaType {
 data class TechData (
     val key:    String,
     val value:  String,
-    val unit:   String
+    val unit:   String?=null,
 )
