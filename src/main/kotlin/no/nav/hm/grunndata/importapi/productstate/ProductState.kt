@@ -2,6 +2,7 @@ package no.nav.hm.grunndata.importapi.productstate
 
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
+import no.nav.hm.grunndata.rapid.dto.ProductDTO
 import java.time.LocalDateTime
 import java.util.*
 

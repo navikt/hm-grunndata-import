@@ -12,16 +12,17 @@ data class TransferState(
     @field:Id
     val id: UUID = UUID.randomUUID(),
     val supplierId: UUID,
+    val reference: String,
     val md5: String,
     @field:TypeDef(type = DataType.JSON)
     val json_payload: ProductTransferDTO,
-    val status: Status = Status.RECEIVED,
+    val transferStatus: TransferStatus = TransferStatus.DONE,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now()
 )
 
-enum class Status {
-    RECEIVED, DONE, ERROR
+enum class TransferStatus {
+    DONE, ERROR
 }
 
 

@@ -1,60 +1,70 @@
 package no.nav.hm.grunndata.importapi.transferstate
 
+
 import java.time.LocalDateTime
 import java.util.*
 
 data class ProductTransferDTO (
-    val title: String, // Iphone 14 Pro Max (256Gb) Blå
-    val name: String, // Iphone 14 Pro Max
-    val attributes: Map<String, List<String>>,
-    val HMSArtNr: String?=null,
-    val identifier: String?=null,
+    val id: UUID = UUID.randomUUID(),
+    val supplier: UUID,
+    val title: String,
+    val attributes: Map<AttributeNames, Any>,
+    val status: TransferProductStatus = TransferProductStatus.INACTIVE,
+    val hmsArtNr: String?=null,
+    val identifier: String,
     val supplierRef: String,
     val isoCategory: String,
     val accessory: Boolean = false,
-    val sparepart: Boolean = false,
-    val seriesId: String?=null,
-    val techData: List<TechData> = emptyList(),
-    val media: List<Media> = emptyList(),
-    val published: LocalDateTime?=null,
-    val expired: LocalDateTime?=null,
-    val agreementInfo: AgreementInfo?=null,
-    val hasAgreement: Boolean = (agreementInfo!=null),
+    val sparePart: Boolean = false,
+    val seriesId: String? = id.toString(),
+    val transferTechData: List<TransferTechData> = emptyList(),
+    val media: List<TransferMediaDTO> = emptyList(),
+    val published: LocalDateTime = LocalDateTime.now(),
+    val expired: LocalDateTime = published.plusYears(20),
+    val agreementInfo: AgreementInfo?=null
 )
 
-// TODO add more later
-val attributes_key = listOf("manufacturer","description", "shortdescription", "externalurl", "compatibility")
+data class TransferMediaDTO (
+    val sourceUri: String,
+    val priority: Int = 1,
+    val type: MediaType = MediaType.IMAGE,
+    val text:   String?=null,
+)
 
-const val IMPORT = "IMPORT"
+enum class TransferProductStatus {
+    ACTIVE, INACTIVE
+}
+
+data class TransferTechData (
+    val key:    String,
+    val value:  String,
+    val unit:   String
+)
 
 data class AgreementInfo (
-    val rank: Int?=null,
-    val postNr: Int?=null,
-    val reference: String?=null,
+    val rank: Int,
+    val postNr: Int,
+    val reference: String?=null
 )
-
-data class Media (
-    val uuid:   UUID = UUID.randomUUID(),
-    val order:  Int=1,
-    val type: MediaType = MediaType.IMAGE,
-    val uri:    String,
-    val text:   String?=null,
-    val source: MediaSourceType = MediaSourceType.EXTERNALURL
-)
-
-enum class MediaSourceType {
-    EXTERNALURL
-}
 
 enum class MediaType {
     PDF,
     IMAGE,
-    VIDEO,
-    OTHER
+    VIDEO
 }
 
-data class TechData (
-    val key:    String,
-    val value:  String,
-    val unit:   String?=null,
-)
+enum class AttributeNames(private val type: AttributeType) {
+
+    manufacturer(AttributeType.STRING),
+    articlename(AttributeType.STRING),
+    compatible(AttributeType.LIST),
+    series(AttributeType.STRING),
+    shortdescription(AttributeType.HTML),
+    text(AttributeType.HTML),
+    url(AttributeType.URL),
+
+}
+
+enum class AttributeType {
+    STRING, HTML, URL, LIST, JSON, BOOLEAN
+}
