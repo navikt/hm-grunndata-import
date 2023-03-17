@@ -32,7 +32,6 @@ CREATE TABLE IF NOT EXISTS productstate_v1 (
     id uuid NOT NULL PRIMARY KEY,
     supplier_id uuid NOT NULL,
     supplier_ref VARCHAR(255) NOT NULL,
-    status VARCHAR(32) NOT NULL,
     product_dto JSONB NOT NULL,
     version BIGINT NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
