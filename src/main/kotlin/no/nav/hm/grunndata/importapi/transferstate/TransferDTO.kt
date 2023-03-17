@@ -11,7 +11,6 @@ data class ProductTransferDTO (
     val attributes: Map<AttributeNames, Any>,
     val status: TransferProductStatus = TransferProductStatus.INACTIVE,
     val hmsArtNr: String?=null,
-    val identifier: String,
     val supplierRef: String,
     val isoCategory: String,
     val accessory: Boolean = false,

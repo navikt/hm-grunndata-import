@@ -11,6 +11,7 @@ import java.util.*
 data class TransferState(
     @field:Id
     val id: UUID = UUID.randomUUID(),
+    val productId: UUID,
     val supplierId: UUID,
     val reference: String,
     val md5: String,
