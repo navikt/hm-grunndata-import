@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS productstate_v1 (
     UNIQUE (supplier_id, supplier_ref)
 );
 
-CREATE TABLE IF NOT EXISTS adminstatus_v1 (
+CREATE TABLE IF NOT EXISTS adminstate_v1 (
     id uuid NOT NULL PRIMARY KEY,
     supplier_id uuid NOT NULL,
     supplier_ref VARCHAR(255) NOT NULL,
