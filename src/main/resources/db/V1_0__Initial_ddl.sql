@@ -2,6 +2,8 @@ CREATE EXTENSION pgcrypto;
 
 CREATE TABLE IF NOT EXISTS supplier_v1 (
     id uuid NOT NULL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    status VARCHAR(32) NOT NULL,
     identifier VARCHAR(128) NOT NULL,
     jwtid uuid NOT NULL,
     updated_by VARCHAR(32) NOT NULL,
