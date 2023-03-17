@@ -11,7 +11,7 @@ import java.util.*
 @MappedEntity("supplier_v1")
 data class Supplier(
     @field: Id
-    val id: UUID,
+    val id: UUID = UUID.randomUUID(),
     val name: String,
     val status: SupplierStatus = SupplierStatus.ACTIVE,
     val jwtid: UUID = UUID.randomUUID(),
