@@ -69,6 +69,10 @@ dependencies {
     implementation("com.github.navikt:hm-rapids-and-rivers-v2-micronaut:$rapidsRiversVersion")
     implementation("no.nav.hm.grunndata:hm-grunndata-rapid-dto:$grunndataDtoVersion")
 
+    // OpenApi
+    kapt("io.micronaut.openapi:micronaut-openapi:4.8.5")
+    implementation("io.swagger.core.v3:swagger-annotations")
+
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("io.micronaut.test:micronaut-test-kotest5")
     testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
