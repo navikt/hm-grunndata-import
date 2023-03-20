@@ -68,6 +68,6 @@ enum class AttributeType {
     STRING, HTML, URL, LIST, JSON, BOOLEAN
 }
 
-data class CompatibleAttribute(private val id: UUID?=null,
-                               private val reference: String?=null,
-                               private val hmsArtNr: String?)
+data class CompatibleAttribute(val id: UUID?=null,
+                               val reference: String?=null,
+                               val hmsArtNr: String?)
