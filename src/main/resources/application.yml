@@ -1,4 +1,6 @@
 micronaut:
+  server:
+    port: ${SERVER_PORT:8080}
   application:
     name: hm-grunndata-import
     thread-selection: auto
@@ -14,7 +16,7 @@ micronaut:
         signatures:
           secret:
             generator:
-              secret: ${JWT_GENERATOR_SECRET:MustBeAVeryLongSecretAndUsedThisForTestOnly}
+              secret: ${JWT_GENERATOR_SECRET:MustBeAVeryLongSecretAndUsedThisForTestImportOnly}
               jws-algorithm: HS256
   metrics:
     enabled: true
@@ -55,8 +57,8 @@ datasources:
   default:
     url: ${DB_JDBC_URL:`jdbc:tc:postgresql:14:///gdb?TC_INITSCRIPT=file:src/test/resources/postgres/postgres-init.sql`}
     driverClassName: ${DB_DRIVER:org.testcontainers.jdbc.ContainerDatabaseDriver}
-    username: ${DB_USERNAME:importapi}
-    password: ${DB_PASSWORD:importapi}
+    username: ${DB_USERNAME:import}
+    password: ${DB_PASSWORD:import}
     maximum-pool-size: 8
     minimum-idle: 0
     pool-name: default
