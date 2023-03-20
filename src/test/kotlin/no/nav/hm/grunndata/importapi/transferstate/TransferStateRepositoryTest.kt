@@ -25,7 +25,7 @@ class TransferStateRepositoryTest(private val transferStateRepository: TransferS
         val product = ProductTransferDTO(supplier = supplierId, title = "Mini Crosser X1 4W",  isoCategory = "12230301" , hmsArtNr = "250464",
             supplierRef = "mini-crosser-x1-x2-4w", seriesId = "mini-crosser-x1-x2",
             attributes = mapOf(Pair(AttributeNames.manufacturer, "Medema AS"),
-                Pair(AttributeNames.compatible, listOf("hmsnr-1", "hmsnr-2")),
+                Pair(AttributeNames.compatible, listOf(CompatibleAttribute(hmsArtNr = "123"), CompatibleAttribute(hmsArtNr = "124"))),
                 Pair(AttributeNames.shortdescription, "4-hjuls scooter med manuell regulering av seteløft, ryggvinkel og seterotasjon. Leveres som standard med Ergo2 sitteenhet."),
                 Pair(AttributeNames.text, """Mini Crosser modell X1/ X2
                     Er uten sammenligning markedets sterkeste og mest komfortable el scooter: Her får man både stor motorkraft, mulighet for ekstra stor kjørelengde og unik regulerbar fjæring pakket inn i et usedvanlig lekkert design. Nordens mest solgte scooter er spesielt konstruert for nordisk klima og geografi, hvilket betyr at den er velegnet for bruk året rundt, på dårlige veier, snøføre, og ellers hvor man ønsker ekstra stabilitet. Det er virkelig fokusert på sikkerheten, og uten at det går på kompromiss med bruksegenskaper og design. Leveres også med kabin.
