@@ -13,7 +13,7 @@ data class TransferState(
     val id: UUID = UUID.randomUUID(),
     val productId: UUID,
     val supplierId: UUID,
-    val reference: String,
+    val supplierRef: String,
     val md5: String,
     @field:TypeDef(type = DataType.JSON)
     val json_payload: ProductTransferDTO,
@@ -26,4 +26,18 @@ enum class TransferStatus {
     DONE, ERROR
 }
 
+data class TransferStateDTO(
+    val id: UUID,
+    val productId: UUID,
+    val supplierId: UUID,
+    val supplierRef: String,
+    val md5: String,
+    val json_payload: ProductTransferDTO,
+    val transferStatus: TransferStatus,
+    val created: LocalDateTime,
+    val updated: LocalDateTime )
 
+fun TransferState.toDTO(): TransferStateDTO = TransferStateDTO(
+    id = id, productId = productId, supplierId = supplierId, supplierRef = supplierRef, md5 = md5,
+    json_payload = json_payload, transferStatus = transferStatus, created = created, updated = updated
+)

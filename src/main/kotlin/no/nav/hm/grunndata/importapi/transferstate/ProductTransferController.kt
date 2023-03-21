@@ -3,10 +3,7 @@ package no.nav.hm.grunndata.importapi.transferstate
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.MediaType
-import io.micronaut.http.annotation.Body
-import io.micronaut.http.annotation.Controller
-import io.micronaut.http.annotation.PathVariable
-import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.*
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -14,14 +11,24 @@ import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SupplierAllowed
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.toMD5Hex
+import no.nav.hm.grunndata.importapi.transferstate.ProductTransferController.Companion.API_V1_TRANSFERS
 import java.util.UUID
 
 @SupplierAllowed(value = [Roles.ROLE_SUPPLIER, Roles.ROLE_ADMIN])
-@Controller("/api/v1/transfers")
+@Controller(API_V1_TRANSFERS)
 @SecurityRequirement(name = "bearer-auth")
 class ProductTransferController(private val supplierService: SupplierService,
+                                private val transferStateRepository: TransferStateRepository,
                                 private val objectMapper: ObjectMapper) {
 
+
+    companion object {
+        const val API_V1_TRANSFERS = "/api/v1/transfers"
+    }
+
+    @Get(value="/{supplierId}/{id}")
+    suspend fun getTransferById(supplierId: UUID, id: UUID): TransferStateDTO? =
+        transferStateRepository.findById(id)?.toDTO()
 
     @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])
     fun productStream(@PathVariable supplierId: UUID, @Body json: Flow<JsonNode>): Flow<TransferResponse> =

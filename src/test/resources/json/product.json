@@ -1,0 +1,46 @@
+{
+  "supplier": "9a279eb6-a076-4d77-8d7b-d16115e75101",
+  "title": "Fjernbetjening til Mini Crosser X1",
+  "attributes": {
+    "manufacturer": "Medema AS",
+    "compatible": [
+      {
+        "hmsArtNr": "250464"
+      },
+      {
+        "hmsArtNr": "250465"
+      },
+      {
+        "hmsArtNr": "250466"
+      }
+    ],
+    "shortdescription": "Fjernbetjening praktisk ved kjøring inn og ut av bil. Fremover/bakover og hastighetsregulering.",
+    "text": "Fjernbetjening praktisk ved kjøring inn og ut av bil. Fremover/bakover og hastighetsregulering."
+  },
+  "hmsArtNr": "250496",
+  "supplierRef": "1506-1041",
+  "isoCategory": "12230301",
+  "accessory": true,
+  "sparePart": false,
+  "transferTechData": [
+    {
+      "key": "Setebredde min",
+      "value": "45",
+      "unit": "cm"
+    },
+    {
+      "key": "Kjørelengde maks",
+      "value": "45",
+      "unit": "km"
+    }
+  ],
+  "media": [
+    {
+      "sourceUri": "https://medema.no/medias/2021-07/fjernbetjening_16647_570x473px.jpg",
+      "priority": 1,
+      "type": "IMAGE"
+    }
+  ],
+  "published": "2023-03-21T12:48:33.845516",
+  "expired": "2043-03-21T12:48:33.845516"
+}

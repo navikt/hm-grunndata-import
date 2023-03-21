@@ -41,7 +41,7 @@ class TransferStateRepositoryTest(private val transferStateRepository: TransferS
         val json = objectMapper.writeValueAsString(product)
         println(json)
         val transfer = TransferState(supplierId=supplierId, json_payload = product, md5 = json.toMD5Hex(),
-            reference = product.supplierRef, productId =  product.id)
+            supplierRef = product.supplierRef, productId =  product.id)
 
         runBlocking {
             val savedSup = supplierRepository.save(supplier)
