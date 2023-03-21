@@ -1,6 +1,7 @@
 package no.nav.hm.grunndata.importapi.transferstate
 
 
+import no.nav.hm.grunndata.rapid.dto.MediaSourceType
 import java.time.LocalDateTime
 import java.util.*
 
@@ -25,9 +26,11 @@ data class ProductTransferDTO (
 
 data class TransferMediaDTO (
     val sourceUri: String,
+    val uri: String = sourceUri,
     val priority: Int = 1,
     val type: MediaType = MediaType.IMAGE,
     val text:   String?=null,
+    val sourceType: MediaSourceType = MediaSourceType.EXTERNALURL
 )
 
 enum class TransferProductStatus {
