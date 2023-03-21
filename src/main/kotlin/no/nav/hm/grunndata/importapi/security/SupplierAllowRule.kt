@@ -14,12 +14,13 @@ import java.util.*
 import jakarta.inject.Singleton
 import kotlinx.coroutines.runBlocking
 import no.nav.hm.grunndata.importapi.supplier.SupplierRepository
+import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import org.reactivestreams.Publisher
 
 
 @Singleton
 class SupplierAllowRule(rolesFinder: RolesFinder,
-                        private val supplierRepository: SupplierRepository): AbstractSecurityRule(rolesFinder) {
+                        private val supplierService: SupplierService): AbstractSecurityRule(rolesFinder) {
 
     private val ORDER = SecuredAnnotationRule.ORDER - 1
 
@@ -42,7 +43,7 @@ class SupplierAllowRule(rolesFinder: RolesFinder,
                     return just(SecurityRuleResult.REJECTED)
                 }
                 return runBlocking {
-                    val supplier = supplierRepository.findById(UUID.fromString(supplierId))
+                    val supplier = supplierService.findById(UUID.fromString(supplierId))
                     if (authentication.attributes["jti"] != supplier?.jwtid ) {
                         LOG.warn("Rejected because jwt id does not match with claims")
                         just(SecurityRuleResult.REJECTED)

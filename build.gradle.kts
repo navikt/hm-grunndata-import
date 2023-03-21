@@ -36,8 +36,7 @@ configurations.all {
 }
 
 dependencies {
-    //implementation("com.github.navikt:hm-rapids-and-rivers-v2-core:1.0-SNAPSHOT")
-    //implementation("com.github.navikt:hm-rapids-and-rivers-v2-micronaut:1.0-SNAPSHOT")
+
     api("ch.qos.logback:logback-classic:$logbackClassicVersion")
     api("net.logstash.logback:logstash-logback-encoder:$logbackEncoderVersion")
     // coroutines
