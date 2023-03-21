@@ -19,8 +19,8 @@ data class ProductTransferDTO (
     val seriesId: String? = id.toString(),
     val transferTechData: List<TransferTechData> = emptyList(),
     val media: List<TransferMediaDTO> = emptyList(),
-    val published: LocalDateTime = LocalDateTime.now(),
-    val expired: LocalDateTime = published.plusYears(20),
+    val published: LocalDateTime?=null,
+    val expired: LocalDateTime?=null,
     val agreementInfo: AgreementInfo?=null
 )
 

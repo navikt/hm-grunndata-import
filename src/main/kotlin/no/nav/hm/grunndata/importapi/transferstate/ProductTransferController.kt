@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.map
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SupplierAllowed
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
+import no.nav.hm.grunndata.importapi.toMD5Hex
 import java.util.UUID
 
 @SupplierAllowed(value = [Roles.ROLE_SUPPLIER, Roles.ROLE_ADMIN])
@@ -26,7 +27,10 @@ class ProductTransferController(private val supplierService: SupplierService,
     fun productStream(@PathVariable supplierId: UUID, @Body json: Flow<JsonNode>): Flow<TransferResponse> =
         json.map {
             val product = objectMapper.treeToValue(it, ProductTransferDTO::class.java)
-            TransferResponse()
+            val content = objectMapper.writeValueAsString(product)
+            val md5 = content.toMD5Hex()
+            TransferResponse(id = product.id, supplierId = supplierId,
+                supplierRef =  product.supplierRef, md5 = md5)
         }
 
 }

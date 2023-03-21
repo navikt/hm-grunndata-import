@@ -8,7 +8,7 @@ data class TransferResponse(
     val status: TransferStatus = TransferStatus.DONE,
     val message: String? = null,
     val supplierId: UUID,
-    val reference: String,
+    val supplierRef: String,
     val updated: LocalDateTime = LocalDateTime.now(),
     val md5: String,
 )

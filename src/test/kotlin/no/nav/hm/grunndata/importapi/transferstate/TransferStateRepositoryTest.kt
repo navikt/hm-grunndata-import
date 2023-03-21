@@ -10,7 +10,6 @@ import no.nav.hm.grunndata.importapi.supplier.SupplierRepository
 import no.nav.hm.grunndata.importapi.toMD5Hex
 import org.junit.jupiter.api.Test
 import java.util.*
-import javax.print.attribute.standard.Media
 import kotlin.collections.LinkedHashMap
 
 @MicronautTest
