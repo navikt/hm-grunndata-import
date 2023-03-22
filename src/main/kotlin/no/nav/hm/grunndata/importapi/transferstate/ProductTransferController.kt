@@ -12,6 +12,7 @@ import no.nav.hm.grunndata.importapi.security.SupplierAllowed
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transferstate.ProductTransferController.Companion.API_V1_TRANSFERS
+import org.slf4j.LoggerFactory
 import java.util.UUID
 
 @SupplierAllowed(value = [Roles.ROLE_SUPPLIER, Roles.ROLE_ADMIN])
@@ -24,6 +25,8 @@ class ProductTransferController(private val supplierService: SupplierService,
 
     companion object {
         const val API_V1_TRANSFERS = "/api/v1/transfers"
+        private val LOG = LoggerFactory.getLogger(ProductTransferController::class.java)
+
     }
 
     @Get(value="/{supplierId}/{id}")
@@ -33,6 +36,7 @@ class ProductTransferController(private val supplierService: SupplierService,
     @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])
     fun productStream(@PathVariable supplierId: UUID, @Body json: Flow<JsonNode>): Flow<TransferResponse> =
         json.map {
+            LOG.info("Got product stream from $supplierId")
             val product = objectMapper.treeToValue(it, ProductTransferDTO::class.java)
             val content = objectMapper.writeValueAsString(product)
             val md5 = content.toMD5Hex()

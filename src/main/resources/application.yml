@@ -2,6 +2,16 @@ micronaut:
   server:
     port: ${SERVER_PORT:8080}
     context-path: /
+  http:
+    client:
+      connect-timeout: 10s
+      read-timeout: 60s
+      event-loop-group: http
+  netty:
+    event-loops:
+      http:
+        num-threads: 25
+        prefer-native-transport: true
   caches:
     suppliers:
       charset: 'UTF-8'
