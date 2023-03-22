@@ -53,6 +53,7 @@ class TransferStateRepositoryTest(private val transferStateRepository: TransferS
             db.shouldNotBeNull()
             db.json_payload.shouldNotBeNull()
             db.json_payload.title shouldBe "Mini Crosser X1 4W"
+            db.transferStatus shouldBe TransferStatus.RECEIVED
 
             transferStateRepository.update(db.copy(transferStatus = TransferStatus.DONE))
             val done = transferStateRepository.findById(saved.transferId)

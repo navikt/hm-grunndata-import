@@ -17,12 +17,12 @@ data class TransferState(
     val md5: String,
     @field:TypeDef(type = DataType.JSON)
     val json_payload: ProductTransferDTO,
-    val transferStatus: TransferStatus = TransferStatus.DONE,
+    val transferStatus: TransferStatus = TransferStatus.RECEIVED,
     val created: LocalDateTime = LocalDateTime.now()
 )
 
 enum class TransferStatus {
-    DONE, ERROR
+    DONE, RECEIVED,  ERROR
 }
 
 data class TransferStateDTO(
