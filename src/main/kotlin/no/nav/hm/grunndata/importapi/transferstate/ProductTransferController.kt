@@ -8,14 +8,14 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import no.nav.hm.grunndata.importapi.security.Roles
-import no.nav.hm.grunndata.importapi.security.SupplierAllowed
+import no.nav.hm.grunndata.importapi.security.SecurityRule
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transferstate.ProductTransferController.Companion.API_V1_TRANSFERS
 import org.slf4j.LoggerFactory
 import java.util.UUID
 
-@SupplierAllowed(value = [Roles.ROLE_SUPPLIER, Roles.ROLE_ADMIN])
+@SecurityRule(value = [Roles.ROLE_SUPPLIER, Roles.ROLE_ADMIN])
 @Controller(API_V1_TRANSFERS)
 @SecurityRequirement(name = "bearer-auth")
 class ProductTransferController(private val supplierService: SupplierService,
