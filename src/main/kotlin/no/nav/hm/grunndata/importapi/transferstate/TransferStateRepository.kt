@@ -7,5 +7,5 @@ import java.util.*
 
 @JdbcRepository(dialect = Dialect.POSTGRES)
 interface TransferStateRepository: CoroutineCrudRepository<TransferState, UUID> {
-
+    suspend fun findOneBySupplierIdAndSupplierRef(supplierId: UUID, supplierRef: String): TransferState?
 }

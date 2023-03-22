@@ -6,7 +6,6 @@ import java.time.LocalDateTime
 import java.util.*
 
 data class ProductTransferDTO (
-    val id: UUID = UUID.randomUUID(),
     val supplier: UUID,
     val title: String,
     val attributes: Map<AttributeNames, Any>,
@@ -16,7 +15,7 @@ data class ProductTransferDTO (
     val isoCategory: String,
     val accessory: Boolean = false,
     val sparePart: Boolean = false,
-    val seriesId: String? = id.toString(),
+    val seriesId: String?,
     val transferTechData: List<TransferTechData> = emptyList(),
     val media: List<TransferMediaDTO> = emptyList(),
     val published: LocalDateTime?=null,

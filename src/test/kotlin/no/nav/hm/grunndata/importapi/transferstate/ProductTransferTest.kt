@@ -28,7 +28,7 @@ class ProductTransferTest(private val client: ProductTransferClient,
     }
 
 
-    val supplierId = UUID.randomUUID()
+    private val supplierId: UUID = UUID.randomUUID()
 
     @Test
     fun productTransferTest() {

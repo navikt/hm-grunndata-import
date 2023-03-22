@@ -47,15 +47,15 @@ class TransferStateRepositoryTest(private val transferStateRepository: TransferS
             val savedSup = supplierRepository.save(supplier)
             savedSup.id shouldBe supplierId
             val saved = transferStateRepository.save(transfer)
-            saved.id.shouldNotBeNull()
+            saved.transferId.shouldNotBeNull()
 
-            val db = transferStateRepository.findById(saved.id)
+            val db = transferStateRepository.findById(saved.transferId)
             db.shouldNotBeNull()
             db.json_payload.shouldNotBeNull()
             db.json_payload.title shouldBe "Mini Crosser X1 4W"
 
             transferStateRepository.update(db.copy(transferStatus = TransferStatus.DONE))
-            val done = transferStateRepository.findById(saved.id)
+            val done = transferStateRepository.findById(saved.transferId)
             done.shouldNotBeNull()
             done.transferStatus shouldBe TransferStatus.DONE
             val compatible =  done.json_payload.attributes[AttributeNames.compatible]

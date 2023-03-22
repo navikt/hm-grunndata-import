@@ -5,6 +5,7 @@ import java.util.*
 
 data class TransferResponse(
     val id: UUID? = null,
+    val productId: UUID? = null,
     val status: TransferStatus = TransferStatus.DONE,
     val message: String? = null,
     val supplierId: UUID,

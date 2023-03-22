@@ -10,7 +10,7 @@ import java.util.*
 @MappedEntity("transferstate_v1")
 data class TransferState(
     @field:Id
-    val id: UUID = UUID.randomUUID(),
+    val transferId: UUID = UUID.randomUUID(),
     val productId: UUID,
     val supplierId: UUID,
     val supplierRef: String,
@@ -38,6 +38,6 @@ data class TransferStateDTO(
     val updated: LocalDateTime )
 
 fun TransferState.toDTO(): TransferStateDTO = TransferStateDTO(
-    id = id, productId = productId, supplierId = supplierId, supplierRef = supplierRef, md5 = md5,
+    id = transferId, productId = productId, supplierId = supplierId, supplierRef = supplierRef, md5 = md5,
     json_payload = json_payload, transferStatus = transferStatus, created = created, updated = updated
 )
