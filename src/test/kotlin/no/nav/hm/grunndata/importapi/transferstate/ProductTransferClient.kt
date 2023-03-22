@@ -4,7 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.http.client.annotation.Client
-import kotlinx.coroutines.flow.Flow
+
+import org.reactivestreams.Publisher
 import java.util.*
 
 @Client(ProductTransferController.API_V1_TRANSFERS)
@@ -13,7 +14,7 @@ interface ProductTransferClient {
     @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])
     fun productStream(@PathVariable supplierId: UUID,
                       @Header authorization: String,
-                      @Body json: Flow<JsonNode>): Flow<TransferResponse>
+                      @Body json: Publisher<JsonNode>): Publisher<TransferResponse>
 
     @Get(value="/{supplierId}/{id}")
     fun getTransferById(supplierId: UUID, id: UUID): TransferStateDTO?

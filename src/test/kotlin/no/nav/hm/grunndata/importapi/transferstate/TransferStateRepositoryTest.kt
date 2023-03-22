@@ -21,7 +21,7 @@ class TransferStateRepositoryTest(private val transferStateRepository: TransferS
 
     @Test
     fun crudRepositoryTest() {
-        val supplier = Supplier(id= supplierId, name = "Medema AS", identifier = "medema_as", jwtid = UUID.randomUUID())
+        val supplier = Supplier(id= supplierId, name = "Medema AS", identifier = "medema_as", jwtid = UUID.randomUUID().toString())
         val product = ProductTransferDTO(supplier = supplierId, title = "Mini Crosser X1 4W",  isoCategory = "12230301" , hmsArtNr = "250464",
             supplierRef = "mini-crosser-x1-x2-4w", seriesId = "mini-crosser-x1-x2",
             attributes = mapOf(Pair(AttributeNames.manufacturer, "Medema AS"),

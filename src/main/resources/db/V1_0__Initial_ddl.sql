@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS supplier_v1 (
     name VARCHAR(255) NOT NULL,
     status VARCHAR(32) NOT NULL,
     identifier VARCHAR(128) NOT NULL,
-    jwtid uuid NOT NULL,
+    jwtid VARCHAR(255) NOT NULL,
     updated_by VARCHAR(32) NOT NULL,
     created_by VARCHAR(32) NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

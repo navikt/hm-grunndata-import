@@ -14,7 +14,7 @@ data class Supplier(
     val id: UUID = UUID.randomUUID(),
     val name: String,
     val status: SupplierStatus = SupplierStatus.ACTIVE,
-    val jwtid: UUID = UUID.randomUUID(),
+    val jwtid: String = UUID.randomUUID().toString(),
     val identifier: String,
     val createdBy: String = "REGISTER",
     val updatedBy: String = "REGISTER",

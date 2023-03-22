@@ -7,6 +7,8 @@
     </appender>
     <logger name="no.nav.hm" level="DEBUG" />
     <logger name="io.micronaut.data.query" level="DEBUG" />
+    <logger name="io.micronaut.cache" level="DEBUG" />
+    <logger name="io.micronaut.caffeine" level="DEBUG" />
 
     <root level="INFO">
         <appender-ref ref="stdout"/>

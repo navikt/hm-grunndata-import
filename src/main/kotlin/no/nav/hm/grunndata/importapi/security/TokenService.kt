@@ -18,7 +18,7 @@ class TokenService(private val secretSignatureConfiguration: SecretSignatureConf
         val signer = MACSigner(secretSignatureConfiguration.secret)
         val claimsSet = JWTClaimsSet.Builder()
                 .subject(supplier.name)
-                .jwtID(supplier.jwtid.toString())
+                .jwtID(supplier.jwtid)
                 .issuer("https://hjelpemiddeldabasen.nav.no")
                 .issueTime(Date())
                 .claim("roles", Roles.ROLE_SUPPLIER)

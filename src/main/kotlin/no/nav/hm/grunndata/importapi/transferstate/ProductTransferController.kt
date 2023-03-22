@@ -7,11 +7,14 @@ import io.micronaut.http.annotation.*
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.reactive.asPublisher
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecurityRule
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transferstate.ProductTransferController.Companion.API_V1_TRANSFERS
+import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import java.util.UUID
 
@@ -34,14 +37,14 @@ class ProductTransferController(private val supplierService: SupplierService,
         transferStateRepository.findById(id)?.toDTO()
 
     @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])
-    fun productStream(@PathVariable supplierId: UUID, @Body json: Flow<JsonNode>): Flow<TransferResponse> =
-        json.map {
+    fun productStream(@PathVariable supplierId: UUID, @Body json: Publisher<JsonNode>): Publisher<TransferResponse> =
+        json.asFlow().map {
             LOG.info("Got product stream from $supplierId")
             val product = objectMapper.treeToValue(it, ProductTransferDTO::class.java)
             val content = objectMapper.writeValueAsString(product)
             val md5 = content.toMD5Hex()
             TransferResponse(id = product.id, supplierId = supplierId,
                 supplierRef =  product.supplierRef, md5 = md5)
-        }
+        }.asPublisher()
 
 }

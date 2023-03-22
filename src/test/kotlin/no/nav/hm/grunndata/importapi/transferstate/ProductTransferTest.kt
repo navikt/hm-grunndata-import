@@ -1,10 +1,14 @@
 package no.nav.hm.grunndata.importapi.transferstate
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.micronaut.core.async.publisher.Publishers
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.reactive.asFlow
+
 import kotlinx.coroutines.runBlocking
 import no.nav.hm.grunndata.importapi.security.TokenService
 import no.nav.hm.grunndata.importapi.supplier.Supplier
@@ -23,20 +27,26 @@ class ProductTransferTest(private val client: ProductTransferClient,
         private val LOG = LoggerFactory.getLogger(ProductTransferTest::class.java)
     }
 
+
+    val supplierId = UUID.randomUUID()
+
     @Test
     fun productTransferTest() {
-        val supplierId = UUID.randomUUID()
-        val supplier = Supplier(id= supplierId, name = "Medema AS", identifier = "medema_as", jwtid = UUID.randomUUID())
-        val token = "bearer ${tokenService.token(supplier)}"
-        val product = objectMapper.readTree(ProductTransferTest.javaClass.classLoader.getResourceAsStream("json/product.json"))
         runBlocking {
-            supplierService.save(supplier)
-            val response = client.productStream(supplierId = supplierId, authorization = token, json = flowOf(product))
-            response.onEach {
-                LOG.info("Got response md5: ${it.md5}")
+           supplierService.save(Supplier(id= supplierId, name = "Medema AS",
+                identifier = "medema_as", jwtid = UUID.randomUUID().toString()))
+            val supplier = supplierService.findById(supplierId)!!
+            val token = "bearer ${tokenService.token(supplier)}"
+            val product = objectMapper.readTree(ProductTransferTest.javaClass.classLoader.getResourceAsStream("json/product.json"))
+            val response = client.productStream(supplierId = supplier.id, authorization = token, json = Publishers.just(product))
+            response.asFlow().onEach {
+                LOG.info(it.md5)
+                it.md5.shouldNotBeNull()
             }.collect()
-
         }
+
+
+
     }
 
 }
