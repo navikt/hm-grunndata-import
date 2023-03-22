@@ -14,7 +14,7 @@ interface ProductTransferClient {
     @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])
     fun productStream(@PathVariable supplierId: UUID,
                       @Header authorization: String,
-                      @Body json: Publisher<JsonNode>): Publisher<TransferResponse>
+                      @Body json: Publisher<JsonNode>): Publisher<TransferStateDTO>
 
     @Get(value="/{supplierId}/{id}")
     fun getTransferById(supplierId: UUID, id: UUID): TransferStateDTO?
