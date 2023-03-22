@@ -39,8 +39,8 @@ class ProductStateRepositoryTest(private val productStateRepository: ProductStat
             agreementInfo = AgreementInfo(id = UUID.randomUUID(), identifier = "hmdbid-1", rank = 1, postNr = 1,
                 reference = "AV-142", expired = LocalDateTime.now()), createdBy = "IMPORT", updatedBy = "IMPORT"
         )
-        val state = ProductState(id = UUID.randomUUID(), supplierId = supplierId, supplierRef = "referanse-123",
-        productDTO = productDTO)
+        val state = ProductState(productId = productDTO.id, supplierId = supplierId, supplierRef = "referanse-123",
+        productDTO = productDTO, transferId = UUID.randomUUID())
         runBlocking {
             val saved = productStateRepository.save(state)
             val find = productStateRepository.findBySupplierIdAndSupplierRef(supplierId, "referanse-123")

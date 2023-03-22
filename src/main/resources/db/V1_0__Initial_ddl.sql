@@ -1,5 +1,3 @@
-CREATE EXTENSION pgcrypto;
-
 CREATE TABLE IF NOT EXISTS supplier_v1 (
     id uuid NOT NULL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -29,25 +27,18 @@ CREATE TABLE IF NOT EXISTS transferstate_v1 (
 CREATE INDEX transferstate_supplierId_supplierRef_idx ON transferstate_v1(supplier_id, supplier_ref);
 
 CREATE TABLE IF NOT EXISTS productstate_v1 (
-    id uuid NOT NULL PRIMARY KEY,
+    product_id uuid NOT NULL PRIMARY KEY,
+    transfer_id UUID NOT NULL,
     supplier_id uuid NOT NULL,
     supplier_ref VARCHAR(255) NOT NULL,
     product_dto JSONB NOT NULL,
-    version BIGINT NOT NULL,
+    admin_status VARCHAR(32) NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (supplier_id, supplier_ref)
 );
 
-CREATE TABLE IF NOT EXISTS adminstate_v1 (
-    id uuid NOT NULL PRIMARY KEY,
-    supplier_id uuid NOT NULL,
-    supplier_ref VARCHAR(255) NOT NULL,
-    status VARCHAR(32) NOT NULL,
-    message VARCHAR(512),
-    version BIGINT NOT NULL,
-    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(supplier_id, supplier_ref)
-);
+CREATE INDEX productstate_transferId_idx ON productstate_v1(transfer_id);
+
+
 
