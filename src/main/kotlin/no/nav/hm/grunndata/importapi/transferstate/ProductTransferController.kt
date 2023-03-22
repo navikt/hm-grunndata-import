@@ -45,7 +45,7 @@ class ProductTransferController(private val supplierService: SupplierService,
             val md5 = content.toMD5Hex()
             transferStateRepository.findOneBySupplierIdAndSupplierRef(supplierId, transfer.supplierRef)?.let {
                     state -> transferStateRepository.save(state.copy(transferId = UUID.randomUUID(),
-                        created = LocalDateTime.now(), updated = LocalDateTime.now(), md5 = md5, json_payload = transfer,
+                        created = LocalDateTime.now(), md5 = md5, json_payload = transfer,
                 transferStatus = TransferStatus.DONE))
                 .toDTO()
             } ?: transferStateRepository.save(TransferState(productId = UUID.randomUUID(), supplierId = supplierId,

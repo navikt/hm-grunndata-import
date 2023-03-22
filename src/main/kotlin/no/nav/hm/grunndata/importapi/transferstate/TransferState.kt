@@ -18,8 +18,7 @@ data class TransferState(
     @field:TypeDef(type = DataType.JSON)
     val json_payload: ProductTransferDTO,
     val transferStatus: TransferStatus = TransferStatus.DONE,
-    val created: LocalDateTime = LocalDateTime.now(),
-    val updated: LocalDateTime = LocalDateTime.now()
+    val created: LocalDateTime = LocalDateTime.now()
 )
 
 enum class TransferStatus {
@@ -34,10 +33,9 @@ data class TransferStateDTO(
     val md5: String,
     val json_payload: ProductTransferDTO,
     val transferStatus: TransferStatus,
-    val created: LocalDateTime,
-    val updated: LocalDateTime )
+    val created: LocalDateTime)
 
 fun TransferState.toDTO(): TransferStateDTO = TransferStateDTO(
     id = transferId, productId = productId, supplierId = supplierId, supplierRef = supplierRef, md5 = md5,
-    json_payload = json_payload, transferStatus = transferStatus, created = created, updated = updated
+    json_payload = json_payload, transferStatus = transferStatus, created = created
 )

@@ -23,10 +23,10 @@ CREATE TABLE IF NOT EXISTS transferstate_v1 (
     transfer_status VARCHAR(32) NOT NULL,
     message TEXT,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(md5),
-    CONSTRAINT fk_supplier_transferstate FOREIGN KEY (supplier_id) REFERENCES supplier_v1(id)
+    UNIQUE(md5)
 );
+
+CREATE INDEX transferstate_supplierId_supplierRef_idx ON transferstate_v1(supplier_id, supplier_ref);
 
 CREATE TABLE IF NOT EXISTS productstate_v1 (
     id uuid NOT NULL PRIMARY KEY,
