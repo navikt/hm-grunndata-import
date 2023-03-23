@@ -20,8 +20,9 @@ class ProductStateRepositoryTest(private val productStateRepository: ProductStat
             supplier = SupplierDTO(id= supplierId, identifier = "12345", updated = LocalDateTime.now(),
                 created = LocalDateTime.now(), createdBy = "IMPORT", updatedBy = "IMPORT", info = SupplierInfo(), name = "testsupplier"),
             title = "Dette er produkt title",
+            articleName = "Dette er article navn",
             attributes = mapOf(
-                AttributeNames.articlename to  "produktnavn", AttributeNames.shortdescription to "En kort beskrivelse av produktet",
+                AttributeNames.shortdescription to "En kort beskrivelse av produktet",
                 AttributeNames.text to "En lang beskrivelse av produktet"
             ),
             hmsArtNr = "123",

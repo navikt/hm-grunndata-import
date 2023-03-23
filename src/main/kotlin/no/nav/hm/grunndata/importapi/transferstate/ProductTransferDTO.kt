@@ -5,11 +5,13 @@ import no.nav.hm.grunndata.rapid.dto.MediaSourceType
 import java.time.LocalDateTime
 import java.util.*
 
+
 data class ProductTransferDTO (
+    val id: UUID = UUID.randomUUID(),
     val supplier: UUID,
     val title: String,
-    val attributes: Map<AttributeNames, Any>,
-    val status: TransferProductStatus = TransferProductStatus.INACTIVE,
+    val articleName: String,
+    val attributes: Attributes = Attributes(),
     val hmsArtNr: String?=null,
     val supplierRef: String,
     val isoCategory: String,
@@ -20,9 +22,10 @@ data class ProductTransferDTO (
     val media: List<TransferMediaDTO> = emptyList(),
     val published: LocalDateTime?=null,
     val expired: LocalDateTime?=null,
-    val agreementInfo: AgreementInfo?=null
+    val agreementInfo: AgreementInfo?=null,
+    val createdBy: String = "IMPORT",
+    val updatedBy: String = "IMPORT"
 )
-
 data class TransferMediaDTO (
     val sourceUri: String,
     val uri: String = sourceUri,
@@ -54,22 +57,13 @@ enum class MediaType {
     VIDEO
 }
 
-enum class AttributeNames(private val type: AttributeType) {
-
-    manufacturer(AttributeType.STRING),
-    articlename(AttributeType.STRING),
-    compatible(AttributeType.LIST),
-    series(AttributeType.STRING),
-    shortdescription(AttributeType.HTML),
-    text(AttributeType.HTML),
-    url(AttributeType.URL),
-
-}
-
-enum class AttributeType {
-    STRING, HTML, URL, LIST, JSON, BOOLEAN
-}
-
+data class Attributes(val manufacturer: String? = null,
+                      val compatible: List<CompatibleAttribute>? = null,
+                      val series: String? = null,
+                      val shortDescription: String? = null,
+                      val text: String? = null,
+                      val url: String? = null)
 data class CompatibleAttribute(val id: UUID?=null,
                                val reference: String?=null,
                                val hmsArtNr: String?)
+

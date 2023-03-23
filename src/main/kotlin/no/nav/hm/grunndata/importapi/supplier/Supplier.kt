@@ -3,6 +3,7 @@ package no.nav.hm.grunndata.importapi.supplier
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import no.nav.hm.grunndata.rapid.dto.SupplierDTO
+import no.nav.hm.grunndata.rapid.dto.SupplierInfo
 import no.nav.hm.grunndata.rapid.dto.SupplierStatus
 import java.awt.SystemColor.info
 import java.time.LocalDateTime
@@ -26,3 +27,8 @@ data class Supplier(
 fun SupplierDTO.toEntity(): Supplier = Supplier(
     id = id, status = status, name = name, identifier = identifier, created = created, updated = updated,
     createdBy = createdBy, updatedBy=updatedBy)
+
+fun Supplier.toDTO(): SupplierDTO = SupplierDTO (
+    id = id, status = status, name = name, identifier = identifier, created = created ,updated = updated,
+    createdBy = createdBy, updatedBy = updatedBy, info = SupplierInfo()
+)
