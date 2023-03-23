@@ -60,7 +60,7 @@ enum class MediaType {
 data class Attributes(val manufacturer: String? = null,
                       val compatible: List<CompatibleAttribute>? = null,
                       val series: String? = null,
-                      val shortDescription: String? = null,
+                      val shortdescription: String? = null,
                       val text: String? = null,
                       val url: String? = null)
 data class CompatibleAttribute(val id: UUID?=null,

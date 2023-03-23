@@ -17,8 +17,8 @@ class TransferToProductState(private val productStateRepository: ProductStateRep
                              private val transferStateRepository: TransferStateRepository,
                              private val supplierService: SupplierService) {
 
-    fun receivedTransfersToProductState() {
-/*        runBlocking {
+/*    fun receivedTransfersToProductState() {
+        runBlocking {
             val contents = transferStateRepository.findByTransferStatus(TransferStatus.RECEIVED, Pageable.from(0, 1000,
                 of(Order.asc("updated")))).content
             contents.map {
@@ -28,10 +28,10 @@ class TransferToProductState(private val productStateRepository: ProductStateRep
                 }
             }
 
-        }*/
+        }
     }
 
-/*    private suspend fun ProductTransferDTO.toProductDTO(): ProductDTO = ProductDTO(
+    private suspend fun ProductTransferDTO.toProductDTO(): ProductDTO = ProductDTO(
         id = id,
         supplier = supplierService.findById(supplier)!!.toDTO(),
         title = title,
