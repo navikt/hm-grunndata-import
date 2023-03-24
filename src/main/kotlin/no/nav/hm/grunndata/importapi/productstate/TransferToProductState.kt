@@ -15,7 +15,7 @@ class TransferToProductState(private val productStateRepository: ProductStateRep
                              private val transferStateRepository: TransferStateRepository,
                              private val supplierService: SupplierService) {
 
-    fun receivedTransfersToProductState() {
+    suspend fun receivedTransfersToProductState() {
         runBlocking {
             val contents = transferStateRepository.findByTransferStatus(TransferStatus.RECEIVED).content
             contents.map {
