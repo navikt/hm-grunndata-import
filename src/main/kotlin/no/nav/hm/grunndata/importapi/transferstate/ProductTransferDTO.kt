@@ -48,7 +48,7 @@ data class TransferTechData (
 data class AgreementInfo (
     val rank: Int,
     val postNr: Int,
-    val reference: String?=null
+    val reference: String
 )
 
 enum class MediaType {
