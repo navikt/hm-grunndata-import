@@ -18,7 +18,8 @@ data class ProductState(
     val supplierRef: String,
     @field:TypeDef(type = DataType.JSON)
     val productDTO: ProductDTO,
-    val adminStatus: AdminStatus = AdminStatus.NOT_APPROVED,
+    val adminStatus: AdminStatus?=null,
+    val message: String? = null,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now()
 )
