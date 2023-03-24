@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory
 
 @Singleton
 class TransferToProductState(private val transferStateRepository: TransferStateRepository,
-                                  private val productStateKafkaService: ProductStateKafkaService) {
+                             private val productStateKafkaService: ProductStateKafkaService) {
     companion object {
         private val LOG = LoggerFactory.getLogger(TransferToProductState::class.java)
     }

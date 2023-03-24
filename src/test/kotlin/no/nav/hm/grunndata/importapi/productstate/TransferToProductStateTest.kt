@@ -5,11 +5,15 @@ import io.kotest.common.runBlocking
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import io.mockk.mockk
+import no.nav.hm.grunndata.importapi.ImportRapidPushService
 import no.nav.hm.grunndata.importapi.supplier.Supplier
 import no.nav.hm.grunndata.importapi.supplier.SupplierRepository
 import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transferstate.*
+import no.nav.hm.rapids_rivers.micronaut.RapidPushService
 import org.junit.jupiter.api.Test
 import java.util.*
 
@@ -21,6 +25,9 @@ class TransferToProductStateTest(private val transferToProductState: TransferToP
                                  private val objectMapper: ObjectMapper) {
 
     private val supplierId: UUID = UUID.randomUUID()
+
+    @MockBean
+    fun rapidPushService(): RapidPushService = mockk(relaxed = true)
 
     @Test
     fun testTransferToProductState() {
