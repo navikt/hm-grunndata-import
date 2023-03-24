@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.kotest.common.runBlocking
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import no.nav.hm.grunndata.importapi.supplier.Supplier
