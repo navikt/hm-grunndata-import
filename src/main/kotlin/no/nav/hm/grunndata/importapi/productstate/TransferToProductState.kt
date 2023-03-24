@@ -12,7 +12,7 @@ import no.nav.hm.grunndata.rapid.dto.*
 import org.slf4j.LoggerFactory
 
 @Singleton
-open class TransferToProductState(private val transferStateRepository: TransferStateRepository,
+class TransferToProductState(private val transferStateRepository: TransferStateRepository,
                                   private val productStateKafkaService: ProductStateKafkaService) {
     companion object {
         private val LOG = LoggerFactory.getLogger(TransferToProductState::class.java)

@@ -11,9 +11,11 @@ import java.time.LocalDateTime
 import javax.transaction.Transactional
 
 @Singleton
-class ProductStateKafkaService(private val productStateRepository: ProductStateRepository,
+open class ProductStateKafkaService(private val productStateRepository: ProductStateRepository,
                                private val supplierService: SupplierService,
                                private val importRapidPushService: ImportRapidPushService) {
+
+    val eventName = "hm-grunndata-import-productstate"
 
     @Transactional
     open suspend fun mapTransferToproductState(transfer: TransferState) {
@@ -26,10 +28,11 @@ class ProductStateKafkaService(private val productStateRepository: ProductStateR
             )
         } ?: productStateRepository.save(
             ProductState(
-                productId = transfer.productId, transferId = transfer.transferId, supplierId = transfer.supplierId,
+                id = transfer.productId, transferId = transfer.transferId, supplierId = transfer.supplierId,
                 supplierRef = transfer.supplierRef, productDTO = transfer.json_payload.toProductDTO()
             )
         )
+        importRapidPushService.pushDTOToKafka(productstate.toDTO(), eventName)
     }
 
     private suspend fun ProductTransferDTO.toProductDTO(): ProductDTO = ProductDTO(

@@ -6,13 +6,14 @@ import io.micronaut.data.annotation.TypeDef
 import io.micronaut.data.model.DataType
 import no.nav.hm.grunndata.rapid.dto.AdminStatus
 import no.nav.hm.grunndata.rapid.dto.ProductDTO
+import no.nav.hm.grunndata.rapid.dto.ProductStateDTO
 import java.time.LocalDateTime
 import java.util.*
 
 @MappedEntity("productstate_v1")
 data class ProductState(
     @field:Id
-    val productId: UUID,
+    val id: UUID,
     val transferId: UUID,
     val supplierId: UUID,
     val supplierRef: String,
@@ -22,4 +23,15 @@ data class ProductState(
     val message: String? = null,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now()
+)
+fun ProductState.toDTO(): ProductStateDTO = ProductStateDTO(
+    id = id,
+    transferId = transferId,
+    supplierId = supplierId,
+    supplierRef = supplierRef,
+    productDTO = productDTO,
+    adminStatus = adminStatus,
+    message = message,
+    created = created,
+    updated = updated
 )
