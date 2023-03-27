@@ -10,5 +10,6 @@ import java.util.*
 @JdbcRepository(dialect = Dialect.POSTGRES)
 interface TransferStateRepository: CoroutineCrudRepository<TransferState, UUID> {
     suspend fun findOneBySupplierIdAndSupplierRef(supplierId: UUID, supplierRef: String): TransferState?
+    suspend fun findBySupplierIdAndMd5(supplierId: UUID, md5: String): TransferState?
     suspend fun findByTransferStatus(transferStatus: TransferStatus, pageable: Pageable = Pageable.from(0, 1000)): Page<TransferState>
 }

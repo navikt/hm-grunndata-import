@@ -8,6 +8,7 @@ import java.util.*
 
 data class ProductTransferDTO (
     val id: UUID = UUID.randomUUID(),
+    val transferId: UUID = UUID.randomUUID(),
     val supplier: UUID,
     val title: String,
     val articleName: String,
@@ -20,12 +21,13 @@ data class ProductTransferDTO (
     val seriesId: String?,
     val transferTechData: List<TransferTechData> = emptyList(),
     val media: List<TransferMediaDTO> = emptyList(),
-    val published: LocalDateTime?=null,
-    val expired: LocalDateTime?=null,
+    val published: LocalDateTime = LocalDateTime.now(),
+    val expired: LocalDateTime = published.plusYears(10),
     val agreementInfo: AgreementInfo?=null,
     val createdBy: String = "IMPORT",
     val updatedBy: String = "IMPORT"
 )
+
 data class TransferMediaDTO (
     val sourceUri: String,
     val uri: String = sourceUri,

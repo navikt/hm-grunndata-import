@@ -17,6 +17,7 @@ data class TransferState(
     val md5: String,
     @field:TypeDef(type = DataType.JSON)
     val json_payload: ProductTransferDTO,
+    val message: String? = null,
     val transferStatus: TransferStatus = TransferStatus.RECEIVED,
     val created: LocalDateTime = LocalDateTime.now()
 )
@@ -31,11 +32,11 @@ data class TransferStateDTO(
     val supplierId: UUID,
     val supplierRef: String,
     val md5: String,
-    val json_payload: ProductTransferDTO,
+    val message: String? = null,
     val transferStatus: TransferStatus,
     val created: LocalDateTime)
 
 fun TransferState.toDTO(): TransferStateDTO = TransferStateDTO(
     id = transferId, productId = productId, supplierId = supplierId, supplierRef = supplierRef, md5 = md5,
-    json_payload = json_payload, transferStatus = transferStatus, created = created
+    message = message, transferStatus = transferStatus, created = created
 )

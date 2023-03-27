@@ -20,7 +20,7 @@ data class ProductState(
     @field:TypeDef(type = DataType.JSON)
     val productDTO: ProductDTO,
     val adminStatus: AdminStatus?=null,
-    val message: String? = null,
+    val adminMessage: String? = null,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now()
 )
@@ -31,7 +31,7 @@ fun ProductState.toDTO(): ProductStateDTO = ProductStateDTO(
     supplierRef = supplierRef,
     productDTO = productDTO,
     adminStatus = adminStatus,
-    message = message,
+    message = adminMessage,
     created = created,
     updated = updated
 )

@@ -7,6 +7,7 @@ import no.nav.hm.grunndata.importapi.supplier.toDTO
 import no.nav.hm.grunndata.importapi.transferstate.ProductTransferDTO
 import no.nav.hm.grunndata.importapi.transferstate.TransferState
 import no.nav.hm.grunndata.rapid.dto.*
+import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import javax.transaction.Transactional
 
@@ -15,7 +16,11 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
                                private val supplierService: SupplierService,
                                private val importRapidPushService: ImportRapidPushService) {
 
-    val eventName = "hm-grunndata-import-productstate"
+    val eventName = "hm-grunndata-import-productstate-transfer"
+
+    companion object {
+        private val LOG = LoggerFactory.getLogger(ProductStateKafkaService::class.java)
+    }
 
     @Transactional
     open suspend fun mapTransferToproductState(transfer: TransferState) {
@@ -32,6 +37,7 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
                 supplierRef = transfer.supplierRef, productDTO = transfer.json_payload.toProductDTO()
             )
         )
+        LOG.info("productstate ${productstate.id} and transfer id: ${productstate.transferId} push to rapid")
         importRapidPushService.pushDTOToKafka(productstate.toDTO(), eventName)
     }
 
