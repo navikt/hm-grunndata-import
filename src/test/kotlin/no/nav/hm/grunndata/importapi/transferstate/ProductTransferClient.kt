@@ -1,6 +1,7 @@
 package no.nav.hm.grunndata.importapi.transferstate
 
 import com.fasterxml.jackson.databind.JsonNode
+import io.micronaut.data.model.Page
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.http.client.annotation.Client
@@ -16,7 +17,8 @@ interface ProductTransferClient {
                       @Header authorization: String,
                       @Body json: Publisher<JsonNode>): Publisher<TransferStateResponseDTO>
 
-    @Get(value="/{supplierId}/{id}")
-    fun getTransferById(supplierId: UUID, id: UUID): TransferStateResponseDTO?
+    @Get(value="/{supplierId}/{supplierRef}")
+    fun getTransfersBySupplierIdSupplierRef(@Header authorization: String, supplierId: UUID, supplierRef: String):
+            Page<TransferStateResponseDTO>
 
 }

@@ -2,6 +2,8 @@ package no.nav.hm.grunndata.importapi.transferstate
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 import io.micronaut.core.async.publisher.Publishers
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import kotlinx.coroutines.flow.collect
@@ -39,13 +41,25 @@ class ProductTransferTest(private val client: ProductTransferClient,
             val token = "bearer ${tokenService.token(supplier)}"
             val product = objectMapper.readTree(ProductTransferTest::class.java.classLoader.getResourceAsStream("json/product.json"))
             val response = client.productStream(supplierId = supplier.id, authorization = token, json = Publishers.just(product))
+            var md5: String? = null
             response.asFlow().onEach {
                 LOG.info(it.md5)
-                it.md5.shouldNotBeNull()
+                md5 = it.md5
+                md5.shouldNotBeNull()
+                it.transferStatus shouldBe TransferStatus.RECEIVED
+            }.collect()
+            val transfers = client.getTransfersBySupplierIdSupplierRef(authorization = token, supplier.id, supplierRef = "1506-1041")
+            transfers.totalSize shouldBe 1
+
+            // test identical add
+            val product2 = objectMapper.readTree(ProductTransferTest::class.java.classLoader.getResourceAsStream("json/product.json"))
+            val response2 = client.productStream(supplierId = supplier.id, authorization = token, json = Publishers.just(product2))
+            response2.asFlow().onEach {
+                LOG.info(it.md5)
+                it.md5 shouldBe md5
+                it.transferStatus shouldBe TransferStatus.RECEIVED
             }.collect()
         }
-
-
 
     }
 

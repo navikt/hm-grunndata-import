@@ -23,7 +23,7 @@ data class TransferState(
 )
 
 enum class TransferStatus {
-    DONE, RECEIVED,  ERROR
+    RECEIVED,  DONE, ERROR
 }
 
 data class TransferStateResponseDTO(
