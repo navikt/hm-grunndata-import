@@ -37,7 +37,7 @@ class ProductTransferTest(private val client: ProductTransferClient,
                 identifier = "medema_as", jwtid = UUID.randomUUID().toString()))
             val supplier = supplierService.findById(supplierId)!!
             val token = "bearer ${tokenService.token(supplier)}"
-            val product = objectMapper.readTree(ProductTransferTest.javaClass.classLoader.getResourceAsStream("json/product.json"))
+            val product = objectMapper.readTree(ProductTransferTest::class.java.classLoader.getResourceAsStream("json/product.json"))
             val response = client.productStream(supplierId = supplier.id, authorization = token, json = Publishers.just(product))
             response.asFlow().onEach {
                 LOG.info(it.md5)

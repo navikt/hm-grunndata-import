@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS productstate_v1 (
     supplier_ref VARCHAR(255) NOT NULL,
     product_dto JSONB NOT NULL,
     admin_status VARCHAR(32),
-    message TEXT,
+    admin_message TEXT,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (supplier_id, supplier_ref)
