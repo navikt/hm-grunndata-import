@@ -7,6 +7,7 @@ import io.micronaut.data.model.DataType
 import no.nav.hm.grunndata.rapid.dto.AdminStatus
 import no.nav.hm.grunndata.rapid.dto.ProductDTO
 import no.nav.hm.grunndata.rapid.dto.ProductStateDTO
+import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import java.time.LocalDateTime
 import java.util.*
 
@@ -32,6 +33,30 @@ fun ProductState.toDTO(): ProductStateDTO = ProductStateDTO(
     productDTO = productDTO,
     adminStatus = adminStatus,
     message = adminMessage,
+    created = created,
+    updated = updated
+)
+
+data class ProductStateResponseDTO (
+    val id: UUID,
+    val transferId: UUID,
+    val supplierId: UUID,
+    val supplierRef: String,
+    val productStatus: ProductStatus,
+    val adminStatus: AdminStatus?=null,
+    val adminMessage: String? = null,
+    val created: LocalDateTime = LocalDateTime.now(),
+    val updated: LocalDateTime = LocalDateTime.now()
+)
+
+fun ProductState.toResponseDTO(): ProductStateResponseDTO = ProductStateResponseDTO (
+    id = id,
+    transferId = transferId,
+    supplierId = supplierId,
+    supplierRef = supplierRef,
+    productStatus = productDTO.status,
+    adminStatus = adminStatus,
+    adminMessage = adminMessage,
     created = created,
     updated = updated
 )

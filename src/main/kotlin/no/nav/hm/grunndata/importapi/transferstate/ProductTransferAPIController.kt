@@ -35,11 +35,11 @@ class ProductTransferController(private val supplierService: SupplierService,
     }
 
     @Get(value="/{supplierId}/{supplierRef}")
-    suspend fun getTransferById(supplierId: UUID, id: UUID): TransferStateDTO? =
-        transferStateRepository.findById(id)?.toDTO()
+    suspend fun getTransferById(supplierId: UUID, id: UUID): TransferStateResponseDTO? =
+        transferStateRepository.findById(id)?.toResponseDTO()
 
     @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])
-    suspend fun productStream(@PathVariable supplierId: UUID, @Body jsonNode: Publisher<JsonNode>): Publisher<TransferStateDTO> =
+    suspend fun productStream(@PathVariable supplierId: UUID, @Body jsonNode: Publisher<JsonNode>): Publisher<TransferStateResponseDTO> =
         jsonNode.asFlow().map { json ->
             val content = objectMapper.writeValueAsString(json)
             val md5 = content.toMD5Hex()
@@ -47,7 +47,7 @@ class ProductTransferController(private val supplierService: SupplierService,
             LOG.info("Got product stream from $supplierId and transferId: ${transfer.transferId}")
             transferStateRepository.findBySupplierIdAndMd5(supplierId, md5)?.let { identical ->
                 LOG.info("Identical product ${identical.md5} with previous transfer ${identical.transferId}")
-                identical.toDTO()
+                identical.toResponseDTO()
             } ?: createtransferState(supplierId, transfer, md5)
         }.asPublisher()
 
@@ -62,14 +62,18 @@ class ProductTransferController(private val supplierService: SupplierService,
                     transferStatus = TransferStatus.RECEIVED
                 )
             )
-                .toDTO()
+                .toResponseDTO()
         } ?: transferStateRepository.save(
             TransferState(
                 productId = UUID.randomUUID(), supplierId = supplierId,
                 supplierRef = transfer.supplierRef, md5 = md5, json_payload = transfer
             )
-        ).toDTO()
+        ).toResponseDTO()
 
-
+    @Delete("/{supplierId}/{supplierRef}", processes = [MediaType.APPLICATION_JSON])
+    suspend fun deactivateProduct(@PathVariable supplierId: UUID): TransferStateResponseDTO =
+        productStateRepository.findBySupplierIdAndSupplierRef()?.let {
+            
+        }
 
 }
