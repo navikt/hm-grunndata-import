@@ -113,3 +113,6 @@ kafka:
   keystorePassword: ${KAFKA_CREDSTORE_PASSWORD:}
   health:
     enabled: false
+
+schedulers:
+  enabled:${SCHEDULERS_ENABLED:false}
