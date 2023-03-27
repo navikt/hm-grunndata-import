@@ -26,7 +26,7 @@ enum class TransferStatus {
     DONE, RECEIVED,  ERROR
 }
 
-data class TransferStateDTO(
+data class TransferStateResponseDTO(
     val id: UUID,
     val productId: UUID,
     val supplierId: UUID,
@@ -36,7 +36,7 @@ data class TransferStateDTO(
     val transferStatus: TransferStatus,
     val created: LocalDateTime)
 
-fun TransferState.toDTO(): TransferStateDTO = TransferStateDTO(
+fun TransferState.toResponseDTO(): TransferStateResponseDTO = TransferStateResponseDTO(
     id = transferId, productId = productId, supplierId = supplierId, supplierRef = supplierRef, md5 = md5,
     message = message, transferStatus = transferStatus, created = created
 )

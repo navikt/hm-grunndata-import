@@ -8,15 +8,15 @@ import io.micronaut.http.client.annotation.Client
 import org.reactivestreams.Publisher
 import java.util.*
 
-@Client(ProductTransferController.API_V1_TRANSFERS)
+@Client(ProductTransferAPIController.API_V1_TRANSFERS)
 interface ProductTransferClient {
 
     @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])
     fun productStream(@PathVariable supplierId: UUID,
                       @Header authorization: String,
-                      @Body json: Publisher<JsonNode>): Publisher<TransferStateDTO>
+                      @Body json: Publisher<JsonNode>): Publisher<TransferStateResponseDTO>
 
     @Get(value="/{supplierId}/{id}")
-    fun getTransferById(supplierId: UUID, id: UUID): TransferStateDTO?
+    fun getTransferById(supplierId: UUID, id: UUID): TransferStateResponseDTO?
 
 }
