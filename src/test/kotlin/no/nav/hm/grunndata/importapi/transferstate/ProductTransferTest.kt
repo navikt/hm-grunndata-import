@@ -2,12 +2,10 @@ package no.nav.hm.grunndata.importapi.transferstate
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.micronaut.core.async.publisher.Publishers
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.reactive.asFlow
 
@@ -39,7 +37,7 @@ class ProductTransferTest(private val client: ProductTransferClient,
                 identifier = "medema_as", jwtid = UUID.randomUUID().toString()))
             val supplier = supplierService.findById(supplierId)!!
             val token = "bearer ${tokenService.token(supplier)}"
-            val product = objectMapper.readTree(ProductTransferTest::class.java.classLoader.getResourceAsStream("json/product.json"))
+            val product = objectMapper.readTree(ProductTransferTest::class.java.classLoader.getResourceAsStream("json/tilbehoer.json"))
             val response = client.productStream(supplierId = supplier.id, authorization = token, json = Publishers.just(product))
             var md5: String? = null
             var productId: UUID? = null
@@ -54,7 +52,7 @@ class ProductTransferTest(private val client: ProductTransferClient,
             transfers.totalSize shouldBe 1
 
             // test identical product
-            val product2 = objectMapper.readTree(ProductTransferTest::class.java.classLoader.getResourceAsStream("json/product.json"))
+            val product2 = objectMapper.readTree(ProductTransferTest::class.java.classLoader.getResourceAsStream("json/tilbehoer.json"))
             val response2 = client.productStream(supplierId = supplier.id, authorization = token, json = Publishers.just(product2))
             response2.asFlow().onEach {
                 LOG.info(it.md5)
