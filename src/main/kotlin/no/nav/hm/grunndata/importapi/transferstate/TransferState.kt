@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 @MappedEntity("transferstate_v1")
-data class TransferState(
+data class TransferState (
     @field:Id
     val transferId: UUID = UUID.randomUUID(),
     val productId: UUID,

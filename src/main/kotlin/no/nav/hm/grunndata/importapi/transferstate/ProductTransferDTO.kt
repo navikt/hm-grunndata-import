@@ -7,8 +7,6 @@ import java.util.*
 
 
 data class ProductTransferDTO (
-    val id: UUID = UUID.randomUUID(),
-    val transferId: UUID = UUID.randomUUID(),
     val supplier: UUID,
     val title: String,
     val articleName: String,

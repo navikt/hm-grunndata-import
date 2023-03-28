@@ -10,10 +10,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.asPublisher
-import no.nav.hm.grunndata.importapi.productstate.ProductStateRepository
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecurityRule
-import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transferstate.ProductTransferAPIController.Companion.API_V1_TRANSFERS
 import org.reactivestreams.Publisher
@@ -46,37 +44,38 @@ class ProductTransferAPIController(private val transferStateRepository: Transfer
             val content = objectMapper.writeValueAsString(json)
             val md5 = content.toMD5Hex()
             val transfer = objectMapper.treeToValue(json, ProductTransferDTO::class.java)
-            LOG.info("Got product stream from $supplierId and transferId: ${transfer.transferId}")
+            LOG.info("Got product stream from $supplierId with supplierRef: ${transfer.supplierRef}")
             transferStateRepository.findBySupplierIdAndMd5(supplierId, md5)?.let { identical ->
                 LOG.info("Identical product ${identical.md5} with previous transfer ${identical.transferId}")
                 identical.toResponseDTO()
-            } ?: createtransferState(supplierId, transfer, md5)
+            } ?: createTransferState(supplierId, transfer, md5)
         }.asPublisher()
 
     @Delete("/{supplierId}/{supplierRef}")
-    suspend fun delete(supplierId: UUID, supplierRef: String): HttpResponse<TransferStateResponseDTO>? =
+    suspend fun delete(supplierId: UUID, supplierRef: String): HttpResponse<TransferStateResponseDTO> =
         transferStateRepository.findOneBySupplierIdAndSupplierRefOrderByCreatedDesc(supplierId, supplierRef)?.let {
             val expiredPayload = it.json_payload.copy(expired = LocalDateTime.now().minusMinutes(1))
-            val expiredState = it.copy(transferId = UUID.randomUUID(), json_payload = expiredPayload)
+            val expiredState = it.copy(transferId = UUID.randomUUID(), json_payload = expiredPayload,
+                message = "deleted by supplier")
             HttpResponse.created(transferStateRepository.save(expiredState).toResponseDTO())
         } ?: HttpResponse.notFound()
 
-    private suspend fun createtransferState(supplierId: UUID,
-                                         transfer: ProductTransferDTO,
-                                         md5: String) =
-        transferStateRepository.findOneBySupplierIdAndSupplierRefOrderByCreatedDesc(supplierId, transfer.supplierRef)?.let { state ->
+    private suspend fun createTransferState(supplierId: UUID,
+                                            productTransfer: ProductTransferDTO,
+                                            md5: String) =
+        transferStateRepository.findOneBySupplierIdAndSupplierRefOrderByCreatedDesc(supplierId, productTransfer.supplierRef)?.let { state ->
             transferStateRepository.save(
                 state.copy(
                     transferId = UUID.randomUUID(),
-                    created = LocalDateTime.now(), md5 = md5, json_payload = transfer,
-                    transferStatus = TransferStatus.RECEIVED
+                    created = LocalDateTime.now(), md5 = md5, json_payload = productTransfer,
+                    message = null, transferStatus = TransferStatus.RECEIVED
                 )
             )
                 .toResponseDTO()
         } ?: transferStateRepository.save(
             TransferState(
-                productId = UUID.randomUUID(), supplierId = supplierId,
-                supplierRef = transfer.supplierRef, md5 = md5, json_payload = transfer
+                productId =  UUID.randomUUID(), supplierId = supplierId,
+                supplierRef = productTransfer.supplierRef, md5 = md5, json_payload = productTransfer
             )
         ).toResponseDTO()
 

@@ -51,7 +51,7 @@ class ProductTransferTest(private val client: ProductTransferClient,
             val transfers = client.getTransfersBySupplierIdSupplierRef(authorization = token, supplier.id, supplierRef = "1506-1041")
             transfers.totalSize shouldBe 1
 
-            // test identical add
+            // test identical product
             val product2 = objectMapper.readTree(ProductTransferTest::class.java.classLoader.getResourceAsStream("json/product.json"))
             val response2 = client.productStream(supplierId = supplier.id, authorization = token, json = Publishers.just(product2))
             response2.asFlow().onEach {
@@ -59,6 +59,10 @@ class ProductTransferTest(private val client: ProductTransferClient,
                 it.md5 shouldBe md5
                 it.transferStatus shouldBe TransferStatus.RECEIVED
             }.collect()
+
+            // test "delete" product
+            val delete = client.deleteProduct(authorization = token, supplierId = supplier.id, supplierRef = "1506-1041")
+
         }
 
     }
