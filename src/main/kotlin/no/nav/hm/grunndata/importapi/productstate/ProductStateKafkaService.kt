@@ -29,22 +29,23 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
             productStateRepository.update(
                 inDb.copy(
                     transferId = transfer.transferId,
-                    productDTO = transfer.json_payload.toProductDTO(transfer.productId)
+                    productDTO = transfer.json_payload.toProductDTO(transfer.productId, transfer.supplierId)
                 )
             )
         } ?: productStateRepository.save(
             ProductState(
                 id = transfer.productId, transferId = transfer.transferId, supplierId = transfer.supplierId,
-                supplierRef = transfer.supplierRef, productDTO = transfer.json_payload.toProductDTO(transfer.productId)
+                supplierRef = transfer.supplierRef,
+                productDTO = transfer.json_payload.toProductDTO(transfer.productId, transfer.supplierId)
             )
         )
         LOG.info("productstate ${productstate.id} and transfer id: ${productstate.transferId} push to rapid")
         importRapidPushService.pushDTOToKafka(productstate.toDTO(), eventName)
     }
 
-    private suspend fun ProductTransferDTO.toProductDTO(productId: UUID): ProductDTO = ProductDTO(
+    private suspend fun ProductTransferDTO.toProductDTO(productId: UUID, supplierId: UUID): ProductDTO = ProductDTO(
         id = productId,
-        supplier = supplierService.findById(supplier)!!.toDTO(),
+        supplier = supplierService.findById(supplierId)!!.toDTO(),
         title = title,
         articleName = articleName,
         supplierRef = supplierRef,

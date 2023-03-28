@@ -7,7 +7,6 @@ import java.util.*
 
 
 data class ProductTransferDTO (
-    val supplier: UUID,
     val title: String,
     val articleName: String,
     val attributes: Attributes = Attributes(),
