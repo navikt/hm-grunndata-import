@@ -8,7 +8,6 @@ import no.nav.hm.grunndata.importapi.transferstate.ProductTransferDTO
 import no.nav.hm.grunndata.importapi.transferstate.TransferState
 import no.nav.hm.grunndata.rapid.dto.*
 import org.slf4j.LoggerFactory
-import java.time.LocalDateTime
 import java.util.UUID
 import javax.transaction.Transactional
 
@@ -24,7 +23,7 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
     }
 
     @Transactional
-    open suspend fun mapTransferToproductState(transfer: TransferState) {
+    open suspend fun mapTransferToProductState(transfer: TransferState) {
         val productstate = productStateRepository.findById(transfer.productId)?.let { inDb ->
             productStateRepository.update(
                 inDb.copy(

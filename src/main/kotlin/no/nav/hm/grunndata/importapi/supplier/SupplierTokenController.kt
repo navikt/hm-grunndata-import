@@ -23,6 +23,7 @@ class SupplierTokenController(private val supplierService: SupplierService,
 
     @Post("/{supplierId}")
     suspend fun createNewTokenForSupplier(supplierId: UUID): HttpResponse<TokenResponseDTO> {
+        LOG.info("admin request creating token for supplier $supplierId")
         return supplierService.findById(supplierId)?.let {
             val token = tokenService.token(it)
             HttpResponse.created(it.toTokenResponseDTO(token))
