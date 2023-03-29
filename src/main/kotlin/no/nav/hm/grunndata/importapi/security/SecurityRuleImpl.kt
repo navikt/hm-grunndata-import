@@ -14,6 +14,7 @@ import java.util.*
 import jakarta.inject.Singleton
 import kotlinx.coroutines.runBlocking
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
+import no.nav.hm.grunndata.rapid.dto.SupplierStatus
 import org.reactivestreams.Publisher
 
 
@@ -43,8 +44,8 @@ class SecurityRuleImpl(rolesFinder: RolesFinder,
                 }
                 return runBlocking {
                     val supplier = supplierService.findById(UUID.fromString(supplierId))
-                    if (authentication.attributes["jti"] != supplier?.jwtid ) {
-                        LOG.warn("Rejected because jwt id does not match with claims")
+                    if (authentication.attributes["jti"] != supplier?.jwtid || SupplierStatus.ACTIVE != supplier?.status ) {
+                        LOG.warn("Rejected because jwt id does not match with claims, or supplier is not longer active")
                         just(SecurityRuleResult.REJECTED)
                     }
                     else
