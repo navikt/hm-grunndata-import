@@ -3,6 +3,7 @@ package no.nav.hm.grunndata.importapi.supplier
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecurityRule
 import no.nav.hm.grunndata.importapi.security.TokenService
@@ -13,6 +14,7 @@ import java.util.*
 
 @SecurityRule(value = [Roles.ROLE_ADMIN])
 @Controller(API_V1_TOKEN)
+@SecurityRequirement(name = "bearer-auth")
 class SupplierTokenController(private val supplierService: SupplierService,
                               private val tokenService: TokenService) {
 

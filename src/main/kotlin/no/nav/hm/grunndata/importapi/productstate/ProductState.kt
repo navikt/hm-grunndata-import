@@ -32,7 +32,7 @@ fun ProductState.toDTO(): ProductStateDTO = ProductStateDTO(
     supplierRef = supplierRef,
     productDTO = productDTO,
     adminStatus = adminStatus,
-    message = adminMessage,
+    adminMessage = adminMessage,
     created = created,
     updated = updated
 )
