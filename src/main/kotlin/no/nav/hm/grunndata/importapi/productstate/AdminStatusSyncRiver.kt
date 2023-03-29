@@ -50,6 +50,7 @@ class AdminStatusSyncRiver(river: RiverHead,
                         updated = LocalDateTime.now(), adminMessage = dto.message
                     ))
                 }
+                LOG.info("adminstatus sync for ${dto.id} with adminstatus ${dto.adminStatus}")
             }
         }
     }
