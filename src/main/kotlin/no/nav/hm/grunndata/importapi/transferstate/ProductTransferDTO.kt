@@ -21,8 +21,6 @@ data class ProductTransferDTO (
     val published: LocalDateTime = LocalDateTime.now(),
     val expired: LocalDateTime = published.plusYears(10),
     val agreementInfo: AgreementInfo?=null,
-    val createdBy: String = "IMPORT",
-    val updatedBy: String = "IMPORT"
 )
 
 data class TransferMediaDTO (

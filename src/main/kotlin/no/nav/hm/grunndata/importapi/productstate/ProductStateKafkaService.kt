@@ -70,7 +70,7 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
         agreementInfo = if (agreementInfo!=null) AgreementInfo(reference = agreementInfo.reference,
             rank = agreementInfo.rank, postNr = agreementInfo.postNr) else null,
         hasAgreement = (agreementInfo!=null),
-        createdBy = createdBy,
-        updatedBy = updatedBy,
+        createdBy = "IMPORT",
+        updatedBy = "IMPORT",
     )
 }
