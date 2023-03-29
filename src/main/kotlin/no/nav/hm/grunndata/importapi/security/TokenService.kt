@@ -29,10 +29,10 @@ class TokenService(private val secretSignatureConfiguration: SecretSignatureConf
         return signedJWT.serialize()
     }
 
-    fun adminToken(): String {
+    fun adminToken(subject: String): String {
         val signer = MACSigner(secretSignatureConfiguration.secret)
         val claimsSet = JWTClaimsSet.Builder()
-                .subject("hjelpemiddeldatabasen@nav.no")
+                .subject(subject)
                 .jwtID(UUID.randomUUID().toString())
                 .issuer("https://hjelpemiddeldabasen.nav.no")
                 .issueTime(Date())
