@@ -26,7 +26,7 @@ class TransferStateRepositoryTest(private val transferStateRepository: TransferS
             supplierRef = "mini-crosser-x1-x2-4w", seriesId = "mini-crosser-x1-x2",
 
             attributes = Attributes(manufacturer = "Medema AS",
-                compatible = listOf(CompatibleAttribute(reference = "supplierref", hmsArtNr = "123"), CompatibleAttribute(hmsArtNr = "124")),
+                compatible = listOf(CompatibleAttribute(supplierRef = "supplierref", hmsArtNr = "123"), CompatibleAttribute(hmsArtNr = "124")),
                 shortdescription = "4-hjuls scooter med manuell regulering av seteløft, ryggvinkel og seterotasjon. Leveres som standard med Ergo2 sitteenhet.",
                 text = """Mini Crosser modell X1/ X2
                     Er uten sammenligning markedets sterkeste og mest komfortable el scooter: Her får man både stor motorkraft, mulighet for ekstra stor kjørelengde og unik regulerbar fjæring pakket inn i et usedvanlig lekkert design. Nordens mest solgte scooter er spesielt konstruert for nordisk klima og geografi, hvilket betyr at den er velegnet for bruk året rundt, på dårlige veier, snøføre, og ellers hvor man ønsker ekstra stabilitet. Det er virkelig fokusert på sikkerheten, og uten at det går på kompromiss med bruksegenskaper og design. Leveres også med kabin.
@@ -42,7 +42,7 @@ class TransferStateRepositoryTest(private val transferStateRepository: TransferS
         val json = objectMapper.writeValueAsString(product)
         println(json)
         val transfer = TransferState(supplierId=supplierId, json_payload = product, md5 = json.toMD5Hex(),
-            supplierRef = product.supplierRef, productId =  UUID.randomUUID())
+            supplierRef = product.supplierRef)
 
         runBlocking {
             val savedSup = supplierRepository.save(supplier)

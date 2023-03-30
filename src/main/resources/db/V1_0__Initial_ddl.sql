@@ -13,7 +13,6 @@ CREATE TABLE IF NOT EXISTS supplier_v1 (
 
 CREATE TABLE IF NOT EXISTS transferstate_v1 (
     transfer_id uuid NOT NULL PRIMARY KEY,
-    product_id uuid NOT NULL,
     supplier_id uuid NOT NULL,
     supplier_ref VARCHAR(255) NOT NULL,
     md5 VARCHAR(32) NOT NULL,

@@ -61,6 +61,6 @@ data class Attributes(val manufacturer: String? = null,
                       val text: String? = null,
                       val url: String? = null)
 data class CompatibleAttribute(val id: UUID?=null,
-                               val reference: String?=null,
+                               val supplierRef: String?=null,
                                val hmsArtNr: String?)
 

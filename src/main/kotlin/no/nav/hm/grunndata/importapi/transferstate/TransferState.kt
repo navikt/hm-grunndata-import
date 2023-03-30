@@ -11,7 +11,6 @@ import java.util.*
 data class TransferState (
     @field:Id
     val transferId: UUID = UUID.randomUUID(),
-    val productId: UUID,
     val supplierId: UUID,
     val supplierRef: String,
     val md5: String,
@@ -27,8 +26,7 @@ enum class TransferStatus {
 }
 
 data class TransferStateResponseDTO(
-    val id: UUID,
-    val productId: UUID,
+    val transferId: UUID,
     val supplierId: UUID,
     val supplierRef: String,
     val md5: String,
@@ -37,6 +35,6 @@ data class TransferStateResponseDTO(
     val created: LocalDateTime)
 
 fun TransferState.toResponseDTO(): TransferStateResponseDTO = TransferStateResponseDTO(
-    id = transferId, productId = productId, supplierId = supplierId, supplierRef = supplierRef, md5 = md5,
+    transferId = transferId, supplierId = supplierId, supplierRef = supplierRef, md5 = md5,
     message = message, transferStatus = transferStatus, created = created
 )

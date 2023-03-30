@@ -67,19 +67,10 @@ class ProductTransferAPIController(private val transferStateRepository: Transfer
     private suspend fun createTransferState(supplierId: UUID,
                                             productTransfer: ProductTransferDTO,
                                             md5: String) =
-        transferStateRepository.findOneBySupplierIdAndSupplierRefOrderByCreatedDesc(supplierId, productTransfer.supplierRef)?.let { state ->
-            transferStateRepository.save(
-                state.copy(
-                    transferId = UUID.randomUUID(),
-                    created = LocalDateTime.now(), md5 = md5, json_payload = productTransfer,
-                    message = null, transferStatus = TransferStatus.RECEIVED
-                )
-            )
-                .toResponseDTO()
-        } ?: transferStateRepository.save(
+        transferStateRepository.save(
             TransferState(
-                productId =  UUID.randomUUID(), supplierId = supplierId,
-                supplierRef = productTransfer.supplierRef, md5 = md5, json_payload = productTransfer
+                supplierId = supplierId, supplierRef = productTransfer.supplierRef, md5 = md5,
+                json_payload = productTransfer
             )
         ).toResponseDTO()
 

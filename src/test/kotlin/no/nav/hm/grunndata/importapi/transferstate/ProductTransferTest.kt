@@ -45,7 +45,6 @@ class ProductTransferTest(private val client: ProductTransferClient,
                 LOG.info(it.md5)
                 md5 = it.md5
                 md5.shouldNotBeNull()
-                productId = it.productId
                 it.transferStatus shouldBe TransferStatus.RECEIVED
             }.collect()
             val transfers = client.getTransfersBySupplierIdSupplierRef(authorization = token, supplier.id, supplierRef = "1506-1041")
@@ -62,7 +61,6 @@ class ProductTransferTest(private val client: ProductTransferClient,
 
             // test "delete" product
             val delete = client.deleteProduct(authorization = token, supplierId = supplier.id, supplierRef = "1506-1041")
-            delete.body().productId shouldBe productId
             delete.body().message shouldBe "deleted by supplier"
 
         }
