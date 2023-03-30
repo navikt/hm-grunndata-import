@@ -63,7 +63,7 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
         sparePart = sparePart,
         seriesId = seriesId,
         techData = transferTechData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
-        media = media.map { MediaDTO(oid = productId, sourceUri = it.sourceUri, uri = it.uri, priority = it.priority,
+        media = media.map { MediaInfo( sourceUri = it.sourceUri, uri = it.uri, priority = it.priority,
             source = it.sourceType, type = MediaType.valueOf(it.type.name) ) },
         published = published,
         expired = expired,
