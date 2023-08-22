@@ -2,15 +2,11 @@ package no.nav.hm.grunndata.importapi.productstate
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller
-import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
-import io.micronaut.http.annotation.PathVariable
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import no.nav.hm.grunndata.importapi.productstate.ProductStateAPIController.Companion.API_V1_PRODUCTSTATE
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecurityRule
-import no.nav.hm.grunndata.importapi.transferstate.TransferStateResponseDTO
-import no.nav.hm.grunndata.rapid.dto.ProductStateDTO
 import org.slf4j.LoggerFactory
 import java.util.*
 

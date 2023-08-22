@@ -9,8 +9,7 @@ import no.nav.helse.rapids_rivers.KafkaRapid
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.River
 import no.nav.hm.grunndata.rapid.dto.DraftStatus
-import no.nav.hm.grunndata.rapid.dto.ProductDTO
-import no.nav.hm.grunndata.rapid.dto.ProductRegistrationDTO
+import no.nav.hm.grunndata.rapid.dto.ProductRegistrationRapidDTO
 import no.nav.hm.grunndata.rapid.dto.rapidDTOVersion
 import no.nav.hm.grunndata.rapid.event.EventName
 import no.nav.hm.grunndata.rapid.event.RapidApp
@@ -32,7 +31,6 @@ class AdminStatusSyncRiver(river: RiverHead,
         river
             .validate { it.demandValue("createdBy", RapidApp.grunndata_register)}
             .validate { it.demandValue("eventName", EventName.registeredProductV1)}
-            .validate { it.demandValue("payloadType", ProductRegistrationDTO::class.java.simpleName)}
             .validate { it.demandKey("payload")}
             .validate { it.demandKey("dtoVersion")}
             .register(this)
@@ -42,7 +40,7 @@ class AdminStatusSyncRiver(river: RiverHead,
         val dtoVersion = packet["dtoVersion"].asLong()
         if (dtoVersion > rapidDTOVersion)
             LOG.warn("this event dto version $dtoVersion is newer than our version: $rapidDTOVersion")
-        val dto = objectMapper.treeToValue(packet["payload"], ProductRegistrationDTO::class.java)
+        val dto = objectMapper.treeToValue(packet["payload"], ProductRegistrationRapidDTO::class.java)
         if (DraftStatus.DONE == dto.draftStatus && "IMPORT" == dto.productDTO.createdBy) {
             runBlocking {
                 productStateRepository.findById(dto.id)?.let {

@@ -2,28 +2,27 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val jvmTarget = "17"
-val micronautVersion="3.8.7"
+val micronautVersion="4.0.3"
 val micrometerRegistryPrometheusVersion = "1.9.1"
 val junitJupiterVersion = "5.9.0"
-val jacksonVersion = "2.13.4"
-val logbackClassicVersion = "1.4.6"
+val logbackClassicVersion = "1.4.7"
 val logbackEncoderVersion = "7.3"
 val postgresqlVersion= "42.5.4"
 val tcVersion= "1.17.6"
 val mockkVersion = "1.13.4"
 val kotestVersion = "5.5.5"
-val rapidsRiversVersion="202303011052"
-val grunndataDtoVersion = "202304031307"
+val rapidsRiversVersion = "202308150807"
+val grunndataDtoVersion = "202307310829"
 
 group = "no.nav.hm"
 version = properties["version"] ?: "local-build"
 
 plugins {
-    kotlin("jvm") version "1.7.0"
-    kotlin("kapt") version "1.7.0"
+    kotlin("jvm") version "1.8.22"
+    kotlin("kapt") version "1.8.22"
     id("java")
     id("com.github.johnrengelman.shadow") version "7.1.0"
-    id("io.micronaut.application") version "3.7.4"
+    id("io.micronaut.application") version "4.0.2"
 }
 
 configurations.all {
@@ -36,14 +35,16 @@ dependencies {
 
     api("ch.qos.logback:logback-classic:$logbackClassicVersion")
     api("net.logstash.logback:logstash-logback-encoder:$logbackEncoderVersion")
+
+
+    runtimeOnly("org.yaml:snakeyaml")
+    implementation("io.micronaut:micronaut-jackson-databind")
+
     // coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive")
     // security
     implementation("io.micronaut.security:micronaut-security-jwt")
-    kapt("io.micronaut.security:micronaut-security-annotations")
-
-    kapt("io.micronaut.data:micronaut-data-processor")
     implementation("io.micronaut.data:micronaut-data-jdbc")
     implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -66,8 +67,13 @@ dependencies {
     implementation("no.nav.hm.grunndata:hm-grunndata-rapid-dto:$grunndataDtoVersion")
 
     // OpenApi
-    kapt("io.micronaut.openapi:micronaut-openapi")
+    implementation("io.micronaut.openapi:micronaut-openapi")
     implementation("io.swagger.core.v3:swagger-annotations")
+
+    kapt("io.micronaut.security:micronaut-security-annotations")
+    kapt("io.micronaut.data:micronaut-data-processor")
+    kapt("io.micronaut.openapi:micronaut-openapi")
+
 
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("io.micronaut.test:micronaut-test-kotest5")
@@ -117,7 +123,7 @@ tasks.withType<Test> {
 }
 
 tasks.withType<Wrapper> {
-    gradleVersion = "7.5.1"
+    gradleVersion = "8.0.1"
 }
 
 repositories {

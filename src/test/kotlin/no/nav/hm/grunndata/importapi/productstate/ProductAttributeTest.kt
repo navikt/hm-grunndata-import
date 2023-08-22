@@ -5,7 +5,6 @@ import io.kotest.matchers.shouldBe
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import no.nav.hm.grunndata.importapi.transferstate.Attributes
 import no.nav.hm.grunndata.importapi.transferstate.CompatibleAttribute
-import no.nav.hm.grunndata.rapid.dto.AttributeNames
 import org.junit.jupiter.api.Test
 
 @MicronautTest
@@ -21,13 +20,13 @@ class ProductAttributeTest(private val objectMapper: ObjectMapper) {
             compatible = listOf(CompatibleAttribute(hmsArtNr = "hmsArtNr")),
             url = "url"
         )
-        val attributesMap: Map<AttributeNames, Any> = mapOf(
-            AttributeNames.shortdescription to  "shortdescription",
-            AttributeNames.text to "text",
-            AttributeNames.manufacturer to "manufacturer",
-            AttributeNames.series to "series",
-            AttributeNames.compatible to listOf(CompatibleAttribute(hmsArtNr = "hmsArtNr")),
-            AttributeNames.url to "url"
+        val attributesMap: Map<String, Any> = mapOf(
+            "shortdescription" to  "shortdescription",
+            "text" to "text",
+            "manufacturer" to "manufacturer",
+            "series" to "series",
+            "compatible" to listOf(CompatibleAttribute(hmsArtNr = "hmsArtNr")),
+            "url" to "url"
 
         )
         // Testing jsons should be the same

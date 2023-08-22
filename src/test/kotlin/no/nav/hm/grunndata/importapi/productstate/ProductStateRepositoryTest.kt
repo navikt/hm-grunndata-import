@@ -15,15 +15,15 @@ class ProductStateRepositoryTest(private val productStateRepository: ProductStat
     @Test
     fun crudProductStateTest() {
         val supplierId = UUID.randomUUID()
-        val productDTO = ProductDTO (
+        val productDTO = ProductRapidDTO (
             id = UUID.randomUUID(),
             supplier = SupplierDTO(id= supplierId, identifier = "12345", updated = LocalDateTime.now(),
                 created = LocalDateTime.now(), createdBy = "IMPORT", updatedBy = "IMPORT", info = SupplierInfo(), name = "testsupplier"),
             title = "Dette er produkt title",
             articleName = "Dette er article navn",
-            attributes = mapOf(
-                AttributeNames.shortdescription to "En kort beskrivelse av produktet",
-                AttributeNames.text to "En lang beskrivelse av produktet"
+            attributes = Attributes(
+                shortdescription = "En kort beskrivelse av produktet",
+                text =  "En lang beskrivelse av produktet"
             ),
             hmsArtNr = "123",
             identifier = "hmdb-123",

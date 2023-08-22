@@ -5,7 +5,7 @@ import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.TypeDef
 import io.micronaut.data.model.DataType
 import no.nav.hm.grunndata.rapid.dto.AdminStatus
-import no.nav.hm.grunndata.rapid.dto.ProductDTO
+import no.nav.hm.grunndata.rapid.dto.ProductRapidDTO
 import no.nav.hm.grunndata.rapid.dto.ProductStateDTO
 import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import java.time.LocalDateTime
@@ -19,7 +19,7 @@ data class ProductState(
     val supplierId: UUID,
     val supplierRef: String,
     @field:TypeDef(type = DataType.JSON)
-    val productDTO: ProductDTO,
+    val productDTO: ProductRapidDTO,
     val adminStatus: AdminStatus?=null,
     val adminMessage: String? = null,
     val created: LocalDateTime = LocalDateTime.now(),

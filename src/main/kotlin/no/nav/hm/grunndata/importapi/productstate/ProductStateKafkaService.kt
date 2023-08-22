@@ -1,6 +1,7 @@
 package no.nav.hm.grunndata.importapi.productstate
 
 import jakarta.inject.Singleton
+import jakarta.transaction.Transactional
 import no.nav.hm.grunndata.importapi.ImportRapidPushService
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.supplier.toDTO
@@ -9,7 +10,7 @@ import no.nav.hm.grunndata.importapi.transferstate.TransferState
 import no.nav.hm.grunndata.rapid.dto.*
 import org.slf4j.LoggerFactory
 import java.util.UUID
-import javax.transaction.Transactional
+
 
 @Singleton
 open class ProductStateKafkaService(private val productStateRepository: ProductStateRepository,
@@ -45,20 +46,13 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
         importRapidPushService.pushDTOToKafka(productstate.toDTO(), eventName)
     }
 
-    private suspend fun ProductTransferDTO.toProductDTO(productId: UUID, supplierId: UUID): ProductDTO = ProductDTO(
+    private suspend fun ProductTransferDTO.toProductDTO(productId: UUID, supplierId: UUID): ProductRapidDTO = ProductRapidDTO (
         id = productId,
         supplier = supplierService.findById(supplierId)!!.toDTO(),
         title = title,
         articleName = articleName,
         supplierRef = supplierRef,
-        attributes = mutableMapOf<AttributeNames, Any?>().apply {
-            put(AttributeNames.manufacturer, attributes.manufacturer)
-            put(AttributeNames.series, attributes.series)
-            put(AttributeNames.url, attributes.url)
-            put(AttributeNames.text, attributes.text)
-            put(AttributeNames.shortdescription, attributes.shortdescription)
-            put(AttributeNames.compatible, attributes.compatible)
-        }.filterValues { it !=null }.toMap() as Map<AttributeNames, Any>,
+        attributes = Attributes(),
         hmsArtNr = hmsArtNr,
         identifier = productId.toString(),
         isoCategory =isoCategory,
@@ -70,9 +64,8 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
             source = it.sourceType, type = MediaType.valueOf(it.type.name) ) },
         published = published,
         expired = expired,
-        agreementInfo = if (agreementInfo!=null) AgreementInfo(reference = agreementInfo.reference,
-            rank = agreementInfo.rank, postNr = agreementInfo.postNr) else null,
-        hasAgreement = (agreementInfo!=null),
+        agreements = emptyList(), // TODO,
+        hasAgreement = false,
         createdBy = "IMPORT",
         updatedBy = "IMPORT",
     )
