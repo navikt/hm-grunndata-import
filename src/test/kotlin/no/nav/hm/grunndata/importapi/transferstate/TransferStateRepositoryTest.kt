@@ -8,6 +8,7 @@ import kotlinx.coroutines.runBlocking
 import no.nav.hm.grunndata.importapi.supplier.Supplier
 import no.nav.hm.grunndata.importapi.supplier.SupplierRepository
 import no.nav.hm.grunndata.importapi.toMD5Hex
+import no.nav.hm.grunndata.importapi.transfer.product.*
 import org.junit.jupiter.api.Test
 import java.util.*
 
@@ -37,7 +38,8 @@ class TransferStateRepositoryTest(private val transferStateRepository: TransferS
                 TransferTechData("Setebredde min", "45", "cm"),
                 TransferTechData("Kjørelengde maks", "45", "km")
             ),
-            media = listOf(TransferMediaDTO(sourceUri="https://medema.no/medias/2019-02/mc_x_4w_orange_10637_570x570px.jpg")
+            media = listOf(
+                TransferMediaDTO(sourceUri="https://medema.no/medias/2019-02/mc_x_4w_orange_10637_570x570px.jpg")
         ))
         val json = objectMapper.writeValueAsString(product)
         println(json)

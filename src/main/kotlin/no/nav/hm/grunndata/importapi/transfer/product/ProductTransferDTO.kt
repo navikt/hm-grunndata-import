@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.importapi.transferstate
+package no.nav.hm.grunndata.importapi.transfer.product
 
 
 import no.nav.hm.grunndata.rapid.dto.MediaSourceType

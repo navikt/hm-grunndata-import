@@ -11,7 +11,7 @@ import io.mockk.mockk
 import no.nav.hm.grunndata.importapi.supplier.Supplier
 import no.nav.hm.grunndata.importapi.supplier.SupplierRepository
 import no.nav.hm.grunndata.importapi.toMD5Hex
-import no.nav.hm.grunndata.importapi.transferstate.*
+import no.nav.hm.grunndata.importapi.transfer.product.*
 import no.nav.hm.rapids_rivers.micronaut.RapidPushService
 import org.junit.jupiter.api.Test
 import java.util.*

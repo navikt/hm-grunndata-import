@@ -6,6 +6,8 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.http.client.annotation.Client
+import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferAPIController
+import no.nav.hm.grunndata.importapi.transfer.product.TransferStateResponseDTO
 
 import org.reactivestreams.Publisher
 import java.util.*

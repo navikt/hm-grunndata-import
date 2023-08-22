@@ -1,8 +1,8 @@
 package no.nav.hm.grunndata.importapi.productstate
 
 import jakarta.inject.Singleton
-import no.nav.hm.grunndata.importapi.transferstate.TransferStateRepository
-import no.nav.hm.grunndata.importapi.transferstate.TransferStatus
+import no.nav.hm.grunndata.importapi.transfer.product.TransferStateRepository
+import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
 import org.slf4j.LoggerFactory
 
 @Singleton

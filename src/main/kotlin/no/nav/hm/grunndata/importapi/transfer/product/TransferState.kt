@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.importapi.transferstate
+package no.nav.hm.grunndata.importapi.transfer.product
 
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.TypeDef

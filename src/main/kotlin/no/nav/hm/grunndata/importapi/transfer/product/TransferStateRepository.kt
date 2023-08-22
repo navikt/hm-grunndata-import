@@ -1,9 +1,8 @@
-package no.nav.hm.grunndata.importapi.transferstate
+package no.nav.hm.grunndata.importapi.transfer.product
 
 import io.micronaut.data.jdbc.annotation.JdbcRepository
 import io.micronaut.data.model.Page
 import io.micronaut.data.model.Pageable
-import io.micronaut.data.model.Sort
 import io.micronaut.data.model.Sort.*
 import io.micronaut.data.model.query.builder.sql.Dialect
 import io.micronaut.data.repository.kotlin.CoroutineCrudRepository
