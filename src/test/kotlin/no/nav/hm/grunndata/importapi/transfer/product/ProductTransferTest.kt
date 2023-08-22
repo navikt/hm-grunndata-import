@@ -37,8 +37,8 @@ class ProductTransferTest(private val client: ProductTransferClient,
     @BeforeEach
     fun before() {
         runBlocking {
-            supplierService.save(Supplier(id= supplierId, name = "Medema AS",
-                identifier = "medema_as", jwtid = UUID.randomUUID().toString()))
+            supplierService.save(Supplier(id= supplierId, name = UUID.randomUUID().toString(),
+                identifier = UUID.randomUUID().toString(), jwtid = UUID.randomUUID().toString()))
             supplier = supplierService.findById(supplierId)!!
             token = "bearer ${tokenService.token(supplier!!)}"
         }

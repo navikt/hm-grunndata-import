@@ -40,5 +40,14 @@ CREATE TABLE IF NOT EXISTS productstate_v1 (
 
 CREATE INDEX productstate_transferId_idx ON productstate_v1(transfer_id);
 
-
+CREATE TABLE IF NOT EXISTS seriesstate_v1(
+    id VARCHAR(255) NOT NULL PRIMARY KEY,
+    supplier_id UUID NOT NULL,
+    name VARCHAR(1024) NOT NULL,
+    message TEXT,
+    status VARCHAR(32) NOT NULL,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (name, supplier_id)
+);
 

@@ -22,7 +22,7 @@
   "media" : [ {
     "sourceUri" : "https://medema.no/medias/2019-02/mc_x_4w_orange_10637_570x570px.jpg",
     "priority" : 1,
-    "type" : "PNG",
+    "type" : "JPG",
     "sourceType" : "EXTERNALURL"
   } ],
   "published" : "2023-08-22T13:39:51.884163",
