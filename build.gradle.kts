@@ -50,7 +50,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     runtimeOnly("io.micronaut.sql:micronaut-jdbc-hikari")
 
-    implementation("org.postgresql:postgresql:${postgresqlVersion}")
+    implementation("org.postgresql:postgresql:$postgresqlVersion")
     implementation("io.micronaut.flyway:micronaut-flyway")
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")

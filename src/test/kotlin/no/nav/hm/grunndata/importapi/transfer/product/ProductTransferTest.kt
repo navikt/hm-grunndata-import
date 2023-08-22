@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.importapi.transferstate
+package no.nav.hm.grunndata.importapi.transfer.product
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.reactive.asFlow
 
 import kotlinx.coroutines.runBlocking
-import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
 import no.nav.hm.grunndata.importapi.security.TokenService
 import no.nav.hm.grunndata.importapi.supplier.Supplier
 import no.nav.hm.grunndata.importapi.supplier.SupplierService

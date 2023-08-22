@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.importapi.transferstate
+package no.nav.hm.grunndata.importapi.transfer.product
 
 import com.fasterxml.jackson.databind.JsonNode
 import io.micronaut.data.model.Page
