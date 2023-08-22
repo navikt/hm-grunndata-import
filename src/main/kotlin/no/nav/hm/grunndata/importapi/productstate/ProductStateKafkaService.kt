@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional
 import no.nav.hm.grunndata.importapi.ImportRapidPushService
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.supplier.toDTO
+import no.nav.hm.grunndata.importapi.transferstate.TransferMediaType
 import no.nav.hm.grunndata.importapi.transferstate.ProductTransferDTO
 import no.nav.hm.grunndata.importapi.transferstate.TransferState
 import no.nav.hm.grunndata.rapid.dto.*
@@ -60,8 +61,11 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
         sparePart = sparePart,
         seriesId = seriesId,
         techData = transferTechData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
-        media = media.map { MediaInfo( sourceUri = it.sourceUri, uri = it.uri, priority = it.priority,
-            source = it.sourceType, type = MediaType.valueOf(it.type.name) ) },
+        media = media.map { MediaInfo( sourceUri = it.sourceUri,
+            uri = generateMediaUri(productId, it.sourceUri, it.type),
+            priority = it.priority, source = it.sourceType,
+            type = if (it.type == TransferMediaType.PDF) MediaType.PDF else MediaType.IMAGE)
+                          },
         published = published,
         expired = expired,
         agreements = emptyList(), // TODO,
@@ -69,4 +73,8 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
         createdBy = "IMPORT",
         updatedBy = "IMPORT",
     )
+
+    private fun generateMediaUri(productId: UUID, sourceUri: String, type: no.nav.hm.grunndata.importapi.transferstate.TransferMediaType): String {
+        TODO("Not yet implemented")
+    }
 }

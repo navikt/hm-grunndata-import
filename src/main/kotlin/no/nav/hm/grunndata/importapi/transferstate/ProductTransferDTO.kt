@@ -9,25 +9,28 @@ import java.util.*
 data class ProductTransferDTO (
     val title: String,
     val articleName: String,
-    val attributes: Attributes = Attributes(),
+    val shortDescription: String,
+    val text: String,
+    val url: String?=null,
+    val manufacturer: String?=null,
     val hmsArtNr: String?=null,
     val supplierRef: String,
     val isoCategory: String,
     val accessory: Boolean = false,
     val sparePart: Boolean = false,
+    val isCompatibleWith: CompatibleAttribute?,
     val seriesId: String?,
     val transferTechData: List<TransferTechData> = emptyList(),
     val media: List<TransferMediaDTO> = emptyList(),
     val published: LocalDateTime = LocalDateTime.now(),
     val expired: LocalDateTime = published.plusYears(10),
-    val agreementInfo: AgreementInfo?=null,
+    val agreements: List<AgreementInfo> = emptyList()
 )
 
 data class TransferMediaDTO (
     val sourceUri: String,
-    val uri: String = sourceUri,
     val priority: Int = 1,
-    val type: MediaType = MediaType.IMAGE,
+    val type: TransferMediaType = TransferMediaType.PNG,
     val text:   String?=null,
     val sourceType: MediaSourceType = MediaSourceType.EXTERNALURL
 )
@@ -48,19 +51,15 @@ data class AgreementInfo (
     val reference: String
 )
 
-enum class MediaType {
+enum class TransferMediaType {
     PDF,
-    IMAGE,
-    VIDEO
+    JPG,
+    PNG
 }
 
-data class Attributes(val manufacturer: String? = null,
-                      val compatible: List<CompatibleAttribute>? = null,
-                      val series: String? = null,
-                      val shortdescription: String? = null,
-                      val text: String? = null,
-                      val url: String? = null)
-data class CompatibleAttribute(val id: UUID?=null,
-                               val supplierRef: String?=null,
-                               val hmsArtNr: String?)
-
+data class CompatibleAttribute(
+    val id: UUID?=null,
+    val seriesId: String?=null,
+    val supplierRef: String?=null,
+    val hmsArtNr: String?=null
+)
