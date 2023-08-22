@@ -13,6 +13,8 @@ import kotlinx.coroutines.runBlocking
 import no.nav.hm.grunndata.importapi.security.TokenService
 import no.nav.hm.grunndata.importapi.supplier.Supplier
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
+
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -29,16 +31,24 @@ class ProductTransferTest(private val client: ProductTransferClient,
 
 
     private val supplierId: UUID = UUID.randomUUID()
+    private var token: String = ""
+    private var supplier: Supplier? = null
+
+    @BeforeEach
+    fun before() {
+        runBlocking {
+            supplierService.save(Supplier(id= supplierId, name = "Medema AS",
+                identifier = "medema_as", jwtid = UUID.randomUUID().toString()))
+            supplier = supplierService.findById(supplierId)!!
+            token = "bearer ${tokenService.token(supplier!!)}"
+        }
+    }
 
     @Test
     fun productTransferTest() {
         runBlocking {
-           supplierService.save(Supplier(id= supplierId, name = "Medema AS",
-                identifier = "medema_as", jwtid = UUID.randomUUID().toString()))
-            val supplier = supplierService.findById(supplierId)!!
-            val token = "bearer ${tokenService.token(supplier)}"
-            val product = objectMapper.readTree(ProductTransferTest::class.java.classLoader.getResourceAsStream("json/tilbehoer.json"))
-            val response = client.productStream(supplierId = supplier.id, authorization = token, json = Publishers.just(product))
+            val product = objectMapper.readTree(ProductTransferTest::class.java.classLoader.getResourceAsStream("json/product.json"))
+            val response = client.productStream(supplierId = supplier!!.id, authorization = token, json = Publishers.just(product))
             var md5: String? = null
             var productId: UUID? = null
             response.asFlow().onEach {
@@ -47,12 +57,12 @@ class ProductTransferTest(private val client: ProductTransferClient,
                 md5.shouldNotBeNull()
                 it.transferStatus shouldBe TransferStatus.RECEIVED
             }.collect()
-            val transfers = client.getTransfersBySupplierIdSupplierRef(authorization = token, supplier.id, supplierRef = "1506-1041")
+            val transfers = client.getTransfersBySupplierIdSupplierRef(authorization = token, supplier!!.id, supplierRef = "mini-crosser-x1-x2-4w")
             transfers.totalSize shouldBe 1
 
             // test identical product
-            val product2 = objectMapper.readTree(ProductTransferTest::class.java.classLoader.getResourceAsStream("json/tilbehoer.json"))
-            val response2 = client.productStream(supplierId = supplier.id, authorization = token, json = Publishers.just(product2))
+            val product2 = objectMapper.readTree(ProductTransferTest::class.java.classLoader.getResourceAsStream("json/product.json"))
+            val response2 = client.productStream(supplierId = supplier!!.id, authorization = token, json = Publishers.just(product2))
             response2.asFlow().onEach {
                 LOG.info(it.md5)
                 it.md5 shouldBe md5
@@ -60,9 +70,8 @@ class ProductTransferTest(private val client: ProductTransferClient,
             }.collect()
 
             // test "delete" product
-            val delete = client.deleteProduct(authorization = token, supplierId = supplier.id, supplierRef = "1506-1041")
+            val delete = client.deleteProduct(authorization = token, supplierId = supplier!!.id, supplierRef = "mini-crosser-x1-x2-4w")
             delete.body().message shouldBe "deleted by supplier"
-
         }
 
     }

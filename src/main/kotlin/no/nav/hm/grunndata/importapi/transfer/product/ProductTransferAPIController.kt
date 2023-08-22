@@ -6,6 +6,7 @@ import io.micronaut.data.model.Page
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
+import io.micronaut.security.annotation.Secured
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
@@ -19,7 +20,7 @@ import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.UUID
 
-@SecurityRule(value = [Roles.ROLE_SUPPLIER])
+@Secured(Roles.ROLE_SUPPLIER)
 @Controller(API_V1_TRANSFERS)
 @SecurityRequirement(name = "bearer-auth")
 class ProductTransferAPIController(private val transferStateRepository: TransferStateRepository,

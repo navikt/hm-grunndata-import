@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional
 import no.nav.hm.grunndata.importapi.ImportRapidPushService
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.supplier.toDTO
+import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transfer.product.TransferMediaType
 import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferDTO
 import no.nav.hm.grunndata.importapi.transfer.product.TransferState
@@ -75,6 +76,12 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
     )
 
     private fun generateMediaUri(productId: UUID, sourceUri: String, type: TransferMediaType): String {
-        TODO("Not yet implemented")
+        val extension = when (type) {
+            TransferMediaType.JPG -> "jpg"
+            TransferMediaType.PNG -> "png"
+            TransferMediaType.PDF -> "pdf"
+        }
+        return "import/${productId}/${sourceUri.toMD5Hex()}.$extension"
     }
+
 }
