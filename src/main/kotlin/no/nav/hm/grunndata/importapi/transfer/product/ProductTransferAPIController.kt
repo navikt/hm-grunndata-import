@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.asPublisher
 import no.nav.hm.grunndata.importapi.security.Roles
-import no.nav.hm.grunndata.importapi.security.SecurityRule
 import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferAPIController.Companion.API_V1_TRANSFERS
 import org.reactivestreams.Publisher
@@ -34,13 +33,13 @@ class ProductTransferAPIController(private val transferStateRepository: Transfer
     }
 
     @Get(value="/{supplierId}/{supplierRef}")
-    suspend fun getTransfersBySupplierIdSupplierRef(supplierId: UUID, supplierRef: String): Page<TransferStateResponseDTO> =
+    suspend fun getTransfersBySupplierIdSupplierRef(supplierId: UUID, supplierRef: String): Page<TransferResponseDTO> =
         transferStateRepository.findBySupplierIdAndSupplierRef(supplierId, supplierRef).map {
             it.toResponseDTO()
         }
 
     @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])
-    suspend fun productStream(@PathVariable supplierId: UUID, @Body jsonNode: Publisher<JsonNode>): Publisher<TransferStateResponseDTO> =
+    suspend fun productStream(@PathVariable supplierId: UUID, @Body jsonNode: Publisher<JsonNode>): Publisher<TransferResponseDTO> =
         jsonNode.asFlow().map { json ->
             val md5 = objectMapper.writeValueAsString(json).toMD5Hex()
             val transfer = objectMapper.treeToValue(json, ProductTransferDTO::class.java)
@@ -52,7 +51,7 @@ class ProductTransferAPIController(private val transferStateRepository: Transfer
         }.asPublisher()
 
     @Delete("/{supplierId}/{supplierRef}")
-    suspend fun delete(supplierId: UUID, supplierRef: String): HttpResponse<TransferStateResponseDTO>  {
+    suspend fun delete(supplierId: UUID, supplierRef: String): HttpResponse<TransferResponseDTO>  {
         LOG.info("delete has been called for $supplierId and $supplierRef")
         return transferStateRepository.findOneBySupplierIdAndSupplierRefOrderByCreatedDesc(supplierId, supplierRef)?.let {
             val expiredPayload = it.json_payload.copy(expired = LocalDateTime.now().minusMinutes(1))
@@ -69,7 +68,7 @@ class ProductTransferAPIController(private val transferStateRepository: Transfer
                                             productTransfer: ProductTransferDTO,
                                             md5: String) =
         transferStateRepository.save(
-            TransferState(
+            ProductTransfer(
                 supplierId = supplierId, supplierRef = productTransfer.supplierRef, md5 = md5,
                 json_payload = productTransfer
             )

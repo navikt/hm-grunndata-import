@@ -8,14 +8,13 @@ import kotlinx.coroutines.runBlocking
 import no.nav.hm.grunndata.importapi.supplier.Supplier
 import no.nav.hm.grunndata.importapi.supplier.SupplierRepository
 import no.nav.hm.grunndata.importapi.toMD5Hex
-import no.nav.hm.grunndata.importapi.transfer.product.*
 import org.junit.jupiter.api.Test
 import java.util.*
 
 @MicronautTest
-class TransferStateRepositoryTest(private val transferStateRepository: TransferStateRepository,
-                                  private val supplierRepository: SupplierRepository,
-                                  private val objectMapper: ObjectMapper) {
+class ProductTransferRepositoryTest(private val transferStateRepository: TransferStateRepository,
+                                    private val supplierRepository: SupplierRepository,
+                                    private val objectMapper: ObjectMapper) {
 
     private val supplierId: UUID = UUID.randomUUID()
 
@@ -43,7 +42,7 @@ class TransferStateRepositoryTest(private val transferStateRepository: TransferS
         ))
         val json = objectMapper.writeValueAsString(product)
         println(json)
-        val transfer = TransferState(supplierId=supplierId, json_payload = product, md5 = json.toMD5Hex(),
+        val transfer = ProductTransfer(supplierId=supplierId, json_payload = product, md5 = json.toMD5Hex(),
             supplierRef = product.supplierRef)
 
         runBlocking {

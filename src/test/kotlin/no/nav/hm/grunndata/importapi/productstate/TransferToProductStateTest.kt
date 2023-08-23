@@ -51,7 +51,7 @@ class TransferToProductStateTest(private val transferToProductState: TransferToP
             ))
         val json = objectMapper.writeValueAsString(product)
         println(json)
-        val transfer = TransferState(supplierId=supplierId, json_payload = product, md5 = json.toMD5Hex(),
+        val transfer = ProductTransfer(supplierId=supplierId, json_payload = product, md5 = json.toMD5Hex(),
             supplierRef = product.supplierRef)
 
         runBlocking {

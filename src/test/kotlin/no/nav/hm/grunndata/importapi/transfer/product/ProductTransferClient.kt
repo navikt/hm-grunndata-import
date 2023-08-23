@@ -6,8 +6,6 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.http.client.annotation.Client
-import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferAPIController
-import no.nav.hm.grunndata.importapi.transfer.product.TransferStateResponseDTO
 
 import org.reactivestreams.Publisher
 import java.util.*
@@ -18,12 +16,12 @@ interface ProductTransferClient {
     @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])
     fun productStream(@PathVariable supplierId: UUID,
                       @Header authorization: String,
-                      @Body json: Publisher<JsonNode>): Publisher<TransferStateResponseDTO>
+                      @Body json: Publisher<JsonNode>): Publisher<TransferResponseDTO>
 
     @Get(value="/{supplierId}/{supplierRef}")
     fun getTransfersBySupplierIdSupplierRef(@Header authorization: String, supplierId: UUID, supplierRef: String):
-            Page<TransferStateResponseDTO>
+            Page<TransferResponseDTO>
     @Delete("/{supplierId}/{supplierRef}")
-    fun deleteProduct(@Header authorization: String, supplierId: UUID, supplierRef: String): HttpResponse<TransferStateResponseDTO>
+    fun deleteProduct(@Header authorization: String, supplierId: UUID, supplierRef: String): HttpResponse<TransferResponseDTO>
 
 }

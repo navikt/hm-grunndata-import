@@ -11,7 +11,7 @@ import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import java.time.LocalDateTime
 import java.util.*
 
-@MappedEntity("productstate_v1")
+@MappedEntity("product_state_v1")
 data class ProductState(
     @field:Id
     val id: UUID,

@@ -9,13 +9,13 @@ import io.micronaut.data.repository.kotlin.CoroutineCrudRepository
 import java.util.*
 
 @JdbcRepository(dialect = Dialect.POSTGRES)
-interface TransferStateRepository: CoroutineCrudRepository<TransferState, UUID> {
-    suspend fun findBySupplierIdAndMd5(supplierId: UUID, md5: String): TransferState?
+interface TransferStateRepository: CoroutineCrudRepository<ProductTransfer, UUID> {
+    suspend fun findBySupplierIdAndMd5(supplierId: UUID, md5: String): ProductTransfer?
     suspend fun findByTransferStatus(transferStatus: TransferStatus,
-                                     pageable: Pageable = Pageable.from(0, 1000)): Page<TransferState>
+                                     pageable: Pageable = Pageable.from(0, 1000)): Page<ProductTransfer>
 
     suspend fun findBySupplierIdAndSupplierRef(supplierId: UUID, supplierRef: String,
                                                pageable: Pageable = Pageable.from(0, 100,
-                                                   of(Order("created")))): Page<TransferState>
-    suspend fun findOneBySupplierIdAndSupplierRefOrderByCreatedDesc(supplierId: UUID, supplierRef: String): TransferState?
+                                                   of(Order("created")))): Page<ProductTransfer>
+    suspend fun findOneBySupplierIdAndSupplierRefOrderByCreatedDesc(supplierId: UUID, supplierRef: String): ProductTransfer?
 }

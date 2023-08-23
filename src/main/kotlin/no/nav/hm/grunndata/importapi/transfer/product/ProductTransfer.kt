@@ -7,8 +7,8 @@ import jakarta.persistence.Id
 import java.time.LocalDateTime
 import java.util.*
 
-@MappedEntity("transferstate_v1")
-data class TransferState (
+@MappedEntity("product_transfer_v1")
+data class ProductTransfer (
     @field:Id
     val transferId: UUID = UUID.randomUUID(),
     val supplierId: UUID,
@@ -25,7 +25,7 @@ enum class TransferStatus {
     RECEIVED,  DONE, ERROR
 }
 
-data class TransferStateResponseDTO(
+data class TransferResponseDTO(
     val transferId: UUID,
     val supplierId: UUID,
     val supplierRef: String,
@@ -34,7 +34,7 @@ data class TransferStateResponseDTO(
     val transferStatus: TransferStatus,
     val created: LocalDateTime)
 
-fun TransferState.toResponseDTO(): TransferStateResponseDTO = TransferStateResponseDTO(
+fun ProductTransfer.toResponseDTO(): TransferResponseDTO = TransferResponseDTO(
     transferId = transferId, supplierId = supplierId, supplierRef = supplierRef, md5 = md5,
     message = message, transferStatus = transferStatus, created = created
 )

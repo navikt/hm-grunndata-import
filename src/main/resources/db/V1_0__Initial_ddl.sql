@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS supplier_v1 (
     unique(identifier)
 );
 
-CREATE TABLE IF NOT EXISTS transferstate_v1 (
+CREATE TABLE IF NOT EXISTS product_transfer_v1 (
     transfer_id uuid NOT NULL PRIMARY KEY,
     supplier_id uuid NOT NULL,
     supplier_ref VARCHAR(255) NOT NULL,
@@ -23,9 +23,9 @@ CREATE TABLE IF NOT EXISTS transferstate_v1 (
     UNIQUE(md5)
 );
 
-CREATE INDEX transferstate_supplierId_supplierRef_idx ON transferstate_v1(supplier_id, supplier_ref);
+CREATE INDEX product_transfer_v1_supplierId_supplierRef_idx ON product_transfer_v1(supplier_id, supplier_ref);
 
-CREATE TABLE IF NOT EXISTS productstate_v1 (
+CREATE TABLE IF NOT EXISTS product_state_v1 (
     id uuid NOT NULL PRIMARY KEY,
     transfer_id UUID NOT NULL,
     supplier_id uuid NOT NULL,
@@ -38,9 +38,9 @@ CREATE TABLE IF NOT EXISTS productstate_v1 (
     UNIQUE (supplier_id, supplier_ref)
 );
 
-CREATE INDEX productstate_transferId_idx ON productstate_v1(transfer_id);
+CREATE INDEX product_state_transferId_idx ON product_state_v1(transfer_id);
 
-CREATE TABLE IF NOT EXISTS seriesstate_v1(
+CREATE TABLE IF NOT EXISTS series_state_v1(
     id VARCHAR(255) NOT NULL PRIMARY KEY,
     supplier_id UUID NOT NULL,
     name VARCHAR(1024) NOT NULL,

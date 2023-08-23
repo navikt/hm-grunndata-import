@@ -15,15 +15,15 @@ class SeriesStateRepositoryTest(private val repository: SeriesStateRepository) {
     fun crudTest() {
         val id = "seriesid +${UUID.randomUUID()}"
         val state = SeriesState(id = id, supplierId = UUID.randomUUID(),
-            name= "Unik navn på serien +${UUID.randomUUID()}", status = SerieTransferStatus.ACTIVE)
+            name= "Unik navn på serien +${UUID.randomUUID()}", status = SeriesStatus.ACTIVE)
         runBlocking {
             val saved = repository.save(state)
             val found = repository.findById(saved.id)
             found.shouldNotBeNull()
-            found.status shouldBe SerieTransferStatus.ACTIVE
-            val updated = repository.update(found.copy(status = SerieTransferStatus.INACTIVE, updated = LocalDateTime.now()))
+            found.status shouldBe SeriesStatus.ACTIVE
+            val updated = repository.update(found.copy(status = SeriesStatus.INACTIVE, updated = LocalDateTime.now()))
             updated.shouldNotBeNull()
-            updated.status shouldBe SerieTransferStatus.INACTIVE
+            updated.status shouldBe SeriesStatus.INACTIVE
         }
     }
 }

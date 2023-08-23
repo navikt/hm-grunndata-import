@@ -8,7 +8,7 @@ import no.nav.hm.grunndata.importapi.supplier.toDTO
 import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transfer.product.TransferMediaType
 import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferDTO
-import no.nav.hm.grunndata.importapi.transfer.product.TransferState
+import no.nav.hm.grunndata.importapi.transfer.product.ProductTransfer
 import no.nav.hm.grunndata.rapid.dto.*
 import org.slf4j.LoggerFactory
 import java.util.UUID
@@ -26,7 +26,7 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
     }
 
     @Transactional
-    open suspend fun mapTransferToProductState(transfer: TransferState) {
+    open suspend fun mapTransferToProductState(transfer: ProductTransfer) {
         val productstate = productStateRepository.findBySupplierIdAndSupplierRef(transfer.supplierId, transfer.supplierRef)?.let { inDb ->
             productStateRepository.update(
                 inDb.copy(
