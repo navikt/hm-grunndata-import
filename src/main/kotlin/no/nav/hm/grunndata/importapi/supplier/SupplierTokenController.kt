@@ -5,14 +5,14 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import no.nav.hm.grunndata.importapi.security.Roles
-import no.nav.hm.grunndata.importapi.security.SecurityRule
+import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
 import no.nav.hm.grunndata.importapi.security.TokenService
 import no.nav.hm.grunndata.importapi.supplier.SupplierTokenController.Companion.API_V1_TOKEN
 import org.slf4j.LoggerFactory
 import java.util.*
 
 
-@SecurityRule(value = [Roles.ROLE_ADMIN])
+@SecuritySupplierRule(value = [Roles.ROLE_ADMIN])
 @Controller(API_V1_TOKEN)
 @SecurityRequirement(name = "bearer-auth")
 class SupplierTokenController(private val supplierService: SupplierService,

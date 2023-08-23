@@ -2,18 +2,18 @@ package no.nav.hm.grunndata.importapi.seriesstate
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
-import io.micronaut.security.annotation.Secured
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.cancellable
-import kotlinx.coroutines.flow.map
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import no.nav.hm.grunndata.importapi.BadRequestException
 import no.nav.hm.grunndata.importapi.security.Roles
+import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.*
 
-@Secured(Roles.ROLE_SUPPLIER)
+
 @Controller(SeriesStateAPIController.SERIES_ENDPOINT)
+@SecuritySupplierRule(Roles.ROLE_SUPPLIER)
+@SecurityRequirement(name = "bearer-auth")
 class SeriesStateAPIController(private val seriesStateRepository: SeriesStateRepository) {
 
 

@@ -35,6 +35,8 @@ micronaut:
         access:
           - isAnonymous()
     token:
+      bearer:
+        enabled: true
       jwt:
         signatures:
           secret:

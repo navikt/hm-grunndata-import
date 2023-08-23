@@ -45,6 +45,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive")
     // security
     implementation("io.micronaut.security:micronaut-security-jwt")
+    implementation("io.micronaut.security:micronaut-security-annotations")
+    kapt("io.micronaut.security:micronaut-security-annotations")
+
     implementation("io.micronaut.data:micronaut-data-jdbc")
     implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -70,7 +73,6 @@ dependencies {
     implementation("io.micronaut.openapi:micronaut-openapi")
     implementation("io.swagger.core.v3:swagger-annotations")
 
-    kapt("io.micronaut.security:micronaut-security-annotations")
     kapt("io.micronaut.data:micronaut-data-processor")
     kapt("io.micronaut.openapi:micronaut-openapi")
 
