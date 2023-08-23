@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.importapi.security
+package no.nav.hm.grunndata.importapi.token
 
 import com.nimbusds.jose.JWSAlgorithm
 import com.nimbusds.jose.JWSHeader
@@ -8,6 +8,7 @@ import com.nimbusds.jwt.SignedJWT
 import io.micronaut.security.token.jwt.signature.secret.SecretSignatureConfiguration
 import java.util.*
 import jakarta.inject.Singleton
+import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.supplier.Supplier
 
 @Singleton
@@ -36,7 +37,7 @@ class TokenService(private val secretSignatureConfiguration: SecretSignatureConf
                 .jwtID(UUID.randomUUID().toString())
                 .issuer("https://hjelpemiddeldabasen.nav.no")
                 .issueTime(Date())
-                .claim("roles",Roles.ROLE_ADMIN)
+                .claim("roles", Roles.ROLE_ADMIN)
                 .build()
         val signedJWT = SignedJWT(JWSHeader(JWSAlgorithm.HS256), claimsSet)
         signedJWT.sign(signer)
