@@ -24,7 +24,7 @@ data class SeriesStateDTO(
     val id: String? = UUID.randomUUID().toString(),
     val supplierId: UUID,
     val name: String,
-    val status: SeriesStatus,
+    val status: SeriesStatus = SeriesStatus.ACTIVE,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now()
 )

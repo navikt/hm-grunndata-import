@@ -21,6 +21,7 @@ interface ProductTransferClient {
     @Get(value="/{supplierId}/{supplierRef}")
     fun getTransfersBySupplierIdSupplierRef(@Header authorization: String, supplierId: UUID, supplierRef: String):
             Page<TransferResponseDTO>
+
     @Delete("/{supplierId}/{supplierRef}")
     fun deleteProduct(@Header authorization: String, supplierId: UUID, supplierRef: String): HttpResponse<TransferResponseDTO>
 
