@@ -11,6 +11,6 @@ interface SeriesStateRepository: CoroutineCrudRepository<SeriesState, String> {
 
     suspend fun findBySupplierIdAndName(supplierId: UUID, name: String): SeriesState?
 
-    suspend fun findBySupplierId(supplierId: UUID): Flow<SeriesState>
+    suspend fun findBySupplierId(supplierId: UUID): List<SeriesState>
 
 }

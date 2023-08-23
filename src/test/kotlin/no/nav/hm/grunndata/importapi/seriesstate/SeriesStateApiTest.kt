@@ -1,5 +1,6 @@
 package no.nav.hm.grunndata.importapi.seriesstate
 
+import io.kotest.matchers.ints.shouldBeGreaterThanOrEqual
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.micronaut.http.HttpStatus
@@ -33,12 +34,20 @@ class SeriesStateApiTest(private val client: SeriesStateAPIClient,
     fun testCrudApi() {
         val dto = SeriesStateDTO(
             supplierId = supplierId,
-            name = "Unique series Name"
+            name = "Unique series name"
         )
         val response = client.createSeries(supplierId = supplierId, dto = dto, authorization = token)
         response.status shouldBe HttpStatus.CREATED
         val created = response.body()
         created.shouldNotBeNull()
+        created.name shouldBe "Unique series name"
+        val dto2 = SeriesStateDTO(supplierId = supplierId, name = "Unique series name 2")
+        client.createSeries(supplierId, dto2, token)
+        val changed = dto.copy(name = "Unique series name 3")
+        val updated = client.updateSeries(supplierId, changed.id!!, changed, token)
+        updated.shouldNotBeNull()
+        updated.body().name shouldBe "Unique series name 3"
+        client.getSeriesBySupplierId(supplierId = supplierId, authorization = token).size shouldBeGreaterThanOrEqual  2
 
     }
 }

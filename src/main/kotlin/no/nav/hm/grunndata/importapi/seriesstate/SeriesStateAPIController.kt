@@ -4,6 +4,7 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.security.annotation.Secured
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.map
 import no.nav.hm.grunndata.importapi.BadRequestException
 import no.nav.hm.grunndata.importapi.security.Roles
@@ -22,7 +23,7 @@ class SeriesStateAPIController(private val seriesStateRepository: SeriesStateRep
     }
 
     @Get("/{supplierId}")
-    suspend fun getSeriesBySupplierId(supplierId: UUID): Flow<SeriesStateDTO> = seriesStateRepository
+    suspend fun getSeriesBySupplierId(supplierId: UUID): List<SeriesStateDTO> = seriesStateRepository
         .findBySupplierId(supplierId).map { it.toDTO() }
 
     @Post("/{supplierId}")
