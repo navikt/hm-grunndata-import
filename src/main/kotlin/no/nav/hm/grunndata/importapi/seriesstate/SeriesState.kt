@@ -21,7 +21,7 @@ enum class SeriesStatus {
 }
 
 data class SeriesStateDTO(
-    val id: String,
+    val id: String? = UUID.randomUUID().toString(),
     val supplierId: UUID,
     val name: String,
     val status: SeriesStatus,
@@ -29,8 +29,12 @@ data class SeriesStateDTO(
     val updated: LocalDateTime = LocalDateTime.now()
 )
 
+
 fun SeriesState.toDTO(): SeriesStateDTO = SeriesStateDTO(
     id = id, supplierId = supplierId, name = name, status = status, created = created, updated = updated
 )
 
+fun SeriesStateDTO.toEntity(): SeriesState = SeriesState(
+    id = id ?: UUID.randomUUID().toString(), supplierId = supplierId, name = name, status = status, created = created, updated = updated
+)
 
