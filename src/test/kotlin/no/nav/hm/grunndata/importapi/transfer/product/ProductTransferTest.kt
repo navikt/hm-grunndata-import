@@ -51,14 +51,19 @@ class ProductTransferTest(private val client: ProductTransferClient,
             val response = client.productStream(supplierId = supplier!!.id, authorization = token, json = Publishers.just(product))
             var md5: String? = null
             var productId: UUID? = null
+            var transferId: UUID? = null
             response.asFlow().onEach {
                 LOG.info(it.md5)
                 md5 = it.md5
                 md5.shouldNotBeNull()
                 it.transferStatus shouldBe TransferStatus.RECEIVED
+                transferId = it.transferId
             }.collect()
             val transfers = client.getTransfersBySupplierIdSupplierRef(authorization = token, supplier!!.id, supplierRef = "mini-crosser-x1-x2-4w")
             transfers.totalSize shouldBe 1
+
+            val transfer = client.getTransferBySupplierIdAndTransferId(authorization = token, supplierId = supplier!!.id, transferId = transferId!!)
+            transfer?.md5 shouldBe md5
 
             // test identical product
             val product2 = objectMapper.readTree(ProductTransferTest::class.java.classLoader.getResourceAsStream("json/product.json"))
