@@ -1,5 +1,6 @@
 package no.nav.hm.grunndata.importapi.seriesstate
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.kotest.matchers.ints.shouldBeGreaterThanOrEqual
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -15,7 +16,8 @@ import java.util.*
 @MicronautTest
 class SeriesStateApiTest(private val client: SeriesStateAPIClient,
                          private val supplierService: SupplierService,
-                         private val tokenService: TokenService
+                         private val tokenService: TokenService,
+                         private val objectMapper: ObjectMapper
 ) {
 
     private val supplierId: UUID = UUID.randomUUID()
@@ -49,6 +51,6 @@ class SeriesStateApiTest(private val client: SeriesStateAPIClient,
         updated.shouldNotBeNull()
         updated.body().name shouldBe "Unique series name 3"
         client.getSeriesBySupplierId(supplierId = supplierId, authorization = token).size shouldBeGreaterThanOrEqual  2
-
+        println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(dto))
     }
 }
