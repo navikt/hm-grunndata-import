@@ -8,6 +8,8 @@ import io.kotest.matchers.shouldBe
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.mockk
+import no.nav.hm.grunndata.importapi.seriesstate.SeriesStateDTO
+import no.nav.hm.grunndata.importapi.seriesstate.SeriesStateService
 import no.nav.hm.grunndata.importapi.supplier.Supplier
 import no.nav.hm.grunndata.importapi.supplier.SupplierRepository
 import no.nav.hm.grunndata.importapi.toMD5Hex
@@ -21,9 +23,11 @@ class TransferToProductStateTest(private val transferToProductState: TransferToP
                                  private val supplierRepository: SupplierRepository,
                                  private val transferStateRepository: TransferStateRepository,
                                  private val productStateRepository: ProductStateRepository,
+                                 private val seriesStateService: SeriesStateService,
                                  private val objectMapper: ObjectMapper) {
 
     private val supplierId: UUID = UUID.randomUUID()
+    private val seriesId: UUID = UUID.randomUUID()
 
     @MockBean
     fun rapidPushService(): RapidPushService = mockk(relaxed = true)
@@ -31,9 +35,12 @@ class TransferToProductStateTest(private val transferToProductState: TransferToP
     @Test
     fun testTransferToProductState() {
         val supplier = Supplier(id= supplierId, name = "Medema AS", identifier = "medema_as", jwtid = UUID.randomUUID().toString())
-        val product = ProductTransferDTO(title = "Mini Crosser X1 4W",  isoCategory = "12230301" , hmsArtNr = "250464",
+        val seriesDTO = SeriesStateDTO(id = seriesId.toString(), supplierId=supplierId, name = "Mini Crosser")
+        val product = ProductTransferDTO(title = "Mini Crosser X1 4W",  isoCategory = "12230301" ,
+            hmsArtNr = "250464",
+            seriesId = seriesId.toString(),
             articleName = "",
-            supplierRef = "mini-crosser-x1-x2-4w", seriesId = "mini-crosser-x1-x2",
+            supplierRef = "mini-crosser-x1-x2-4w",
             manufacturer = "Medema AS",
             isCompatibleWith = CompatibleAttribute(supplierRef = "supplierref", hmsArtNr = "123"),
             shortDescription = "4-hjuls scooter med manuell regulering av seteløft, ryggvinkel og seterotasjon. Leveres som standard med Ergo2 sitteenhet.",
@@ -56,7 +63,9 @@ class TransferToProductStateTest(private val transferToProductState: TransferToP
 
         runBlocking {
             val savedSup = supplierRepository.save(supplier)
+            val savedSeries = seriesStateService.save(seriesDTO)
             savedSup.id shouldBe supplierId
+            savedSeries.id shouldBe seriesId.toString()
             val saved = transferStateRepository.save(transfer)
             saved.transferId.shouldNotBeNull()
             saved.transferStatus shouldBe TransferStatus.RECEIVED
@@ -68,7 +77,8 @@ class TransferToProductStateTest(private val transferToProductState: TransferToP
             found.adminStatus.shouldBeNull()
             found.transferId shouldBe saved.transferId
             found.id.shouldNotBeNull()
-
         }
     }
+
+
 }
