@@ -22,3 +22,5 @@ object Application {
             .start()
     }
 }
+
+const val IMPORT = "IMPORT"

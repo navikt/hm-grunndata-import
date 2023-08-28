@@ -2,10 +2,11 @@ package no.nav.hm.grunndata.importapi.productstate
 
 import jakarta.inject.Singleton
 import jakarta.transaction.Transactional
-import no.nav.hm.grunndata.importapi.ImportRapidPushService
+import no.nav.hm.grunndata.importapi.*
+import no.nav.hm.grunndata.importapi.seriesstate.SeriesStateDTO
+import no.nav.hm.grunndata.importapi.seriesstate.SeriesStateService
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.supplier.toDTO
-import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transfer.product.TransferMediaType
 import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferDTO
 import no.nav.hm.grunndata.importapi.transfer.product.ProductTransfer
@@ -16,8 +17,9 @@ import java.util.UUID
 
 @Singleton
 open class ProductStateKafkaService(private val productStateRepository: ProductStateRepository,
-                               private val supplierService: SupplierService,
-                               private val importRapidPushService: ImportRapidPushService) {
+                                    private val supplierService: SupplierService,
+                                    private val importRapidPushService: ImportRapidPushService,
+                                    private val seriesStateService: SeriesStateService) {
 
     val eventName = "hm-grunndata-import-productstate-transfer"
 
@@ -27,11 +29,14 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
 
     @Transactional
     open suspend fun mapTransferToProductState(transfer: ProductTransfer) {
+        val seriesId = transfer.json_payload.seriesId
+        val seriesStateDTO = if (seriesId != null) seriesStateService.findByIdCacheable(seriesId) else
+            throw ImportErrorException("Serier $seriesId does not exist")
         val productstate = productStateRepository.findBySupplierIdAndSupplierRef(transfer.supplierId, transfer.supplierRef)?.let { inDb ->
             productStateRepository.update(
                 inDb.copy(
                     transferId = transfer.transferId,
-                    productDTO = transfer.json_payload.toProductDTO(inDb.id, transfer.supplierId)
+                    productDTO = transfer.json_payload.toProductDTO(inDb.id, transfer.supplierId, seriesStateDTO)
                 )
             )
         } ?: run {
@@ -40,7 +45,7 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
                 ProductState(
                     id = productId, transferId = transfer.transferId, supplierId = transfer.supplierId,
                     supplierRef = transfer.supplierRef,
-                    productDTO = transfer.json_payload.toProductDTO(productId, transfer.supplierId)
+                    productDTO = transfer.json_payload.toProductDTO(productId, transfer.supplierId, seriesStateDTO)
                 )
             )
         }
@@ -48,31 +53,34 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
         importRapidPushService.pushDTOToKafka(productstate.toDTO(), eventName)
     }
 
-    private suspend fun ProductTransferDTO.toProductDTO(productId: UUID, supplierId: UUID): ProductRapidDTO = ProductRapidDTO (
+    private suspend fun ProductTransferDTO.toProductDTO(productId: UUID, supplierId: UUID, seriesStateDTO: SeriesStateDTO?): ProductRapidDTO = ProductRapidDTO (
         id = productId,
         supplier = supplierService.findById(supplierId)!!.toDTO(),
         title = title,
         articleName = articleName,
         supplierRef = supplierRef,
-        attributes = Attributes(),
+        attributes = Attributes(
+            series = seriesStateDTO?.name,
+            shortdescription = shortDescription,
+            text = text,
+        ),
         hmsArtNr = hmsArtNr,
         identifier = productId.toString(),
         isoCategory =isoCategory,
         accessory = accessory,
         sparePart = sparePart,
-        seriesId = seriesId,
+        seriesId = seriesStateDTO?.id,
         techData = transferTechData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
         media = media.map { MediaInfo( sourceUri = it.sourceUri,
             uri = generateMediaUri(productId, it.sourceUri, it.type),
             priority = it.priority, source = it.sourceType,
-            type = if (it.type == TransferMediaType.PDF) MediaType.PDF else MediaType.IMAGE)
-                          },
+            type = if (it.type == TransferMediaType.PDF) MediaType.PDF else MediaType.IMAGE) },
         published = published,
         expired = expired,
         agreements = emptyList(), // TODO,
         hasAgreement = false,
-        createdBy = "IMPORT",
-        updatedBy = "IMPORT",
+        createdBy = IMPORT,
+        updatedBy = IMPORT,
     )
 
     private fun generateMediaUri(productId: UUID, sourceUri: String, type: TransferMediaType): String {
