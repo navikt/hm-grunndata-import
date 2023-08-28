@@ -18,4 +18,5 @@ interface TransferStateRepository: CoroutineCrudRepository<ProductTransfer, UUID
                                                pageable: Pageable = Pageable.from(0, 100,
                                                    of(Order("created")))): Page<ProductTransfer>
     suspend fun findOneBySupplierIdAndSupplierRefOrderByCreatedDesc(supplierId: UUID, supplierRef: String): ProductTransfer?
+    suspend fun findBySupplierIdAndTransferId(supplierId: UUID, transferId: UUID): ProductTransfer?
 }

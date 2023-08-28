@@ -38,6 +38,10 @@ class ProductTransferAPIController(private val transferStateRepository: Transfer
             it.toResponseDTO()
         }
 
+    @Get(value="/{supplierId}/transferId/{transferId}")
+    suspend fun getTransfersBySupplierIdAndTransferId(supplierId: UUID, transferId: UUID): TransferResponseDTO? =
+        transferStateRepository.findBySupplierIdAndTransferId(supplierId, transferId)?.toResponseDTO()
+
     @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])
     suspend fun productStream(@PathVariable supplierId: UUID, @Body jsonNode: Publisher<JsonNode>): Publisher<TransferResponseDTO> =
         jsonNode.asFlow().map { json ->
