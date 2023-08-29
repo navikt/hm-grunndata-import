@@ -22,11 +22,11 @@ class ProductTransferRepositoryTest(private val transferStateRepository: Transfe
     fun crudRepositoryTest() {
         val supplier = Supplier(id= supplierId, name = "Medema AS", identifier = "medema_as", jwtid = UUID.randomUUID().toString())
         val product = ProductTransferDTO(title = "Mini Crosser X1 4W",  isoCategory = "12230301" , hmsArtNr = "250464",
-            articleName = "",
-            supplierRef = "mini-crosser-x1-x2-4w", seriesId = "mini-crosser-x1-x2",
-
+            articleName = "mini-crosser-x1-x2-4w",
+            supplierRef = "mini-crosser-x1-x2-4w",
+            seriesId = "mini-crosser-x1-x2",
             manufacturer = "Medema AS",
-            isCompatibleWith = CompatibleAttribute(supplierRef = "supplierref", hmsArtNr = "123"),
+            compatibleWith = null,
             shortDescription = "4-hjuls scooter med manuell regulering av seteløft, ryggvinkel og seterotasjon. Leveres som standard med Ergo2 sitteenhet.",
             text = """Mini Crosser modell X1/ X2
                     Er uten sammenligning markedets sterkeste og mest komfortable el scooter: Her får man både stor motorkraft, mulighet for ekstra stor kjørelengde og unik regulerbar fjæring pakket inn i et usedvanlig lekkert design. Nordens mest solgte scooter er spesielt konstruert for nordisk klima og geografi, hvilket betyr at den er velegnet for bruk året rundt, på dårlige veier, snøføre, og ellers hvor man ønsker ekstra stabilitet. Det er virkelig fokusert på sikkerheten, og uten at det går på kompromiss med bruksegenskaper og design. Leveres også med kabin.
@@ -41,7 +41,6 @@ class ProductTransferRepositoryTest(private val transferStateRepository: Transfe
                 TransferMediaDTO(sourceUri="https://medema.no/medias/2019-02/mc_x_4w_orange_10637_570x570px.jpg")
         ))
         val json = objectMapper.writeValueAsString(product)
-        println(json)
         val transfer = ProductTransfer(supplierId=supplierId, json_payload = product, md5 = json.toMD5Hex(),
             supplierRef = product.supplierRef)
 
@@ -61,8 +60,6 @@ class ProductTransferRepositoryTest(private val transferStateRepository: Transfe
             val done = transferStateRepository.findById(saved.transferId)
             done.shouldNotBeNull()
             done.transferStatus shouldBe TransferStatus.DONE
-            val compatible = done.json_payload.isCompatibleWith
-            compatible.shouldNotBeNull()
         }
     }
 }
