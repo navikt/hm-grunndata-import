@@ -27,7 +27,11 @@ data class SeriesStateDTO(
     val status: SeriesStatus = SeriesStatus.ACTIVE,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now()
-)
+) {
+    init {
+        require(name.isNotBlank()) {"name must be unique and not blank"}
+    }
+}
 
 
 fun SeriesState.toDTO(): SeriesStateDTO = SeriesStateDTO(

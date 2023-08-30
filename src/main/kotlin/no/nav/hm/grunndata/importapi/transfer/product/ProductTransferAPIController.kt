@@ -11,7 +11,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.asPublisher
+import no.nav.hm.grunndata.importapi.ImportErrorException
 import no.nav.hm.grunndata.importapi.security.Roles
+import no.nav.hm.grunndata.importapi.techlabel.TechLabelService
 import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferAPIController.Companion.API_V1_TRANSFERS
 import org.reactivestreams.Publisher
@@ -23,6 +25,7 @@ import java.util.UUID
 @Controller(API_V1_TRANSFERS)
 @SecurityRequirement(name = "bearer-auth")
 class ProductTransferAPIController(private val transferStateRepository: TransferStateRepository,
+                                   private val techLabelService: TechLabelService,
                                    private val objectMapper: ObjectMapper) {
 
 
@@ -51,8 +54,22 @@ class ProductTransferAPIController(private val transferStateRepository: Transfer
             transferStateRepository.findBySupplierIdAndMd5(supplierId, md5)?.let { identical ->
                 LOG.info("Identical product ${identical.md5} with previous transfer ${identical.transferId}")
                 identical.toResponseDTO()
-            } ?: createTransferState(supplierId, transfer, md5)
+            } ?: run {
+                validate(transfer)
+                createTransferState(supplierId, transfer, md5)
+            }
         }.asPublisher()
+
+    private fun validate(transfer: ProductTransferDTO) {
+        if (transfer.transferTechData.isNotEmpty()) {
+            transfer.transferTechData.forEach {
+                val label = techLabelService.fetchLabelByKeyName(it.key)
+                if (label == null ||  label.unit != it.unit)
+                    throw ImportErrorException("Wrong techlabel key ${it.key} and unit: ${it.unit}")
+            }
+        }
+
+    }
 
     @Delete("/{supplierId}/{supplierRef}")
     suspend fun delete(supplierId: UUID, supplierRef: String): HttpResponse<TransferResponseDTO>  {
