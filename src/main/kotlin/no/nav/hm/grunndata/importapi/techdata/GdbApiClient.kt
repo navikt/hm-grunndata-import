@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.importapi.techlabel
+package no.nav.hm.grunndata.importapi.techdata
 
 import io.micronaut.data.model.Page
 import io.micronaut.http.MediaType.APPLICATION_JSON
@@ -21,6 +21,6 @@ interface GdbApiClient {
     fun retrieveIsoCategories(): List<IsoCategoryDTO>
 
     @Get(uri="/api/v1/techlabels", consumes = [APPLICATION_JSON])
-    fun fetchAllTechLabels(): List<TechLabelDTO>
+    fun fetchAllTechLabels(): List<TechDataLabelDTO>
 
 }

@@ -13,7 +13,7 @@ import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.asPublisher
 import no.nav.hm.grunndata.importapi.ImportErrorException
 import no.nav.hm.grunndata.importapi.security.Roles
-import no.nav.hm.grunndata.importapi.techlabel.TechLabelService
+import no.nav.hm.grunndata.importapi.techdata.TechDataLabelService
 import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferAPIController.Companion.API_V1_TRANSFERS
 import org.reactivestreams.Publisher
@@ -25,7 +25,7 @@ import java.util.UUID
 @Controller(API_V1_TRANSFERS)
 @SecurityRequirement(name = "bearer-auth")
 class ProductTransferAPIController(private val transferStateRepository: TransferStateRepository,
-                                   private val techLabelService: TechLabelService,
+                                   private val techDataLabelService: TechDataLabelService,
                                    private val objectMapper: ObjectMapper) {
 
 
@@ -63,7 +63,7 @@ class ProductTransferAPIController(private val transferStateRepository: Transfer
     private fun validate(transfer: ProductTransferDTO) {
         if (transfer.transferTechData.isNotEmpty()) {
             transfer.transferTechData.forEach {
-                val label = techLabelService.fetchLabelByKeyName(it.key)
+                val label = techDataLabelService.fetchTechDataLabelByKeyName(it.key)
                 if (label == null ||  label.unit != it.unit)
                     throw ImportErrorException("Wrong techlabel key ${it.key} and unit: ${it.unit}")
             }

@@ -1,9 +1,9 @@
-package no.nav.hm.grunndata.importapi.techlabel
+package no.nav.hm.grunndata.importapi.techdata
 
 import java.time.LocalDateTime
 import java.util.*
 
-data class TechLabelDTO(
+data class TechDataLabelDTO(
     val id: UUID = UUID.randomUUID(),
     val identifier: String,
     val label: String,
