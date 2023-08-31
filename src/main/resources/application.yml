@@ -120,3 +120,7 @@ kafka:
 
 schedulers:
   enabled: ${SCHEDULERS_ENABLED:false}
+
+grunndata:
+  db:
+    url: ${GRUNNDATA_DB_URL:`http://localhost:8888`}
