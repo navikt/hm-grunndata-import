@@ -12,6 +12,7 @@ import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferDTO
 import no.nav.hm.grunndata.importapi.transfer.product.ProductTransfer
 import no.nav.hm.grunndata.rapid.dto.*
 import org.slf4j.LoggerFactory
+import java.time.LocalDateTime
 import java.util.UUID
 
 
@@ -36,7 +37,8 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
             productStateRepository.update(
                 inDb.copy(
                     transferId = transfer.transferId,
-                    productDTO = transfer.json_payload.toProductDTO(inDb.id, transfer.supplierId, seriesStateDTO)
+                    productDTO = transfer.json_payload.toProductDTO(inDb.id, transfer.supplierId, seriesStateDTO),
+                    updated = LocalDateTime.now()
                 )
             )
         } ?: run {
@@ -59,7 +61,7 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
         title = title,
         articleName = articleName,
         supplierRef = supplierRef,
-        attributes = Attributes(
+        attributes = Attributes (
             series = seriesStateDTO?.name,
             shortdescription = shortDescription,
             text = text,

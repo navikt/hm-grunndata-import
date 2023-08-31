@@ -68,7 +68,9 @@ class ProductTransferAPIController(private val transferStateRepository: Transfer
                     throw ImportErrorException("Wrong techlabel key ${it.key} and unit: ${it.unit}")
             }
         }
-
+        if ((transfer.accessory || transfer.sparePart) && transfer.compatibleWith == null) {
+            throw ImportErrorException("It is accessory or sparePart, must set compatibleWidth")
+        }
     }
 
     @Delete("/{supplierId}/{supplierRef}")

@@ -14,6 +14,7 @@ class TransferToProductState(private val transferStateRepository: TransferStateR
 
     suspend fun receivedTransfersToProductState() {
         val contents = transferStateRepository.findByTransferStatus(TransferStatus.RECEIVED).content
+        LOG.info("Got ${contents.size} transfers to map to products")
         contents.map {
             productStateKafkaService.mapTransferToProductState(it)
         }
