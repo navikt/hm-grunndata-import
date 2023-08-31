@@ -11,15 +11,12 @@ import io.mockk.mockk
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.reactive.asFlow
-
 import kotlinx.coroutines.runBlocking
-import no.nav.hm.grunndata.importapi.token.TokenService
 import no.nav.hm.grunndata.importapi.supplier.Supplier
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.techdata.GdbApiClient
 import no.nav.hm.grunndata.importapi.techdata.TechDataLabelDTO
-
-import org.junit.jupiter.api.BeforeEach
+import no.nav.hm.grunndata.importapi.token.TokenService
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -63,8 +60,7 @@ class ProductTransferTest(private val client: ProductTransferClient,
         return mock
     }
 
-    @BeforeEach
-    fun before() {
+    init {
         runBlocking {
             supplierService.save(Supplier(id= supplierId, name = UUID.randomUUID().toString(),
                 identifier = UUID.randomUUID().toString(), jwtid = UUID.randomUUID().toString()))

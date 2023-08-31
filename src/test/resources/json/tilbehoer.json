@@ -1,3 +1,37 @@
 {
-
+  "title" : "Løftebøyle til Opus",
+  "articleName" : "Løftebøyle til Opus",
+  "shortDescription" : "Tilbehør til: Opus EW-senger",
+  "text" : "Beregnet til: Opus K85EW, Opus 90EW , Opus 120EW og Opus 90EW HS\nLøftebøylen gjør det enklere for beboer å reise seg, endre stilling eller komme seg trygt inn og ut av sengen\nHøyden på håndtaket reguleres opp og ned med stroppen slik at den henger i en passende høyde\nMERK: For å montere løftebøyle på SDW-sengebunn må feste bestilles i tillegg\nAntall: 1",
+  "manufacturer" : "Medema AS",
+  "hmsArtNr" : "255807",
+  "supplierRef" : "625067",
+  "isoCategory" : "12230301",
+  "accessory" : true,
+  "sparePart" : false,
+  "seriesId" : null,
+  "transferTechData" : [ {
+    "key" : "Farge",
+    "value" : "RAL 9001",
+    "unit" : ""
+  }, {
+    "key" : "Materiale",
+    "value" : "Pulverlakkert og rustfritt stål",
+    "unit" : ""
+  },
+    {
+      "key" : "Belastning maks",
+      "value" : "75",
+      "unit" : "kg"
+    }
+  ],
+  "media" : [ {
+    "sourceUri" : "https://d38vpb7vfo5r61.cloudfront.net/wp-content/uploads/2021/12/25150237/Lofteboyle-art.nr_.-622002.png",
+    "priority" : 1,
+    "type" : "PNG",
+    "sourceType" : "IMPORTURL"
+  } ],
+  "published" : "2023-08-22T13:39:51.884163",
+  "expired" : "2033-08-22T13:39:51.884163",
+  "agreements" : [ ]
 }
