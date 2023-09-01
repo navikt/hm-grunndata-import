@@ -9,6 +9,10 @@
   "isoCategory" : "12230301",
   "accessory" : true,
   "sparePart" : false,
+  "compatibleWith": {
+    "id": [],
+    "seriesId": []
+  },
   "seriesId" : null,
   "transferTechData" : [ {
     "key" : "Farge",
@@ -28,8 +32,7 @@
   "media" : [ {
     "sourceUri" : "https://d38vpb7vfo5r61.cloudfront.net/wp-content/uploads/2021/12/25150237/Lofteboyle-art.nr_.-622002.png",
     "priority" : 1,
-    "type" : "PNG",
-    "sourceType" : "IMPORTURL"
+    "type" : "PNG"
   } ],
   "published" : "2023-08-22T13:39:51.884163",
   "expired" : "2033-08-22T13:39:51.884163",

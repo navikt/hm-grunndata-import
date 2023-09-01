@@ -32,7 +32,6 @@ data class ProductTransferDTO (
         require(shortDescription.isNotBlank()) {"shortDescription is blank"}
         require(supplierRef.isNotBlank()) {"supplierRef is blank"}
         require(isoCategory.isNotBlank()) {"isoCategory is blank"}
-        require(!accessory && !sparePart && compatibleWith ==null) {"accessory or sparePart is set, need to specify compatibleWith "}
     }
 }
 
@@ -41,7 +40,7 @@ data class TransferMediaDTO (
     val priority: Int = 1,
     val type: TransferMediaType = TransferMediaType.PNG,
     val text:   String?=null,
-    val sourceType: MediaSourceType = MediaSourceType.EXTERNALURL
+    val sourceType: MediaSourceType = MediaSourceType.IMPORTAPI
 )
 
 enum class TransferProductStatus {
