@@ -19,12 +19,12 @@ import org.junit.jupiter.api.Test
 import java.util.*
 
 @MicronautTest
-class TransferToProductStateTest(private val transferToProductState: TransferToProductState,
-                                 private val supplierRepository: SupplierRepository,
-                                 private val transferStateRepository: TransferStateRepository,
-                                 private val productStateRepository: ProductStateRepository,
-                                 private val seriesStateService: SeriesStateService,
-                                 private val objectMapper: ObjectMapper) {
+class ProductToProductStateTest(private val transferToProductState: TransferToProductState,
+                                private val supplierRepository: SupplierRepository,
+                                private val transferStateRepository: TransferStateRepository,
+                                private val productStateRepository: ProductStateRepository,
+                                private val seriesStateService: SeriesStateService,
+                                private val objectMapper: ObjectMapper) {
 
     private val supplierId: UUID = UUID.randomUUID()
     private val seriesId: UUID = UUID.randomUUID()

@@ -76,7 +76,6 @@ class ProductAccessoryTransferTest(private val client: ProductTransferClient,
     fun testAccessoryTransfer() {
         runBlocking {
             val accessory = objectMapper.readTree(ProductAccessoryTransferTest::class.java.classLoader.getResourceAsStream("json/tilbehoer.json"))
-            val transferDTO = objectMapper.treeToValue(accessory, ProductTransferDTO::class.java)
             val response = client.productStream(supplierId = supplier!!.id, authorization = token, json = Publishers.just(accessory))
             var md5: String? = null
             var productId: UUID? = null
