@@ -66,7 +66,6 @@ enum class TransferMediaType {
 }
 
 data class CompatibleWith (
-    val id: List<UUID> = emptyList(),
     val seriesId: List<String> = emptyList(),
 )
 

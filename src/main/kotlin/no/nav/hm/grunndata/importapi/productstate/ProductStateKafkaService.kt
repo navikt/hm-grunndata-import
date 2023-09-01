@@ -71,7 +71,7 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
         isoCategory =isoCategory,
         accessory = accessory,
         sparePart = sparePart,
-        seriesId = seriesStateDTO?.id,
+        seriesId = seriesStateDTO?.id ?: productId.toString(), // use the productId if single product in a series.
         techData = transferTechData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
         media = media.map { MediaInfo( sourceUri = it.sourceUri,
             uri = generateMediaUri(productId, it.sourceUri, it.type),
