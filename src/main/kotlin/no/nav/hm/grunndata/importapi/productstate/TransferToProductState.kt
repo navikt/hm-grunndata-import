@@ -17,7 +17,9 @@ class TransferToProductState(private val transferStateRepository: TransferStateR
         LOG.info("Got ${contents.size} transfers to map to products")
         contents.map {
             productStateKafkaService.mapTransferToProductState(it)
+            transferStateRepository.update(it.copy(transferStatus = TransferStatus.DONE))
         }
+        //TODO feilhåndtering her
     }
 
 }

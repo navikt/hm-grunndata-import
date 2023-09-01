@@ -33,7 +33,7 @@ class TransferToProductStateTest(private val transferToProductState: TransferToP
     fun rapidPushService(): RapidPushService = mockk(relaxed = true)
 
     @Test
-    fun testTransferToProductState() {
+    fun testProductTransferToProductState() {
         val supplier = Supplier(id= supplierId, name = "Medema AS", identifier = "medema_as", jwtid = UUID.randomUUID().toString())
         val seriesDTO = SeriesStateDTO(id = seriesId.toString(), supplierId=supplierId, name = "Mini Crosser")
         val product = ProductTransferDTO(title = "Mini Crosser X1 4W",  isoCategory = "12230301" ,
