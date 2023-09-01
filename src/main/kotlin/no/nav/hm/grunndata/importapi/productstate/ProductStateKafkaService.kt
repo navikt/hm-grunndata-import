@@ -10,6 +10,7 @@ import no.nav.hm.grunndata.importapi.supplier.toDTO
 import no.nav.hm.grunndata.importapi.transfer.product.TransferMediaType
 import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferDTO
 import no.nav.hm.grunndata.importapi.transfer.product.ProductTransfer
+import no.nav.hm.grunndata.importapi.transfer.product.TransferStateRepository
 import no.nav.hm.grunndata.rapid.dto.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
@@ -31,8 +32,7 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
     @Transactional
     open suspend fun mapTransferToProductState(transfer: ProductTransfer) {
         val seriesId = transfer.json_payload.seriesId
-        val seriesStateDTO = if (seriesId != null) seriesStateService.findByIdCacheable(seriesId) else
-            throw ImportErrorException("Serier $seriesId does not exist")
+        val seriesStateDTO = if (seriesId != null) seriesStateService.findByIdCacheable(seriesId) else null
         val productstate = productStateRepository.findBySupplierIdAndSupplierRef(transfer.supplierId, transfer.supplierRef)?.let { inDb ->
             productStateRepository.update(
                 inDb.copy(
@@ -53,6 +53,7 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
         }
         LOG.info("productstate ${productstate.id} and transfer id: ${productstate.transferId} push to rapid")
         importRapidPushService.pushDTOToKafka(productstate.toDTO(), eventName)
+
     }
 
     private suspend fun ProductTransferDTO.toProductDTO(productId: UUID, supplierId: UUID, seriesStateDTO: SeriesStateDTO?): ProductRapidDTO = ProductRapidDTO (
@@ -71,7 +72,7 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
         isoCategory =isoCategory,
         accessory = accessory,
         sparePart = sparePart,
-        seriesId = seriesStateDTO?.id ?: productId.toString(), // use the productId if single product in a series.
+        seriesId = seriesStateDTO?.id ?: productId.toString(), // use the productId if it's a single product
         techData = transferTechData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
         media = media.map { MediaInfo( sourceUri = it.sourceUri,
             uri = generateMediaUri(productId, it.sourceUri, it.type),

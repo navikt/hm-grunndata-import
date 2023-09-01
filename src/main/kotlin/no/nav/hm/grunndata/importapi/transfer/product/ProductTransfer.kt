@@ -18,7 +18,8 @@ data class ProductTransfer (
     val json_payload: ProductTransferDTO,
     val message: String? = null,
     val transferStatus: TransferStatus = TransferStatus.RECEIVED,
-    val created: LocalDateTime = LocalDateTime.now()
+    val created: LocalDateTime = LocalDateTime.now(),
+    val updated: LocalDateTime = LocalDateTime.now()
 )
 
 enum class TransferStatus {

@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS product_transfer_v1 (
     transfer_status VARCHAR(32) NOT NULL,
     message TEXT,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(md5)
 );
 
