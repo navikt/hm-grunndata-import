@@ -28,12 +28,12 @@ data class ProductImport(
 fun ProductImport.toDTO(): ProductImportRapidDTO = ProductImportRapidDTO(
     id = id,
     transferId = transferId,
-    version = version!!,
     supplierId = supplierId,
     supplierRef = supplierRef,
     productDTO = productDTO,
     created = created,
-    updated = updated
+    updated = updated,
+    version = version!!
 )
 
 data class ProductImportRapidDTO(

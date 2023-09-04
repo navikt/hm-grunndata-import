@@ -66,6 +66,7 @@ open class ProductImportKafkaService(private val productImportRepository: Produc
             series = seriesStateDTO?.name,
             shortdescription = shortDescription,
             text = text,
+
         ),
         hmsArtNr = hmsArtNr,
         identifier = productId.toString(),
