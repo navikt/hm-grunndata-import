@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.importapi.productstate
+package no.nav.hm.grunndata.importapi.productImport
 
 import io.micronaut.context.annotation.Requires
 import io.micronaut.scheduling.annotation.Scheduled

@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.importapi.productstate
+package no.nav.hm.grunndata.importapi.productImport
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.context.annotation.Context
@@ -21,7 +21,8 @@ import java.time.LocalDateTime
 @Requires(bean = KafkaRapid::class)
 class AdminStatusSyncRiver(river: RiverHead,
                            private val objectMapper: ObjectMapper,
-                           private val productStateRepository: ProductStateRepository): River.PacketListener {
+                           private val productStateRepository: ProductStateRepository
+): River.PacketListener {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(AdminStatusSyncRiver::class.java)

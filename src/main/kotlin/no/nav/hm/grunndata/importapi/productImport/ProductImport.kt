@@ -1,41 +1,53 @@
-package no.nav.hm.grunndata.importapi.productstate
+package no.nav.hm.grunndata.importapi.productImport
 
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.TypeDef
+import io.micronaut.data.annotation.Version
 import io.micronaut.data.model.DataType
-import no.nav.hm.grunndata.rapid.dto.AdminStatus
-import no.nav.hm.grunndata.rapid.dto.ProductRapidDTO
+import no.nav.hm.grunndata.rapid.dto.*
 import no.nav.hm.grunndata.rapid.dto.ProductStateDTO
-import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import java.time.LocalDateTime
 import java.util.*
 
-@MappedEntity("product_state_v1")
-data class ProductState(
+@MappedEntity("product_import_v1")
+data class ProductImport(
     @field:Id
     val id: UUID,
     val transferId: UUID,
     val supplierId: UUID,
     val supplierRef: String,
+    val md5: String,
+    @field:Version
+    val version: Long,
     @field:TypeDef(type = DataType.JSON)
     val productDTO: ProductRapidDTO,
-    val adminStatus: AdminStatus?=null,
-    val adminMessage: String? = null,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now()
 )
-fun ProductState.toDTO(): ProductStateDTO = ProductStateDTO(
+fun ProductImport.toDTO(): ProductImportRapidDTO = ProductImportRapidDTO(
     id = id,
     transferId = transferId,
+    version = version,
+    md5 = md5,
     supplierId = supplierId,
     supplierRef = supplierRef,
     productDTO = productDTO,
-    adminStatus = adminStatus,
-    adminMessage = adminMessage,
     created = created,
     updated = updated
 )
+
+data class ProductImportRapidDTO(
+    override val id: UUID,
+    val transferId: UUID,
+    val supplierId: UUID,
+    val supplierRef: String,
+    val md5: String,
+    val version: Long,
+    val productDTO: ProductRapidDTO,
+    val created: LocalDateTime = LocalDateTime.now(),
+    val updated: LocalDateTime = LocalDateTime.now()
+): RapidDTO
 
 data class ProductStateResponseDTO (
     val id: UUID,
@@ -49,14 +61,12 @@ data class ProductStateResponseDTO (
     val updated: LocalDateTime = LocalDateTime.now()
 )
 
-fun ProductState.toResponseDTO(): ProductStateResponseDTO = ProductStateResponseDTO (
+fun ProductImport.toResponseDTO(): ProductStateResponseDTO = ProductStateResponseDTO (
     id = id,
     transferId = transferId,
     supplierId = supplierId,
     supplierRef = supplierRef,
     productStatus = productDTO.status,
-    adminStatus = adminStatus,
-    adminMessage = adminMessage,
     created = created,
     updated = updated
 )

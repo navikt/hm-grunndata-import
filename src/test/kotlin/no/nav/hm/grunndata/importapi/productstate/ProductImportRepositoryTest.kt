@@ -4,13 +4,15 @@ import io.kotest.common.runBlocking
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import no.nav.hm.grunndata.importapi.productImport.ProductImport
+import no.nav.hm.grunndata.importapi.productImport.ProductStateRepository
 import no.nav.hm.grunndata.rapid.dto.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.util.*
 
 @MicronautTest
-class ProductStateRepositoryTest(private val productStateRepository: ProductStateRepository) {
+class ProductImportRepositoryTest(private val productStateRepository: ProductStateRepository) {
 
     @Test
     fun crudProductStateTest() {
@@ -40,7 +42,7 @@ class ProductStateRepositoryTest(private val productStateRepository: ProductStat
             agreementInfo = AgreementInfo(id = UUID.randomUUID(), identifier = "hmdbid-1", rank = 1, postNr = 1,
                 reference = "AV-142", expired = LocalDateTime.now()), createdBy = "IMPORT", updatedBy = "IMPORT"
         )
-        val state = ProductState(id = productDTO.id, supplierId = supplierId, supplierRef = "referanse-123",
+        val state = ProductImport(id = productDTO.id, supplierId = supplierId, supplierRef = "referanse-123",
         productDTO = productDTO, transferId = UUID.randomUUID())
         runBlocking {
             val saved = productStateRepository.save(state)

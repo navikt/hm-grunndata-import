@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.importapi.productstate
+package no.nav.hm.grunndata.importapi.productImport
 
 import jakarta.inject.Singleton
 import jakarta.transaction.Transactional
@@ -10,7 +10,6 @@ import no.nav.hm.grunndata.importapi.supplier.toDTO
 import no.nav.hm.grunndata.importapi.transfer.product.TransferMediaType
 import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferDTO
 import no.nav.hm.grunndata.importapi.transfer.product.ProductTransfer
-import no.nav.hm.grunndata.importapi.transfer.product.TransferStateRepository
 import no.nav.hm.grunndata.rapid.dto.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
@@ -44,14 +43,15 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
         } ?: run {
             val productId = UUID.randomUUID()
             productStateRepository.save(
-                ProductState(
+                ProductImport(
                     id = productId, transferId = transfer.transferId, supplierId = transfer.supplierId,
                     supplierRef = transfer.supplierRef,
                     productDTO = transfer.json_payload.toProductDTO(productId, transfer.supplierId, seriesStateDTO)
                 )
             )
         }
-        LOG.info("productstate ${productstate.id} and transfer id: ${productstate.transferId} push to rapid")
+        LOG.info("productstate ${productstate.id} and transfer id: ${productstate.transferId} " +
+                "for supplierId: ${productstate.supplierId} supplierRef: ${productstate.supplierRef} push to rapid")
         importRapidPushService.pushDTOToKafka(productstate.toDTO(), eventName)
 
     }

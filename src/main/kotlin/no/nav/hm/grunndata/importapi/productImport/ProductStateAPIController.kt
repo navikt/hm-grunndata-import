@@ -1,10 +1,10 @@
-package no.nav.hm.grunndata.importapi.productstate
+package no.nav.hm.grunndata.importapi.productImport
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
-import no.nav.hm.grunndata.importapi.productstate.ProductStateAPIController.Companion.API_V1_PRODUCTSTATE
+import no.nav.hm.grunndata.importapi.productImport.ProductStateAPIController.Companion.API_V1_PRODUCTSTATE
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
 import org.slf4j.LoggerFactory

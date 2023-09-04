@@ -8,6 +8,8 @@ import io.kotest.matchers.shouldBe
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.mockk
+import no.nav.hm.grunndata.importapi.productImport.ProductStateRepository
+import no.nav.hm.grunndata.importapi.productImport.TransferToProductState
 import no.nav.hm.grunndata.importapi.seriesstate.SeriesStateDTO
 import no.nav.hm.grunndata.importapi.seriesstate.SeriesStateService
 import no.nav.hm.grunndata.importapi.supplier.Supplier
@@ -19,12 +21,12 @@ import org.junit.jupiter.api.Test
 import java.util.*
 
 @MicronautTest
-class ProductToProductStateTest(private val transferToProductState: TransferToProductState,
-                                private val supplierRepository: SupplierRepository,
-                                private val transferStateRepository: TransferStateRepository,
-                                private val productStateRepository: ProductStateRepository,
-                                private val seriesStateService: SeriesStateService,
-                                private val objectMapper: ObjectMapper) {
+class ProductToProductImportTest(private val transferToProductState: TransferToProductState,
+                                 private val supplierRepository: SupplierRepository,
+                                 private val transferStateRepository: TransferStateRepository,
+                                 private val productStateRepository: ProductStateRepository,
+                                 private val seriesStateService: SeriesStateService,
+                                 private val objectMapper: ObjectMapper) {
 
     private val supplierId: UUID = UUID.randomUUID()
     private val seriesId: UUID = UUID.randomUUID()

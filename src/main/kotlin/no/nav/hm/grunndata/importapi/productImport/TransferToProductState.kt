@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.importapi.productstate
+package no.nav.hm.grunndata.importapi.productImport
 
 import jakarta.inject.Singleton
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStateRepository
@@ -8,7 +8,8 @@ import java.time.LocalDateTime
 
 @Singleton
 class TransferToProductState(private val transferStateRepository: TransferStateRepository,
-                             private val productStateKafkaService: ProductStateKafkaService) {
+                             private val productStateKafkaService: ProductStateKafkaService
+) {
     companion object {
         private val LOG = LoggerFactory.getLogger(TransferToProductState::class.java)
     }
