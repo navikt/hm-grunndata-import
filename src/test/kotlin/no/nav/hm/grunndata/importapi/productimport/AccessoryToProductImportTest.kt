@@ -2,6 +2,9 @@ package no.nav.hm.grunndata.importapi.productimport
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.kotest.common.runBlocking
+import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.mockk
@@ -45,7 +48,13 @@ class AccessoryToProductImportTest(private val transferToProductImport: Transfer
             val savedSupplier = supplierRepository.save(supplier)
             val savedTransfer = transferStateRepository.save(transfer)
             transferToProductImport.receivedTransfersToProductState()
-
+            val productImport = productImportRepository.findBySupplierIdAndSupplierRef(supplierId, accessory.supplierRef)
+            productImport.shouldNotBeNull()
+            productImport.id.shouldNotBeNull()
+            productImport.productDTO.id shouldBe productImport.id
+            productImport.productDTO.accessory shouldBe true
+            productImport.productDTO.attributes.compatibleWidth.shouldNotBeNull()
+            productImport.productDTO.attributes.compatibleWidth!!.seriesIds.shouldNotBeEmpty()
         }
     }
 }

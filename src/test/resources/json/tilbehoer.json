@@ -10,7 +10,7 @@
   "accessory" : true,
   "sparePart" : false,
   "compatibleWith": {
-    "seriesId": ["HMDB-66207", "HMDB-66208", "HMDB-66209"]
+    "seriesIds": ["HMDB-66207", "HMDB-66208", "HMDB-66209"]
   },
   "seriesId" : null,
   "transferTechData" : [ {
