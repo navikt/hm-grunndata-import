@@ -91,7 +91,7 @@ jackson:
 
 datasources:
   default:
-    url: ${DB_JDBC_URL:`jdbc:tc:postgresql:15:///importapi?TC_TMPFS=/testtmpfs:rw&TC_INITSCRIPT=file:src/test/resources/postgres/postgres-init.sql&TC_REUSABLE=true`}
+    url: ${DB_JDBC_URL:`jdbc:tc:postgresql:14:///importapi?TC_TMPFS=/testtmpfs:rw&TC_INITSCRIPT=file:src/test/resources/postgres/postgres-init.sql&TC_REUSABLE=true`}
     driverClassName: ${DB_DRIVER:org.testcontainers.jdbc.ContainerDatabaseDriver}
     username: ${DB_USERNAME:importapi}
     password: ${DB_PASSWORD:importapi}
