@@ -17,19 +17,18 @@ data class ProductImport(
     val transferId: UUID,
     val supplierId: UUID,
     val supplierRef: String,
-    val md5: String,
-    @field:Version
-    val version: Long,
     @field:TypeDef(type = DataType.JSON)
     val productDTO: ProductRapidDTO,
     val created: LocalDateTime = LocalDateTime.now(),
-    val updated: LocalDateTime = LocalDateTime.now()
+    val updated: LocalDateTime = LocalDateTime.now(),
+    @field:Version
+    val version: Long?=0L
 )
+
 fun ProductImport.toDTO(): ProductImportRapidDTO = ProductImportRapidDTO(
     id = id,
     transferId = transferId,
-    version = version,
-    md5 = md5,
+    version = version!!,
     supplierId = supplierId,
     supplierRef = supplierRef,
     productDTO = productDTO,
@@ -42,7 +41,6 @@ data class ProductImportRapidDTO(
     val transferId: UUID,
     val supplierId: UUID,
     val supplierRef: String,
-    val md5: String,
     val version: Long,
     val productDTO: ProductRapidDTO,
     val created: LocalDateTime = LocalDateTime.now(),

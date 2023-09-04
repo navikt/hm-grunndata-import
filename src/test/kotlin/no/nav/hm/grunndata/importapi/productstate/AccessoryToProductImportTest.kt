@@ -5,8 +5,8 @@ import io.kotest.common.runBlocking
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.mockk
-import no.nav.hm.grunndata.importapi.productImport.ProductStateRepository
-import no.nav.hm.grunndata.importapi.productImport.TransferToProductState
+import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
+import no.nav.hm.grunndata.importapi.productImport.TransferToProductImport
 import no.nav.hm.grunndata.importapi.seriesstate.SeriesStateService
 import no.nav.hm.grunndata.importapi.supplier.Supplier
 import no.nav.hm.grunndata.importapi.supplier.SupplierRepository
@@ -19,10 +19,10 @@ import org.junit.jupiter.api.Test
 import java.util.*
 
 @MicronautTest
-class AccessoryToProductImportTest(private val transferToProductState: TransferToProductState,
+class AccessoryToProductImportTest(private val transferToProductImport: TransferToProductImport,
                                    private val supplierRepository: SupplierRepository,
                                    private val transferStateRepository: TransferStateRepository,
-                                   private val productStateRepository: ProductStateRepository,
+                                   private val productImportRepository: ProductImportRepository,
                                    private val seriesStateService: SeriesStateService,
                                    private val objectMapper: ObjectMapper) {
 
@@ -44,8 +44,8 @@ class AccessoryToProductImportTest(private val transferToProductState: TransferT
         runBlocking {
             val savedSupplier = supplierRepository.save(supplier)
             val savedTransfer = transferStateRepository.save(transfer)
-            transferToProductState.receivedTransfersToProductState()
-            productStateRepository.findBySupplierIdAndSupplierRef()
+            transferToProductImport.receivedTransfersToProductState()
+            productImportRepository.findBySupplierIdAndSupplierRef()
 
         }
     }

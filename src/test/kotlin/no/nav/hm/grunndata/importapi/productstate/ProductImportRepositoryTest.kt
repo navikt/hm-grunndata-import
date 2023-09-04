@@ -5,14 +5,14 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import no.nav.hm.grunndata.importapi.productImport.ProductImport
-import no.nav.hm.grunndata.importapi.productImport.ProductStateRepository
+import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.rapid.dto.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.util.*
 
 @MicronautTest
-class ProductImportRepositoryTest(private val productStateRepository: ProductStateRepository) {
+class ProductImportRepositoryTest(private val productImportRepository: ProductImportRepository) {
 
     @Test
     fun crudProductStateTest() {
@@ -45,11 +45,11 @@ class ProductImportRepositoryTest(private val productStateRepository: ProductSta
         val state = ProductImport(id = productDTO.id, supplierId = supplierId, supplierRef = "referanse-123",
         productDTO = productDTO, transferId = UUID.randomUUID())
         runBlocking {
-            val saved = productStateRepository.save(state)
-            val find = productStateRepository.findBySupplierIdAndSupplierRef(supplierId, "referanse-123")
+            val saved = productImportRepository.save(state)
+            val find = productImportRepository.findBySupplierIdAndSupplierRef(supplierId, "referanse-123")
             find.shouldNotBeNull()
             find.productDTO.title shouldBe "Dette er produkt title"
-            val updated = productStateRepository.update(find.copy(productDTO = find.productDTO.copy(title = "ny tittel")))
+            val updated = productImportRepository.update(find.copy(productDTO = find.productDTO.copy(title = "ny tittel")))
             updated.shouldNotBeNull()
             updated.productDTO.title shouldBe "ny tittel"
         }

@@ -17,23 +17,23 @@ import java.util.UUID
 
 
 @Singleton
-open class ProductStateKafkaService(private val productStateRepository: ProductStateRepository,
-                                    private val supplierService: SupplierService,
-                                    private val importRapidPushService: ImportRapidPushService,
-                                    private val seriesStateService: SeriesStateService) {
+open class ProductImportKafkaService(private val productImportRepository: ProductImportRepository,
+                                     private val supplierService: SupplierService,
+                                     private val importRapidPushService: ImportRapidPushService,
+                                     private val seriesStateService: SeriesStateService) {
 
     val eventName = "hm-grunndata-import-productstate-transfer"
 
     companion object {
-        private val LOG = LoggerFactory.getLogger(ProductStateKafkaService::class.java)
+        private val LOG = LoggerFactory.getLogger(ProductImportKafkaService::class.java)
     }
 
     @Transactional
     open suspend fun mapTransferToProductState(transfer: ProductTransfer) {
         val seriesId = transfer.json_payload.seriesId
         val seriesStateDTO = if (seriesId != null) seriesStateService.findByIdCacheable(seriesId) else null
-        val productstate = productStateRepository.findBySupplierIdAndSupplierRef(transfer.supplierId, transfer.supplierRef)?.let { inDb ->
-            productStateRepository.update(
+        val productstate = productImportRepository.findBySupplierIdAndSupplierRef(transfer.supplierId, transfer.supplierRef)?.let { inDb ->
+            productImportRepository.update(
                 inDb.copy(
                     transferId = transfer.transferId,
                     productDTO = transfer.json_payload.toProductDTO(inDb.id, transfer.supplierId, seriesStateDTO),
@@ -42,7 +42,7 @@ open class ProductStateKafkaService(private val productStateRepository: ProductS
             )
         } ?: run {
             val productId = UUID.randomUUID()
-            productStateRepository.save(
+            productImportRepository.save(
                 ProductImport(
                     id = productId, transferId = transfer.transferId, supplierId = transfer.supplierId,
                     supplierRef = transfer.supplierRef,

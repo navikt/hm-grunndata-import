@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS product_transfer_v1 (
 
 CREATE INDEX product_transfer_v1_supplierId_supplierRef_idx ON product_transfer_v1(supplier_id, supplier_ref);
 
-CREATE TABLE IF NOT EXISTS product_state_v1 (
+CREATE TABLE IF NOT EXISTS product_import_v1 (
     id uuid NOT NULL PRIMARY KEY,
     transfer_id UUID NOT NULL,
     supplier_id uuid NOT NULL,
@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS product_state_v1 (
     admin_message TEXT,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    version BIGINT NOT NULL,
     UNIQUE (supplier_id, supplier_ref)
 );
 

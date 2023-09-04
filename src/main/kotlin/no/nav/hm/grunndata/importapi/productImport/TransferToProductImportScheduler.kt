@@ -8,17 +8,17 @@ import org.slf4j.LoggerFactory
 
 @Singleton
 @Requires(property = "schedulers.enabled", value = "true")
-class TransferToProductStateScheduler(private val transferToProductState: TransferToProductState) {
+class TransferToProductImportScheduler(private val transferToProductImport: TransferToProductImport) {
 
 
     companion object {
-        private val LOG = LoggerFactory.getLogger(TransferToProductStateScheduler::class.java)
+        private val LOG = LoggerFactory.getLogger(TransferToProductImportScheduler::class.java)
     }
     @Scheduled(fixedDelay = "1m")
     fun transferToProductStateTask() {
         LOG.info("Running receivedTransfers to ProductState scheduler")
         runBlocking {
-            transferToProductState.receivedTransfersToProductState()
+            transferToProductImport.receivedTransfersToProductState()
         }
     }
 

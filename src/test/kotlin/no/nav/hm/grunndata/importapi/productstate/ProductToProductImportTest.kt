@@ -8,8 +8,8 @@ import io.kotest.matchers.shouldBe
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.mockk
-import no.nav.hm.grunndata.importapi.productImport.ProductStateRepository
-import no.nav.hm.grunndata.importapi.productImport.TransferToProductState
+import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
+import no.nav.hm.grunndata.importapi.productImport.TransferToProductImport
 import no.nav.hm.grunndata.importapi.seriesstate.SeriesStateDTO
 import no.nav.hm.grunndata.importapi.seriesstate.SeriesStateService
 import no.nav.hm.grunndata.importapi.supplier.Supplier
@@ -21,10 +21,10 @@ import org.junit.jupiter.api.Test
 import java.util.*
 
 @MicronautTest
-class ProductToProductImportTest(private val transferToProductState: TransferToProductState,
+class ProductToProductImportTest(private val transferToProductImport: TransferToProductImport,
                                  private val supplierRepository: SupplierRepository,
                                  private val transferStateRepository: TransferStateRepository,
-                                 private val productStateRepository: ProductStateRepository,
+                                 private val productImportRepository: ProductImportRepository,
                                  private val seriesStateService: SeriesStateService,
                                  private val objectMapper: ObjectMapper) {
 
@@ -72,9 +72,9 @@ class ProductToProductImportTest(private val transferToProductState: TransferToP
             saved.transferId.shouldNotBeNull()
             saved.transferStatus shouldBe TransferStatus.RECEIVED
             saved.transferId.shouldNotBeNull()
-            productStateRepository.findBySupplierIdAndSupplierRef(saved.supplierId, saved.supplierRef).shouldBeNull()
-            transferToProductState.receivedTransfersToProductState()
-            val found = productStateRepository.findBySupplierIdAndSupplierRef(saved.supplierId, saved.supplierRef)
+            productImportRepository.findBySupplierIdAndSupplierRef(saved.supplierId, saved.supplierRef).shouldBeNull()
+            transferToProductImport.receivedTransfersToProductState()
+            val found = productImportRepository.findBySupplierIdAndSupplierRef(saved.supplierId, saved.supplierRef)
             found.shouldNotBeNull()
             found.adminStatus.shouldBeNull()
             found.transferId shouldBe saved.transferId
