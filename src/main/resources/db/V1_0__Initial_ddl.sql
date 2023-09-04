@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS product_import_v1 (
     UNIQUE (supplier_id, supplier_ref)
 );
 
-CREATE INDEX product_state_transferId_idx ON product_state_v1(transfer_id);
+CREATE INDEX product_import_v1_transferId_idx ON product_import_v1(transfer_id);
 
 CREATE TABLE IF NOT EXISTS series_state_v1(
     id VARCHAR(255) NOT NULL PRIMARY KEY,

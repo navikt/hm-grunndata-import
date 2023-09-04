@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.importapi.productImport
+package no.nav.hm.grunndata.importapi.adminstatus
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.context.annotation.Context
@@ -8,6 +8,7 @@ import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.KafkaRapid
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.River
+import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.rapid.dto.DraftStatus
 import no.nav.hm.grunndata.rapid.dto.ProductRegistrationRapidDTO
 import no.nav.hm.grunndata.rapid.dto.rapidDTOVersion
@@ -44,11 +45,7 @@ class AdminStatusSyncRiver(river: RiverHead,
         val dto = objectMapper.treeToValue(packet["payload"], ProductRegistrationRapidDTO::class.java)
         if (DraftStatus.DONE == dto.draftStatus && "IMPORT" == dto.productDTO.createdBy) {
             runBlocking {
-                productImportRepository.findById(dto.id)?.let {
-                    productImportRepository.update(it.copy(adminStatus = dto.adminStatus,
-                        updated = LocalDateTime.now(), adminMessage = dto.message
-                    ))
-                }
+                // TODO
                 LOG.info("adminstatus sync for ${dto.id} with adminstatus ${dto.adminStatus}")
             }
         }

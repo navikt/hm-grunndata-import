@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.importapi.productstate
+package no.nav.hm.grunndata.importapi.productimport
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.kotest.common.runBlocking
@@ -45,7 +45,6 @@ class AccessoryToProductImportTest(private val transferToProductImport: Transfer
             val savedSupplier = supplierRepository.save(supplier)
             val savedTransfer = transferStateRepository.save(transfer)
             transferToProductImport.receivedTransfersToProductState()
-            productImportRepository.findBySupplierIdAndSupplierRef()
 
         }
     }

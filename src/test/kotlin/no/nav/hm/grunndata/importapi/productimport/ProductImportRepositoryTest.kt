@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.importapi.productstate
+package no.nav.hm.grunndata.importapi.productimport
 
 import io.kotest.common.runBlocking
 import io.kotest.matchers.nulls.shouldNotBeNull
