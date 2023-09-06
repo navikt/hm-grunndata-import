@@ -8,6 +8,8 @@ import io.kotest.matchers.shouldBe
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.mockk
+import no.nav.hm.grunndata.importapi.adminstate.ProductAdminState
+import no.nav.hm.grunndata.importapi.adminstate.ProductAdminStateRepository
 import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.importapi.productImport.TransferToProductImport
 import no.nav.hm.grunndata.importapi.seriesstate.SeriesStateDTO
@@ -16,6 +18,7 @@ import no.nav.hm.grunndata.importapi.supplier.Supplier
 import no.nav.hm.grunndata.importapi.supplier.SupplierRepository
 import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transfer.product.*
+import no.nav.hm.grunndata.rapid.dto.AdminStatus
 import no.nav.hm.rapids_rivers.micronaut.RapidPushService
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -26,7 +29,8 @@ class ProductToProductImportTest(private val transferToProductImport: TransferTo
                                  private val transferStateRepository: TransferStateRepository,
                                  private val productImportRepository: ProductImportRepository,
                                  private val seriesStateService: SeriesStateService,
-                                 private val objectMapper: ObjectMapper) {
+                                 private val objectMapper: ObjectMapper,
+                                 private val productAdminStateRepository: ProductAdminStateRepository) {
 
     private val supplierId: UUID = UUID.randomUUID()
     private val seriesId: UUID = UUID.randomUUID()
@@ -35,7 +39,7 @@ class ProductToProductImportTest(private val transferToProductImport: TransferTo
     fun rapidPushService(): RapidPushService = mockk(relaxed = true)
 
     @Test
-    fun testProductTransferToProductState() {
+    fun testProductTransferToProductImport() {
         val supplier = Supplier(id= supplierId, name = "Medema AS", identifier = "medema_as", jwtid = UUID.randomUUID().toString())
         val seriesDTO = SeriesStateDTO(id = seriesId.toString(), supplierId=supplierId, name = "Mini Crosser")
         val product = ProductTransferDTO(title = "Mini Crosser X1 4W",  isoCategory = "12230301" ,
@@ -78,6 +82,10 @@ class ProductToProductImportTest(private val transferToProductImport: TransferTo
             found.shouldNotBeNull()
             found.transferId shouldBe saved.transferId
             found.id.shouldNotBeNull()
+            val adminState = productAdminStateRepository.findById(found.id)
+            adminState.shouldNotBeNull()
+            adminState.adminStatus shouldBe AdminStatus.PENDING
+            adminState.transferId shouldBe found.transferId
         }
     }
 
