@@ -29,10 +29,10 @@ open class ProductImportKafkaService(private val productImportRepository: Produc
     }
 
     @Transactional
-    open suspend fun mapTransferToProductState(transfer: ProductTransfer) {
+    open suspend fun mapSaveTransferToProductImport(transfer: ProductTransfer): ProductImport {
         val seriesId = transfer.json_payload.seriesId
         val seriesStateDTO = if (seriesId != null) seriesStateService.findByIdCacheable(seriesId) else null
-        val productstate = productImportRepository.findBySupplierIdAndSupplierRef(transfer.supplierId, transfer.supplierRef)?.let { inDb ->
+        val productImport = productImportRepository.findBySupplierIdAndSupplierRef(transfer.supplierId, transfer.supplierRef)?.let { inDb ->
             productImportRepository.update(
                 inDb.copy(
                     transferId = transfer.transferId,
@@ -50,10 +50,10 @@ open class ProductImportKafkaService(private val productImportRepository: Produc
                 )
             )
         }
-        LOG.info("productstate ${productstate.id} and transfer id: ${productstate.transferId} " +
-                "for supplierId: ${productstate.supplierId} supplierRef: ${productstate.supplierRef} push to rapid")
-        importRapidPushService.pushDTOToKafka(productstate.toDTO(), eventName)
-
+        LOG.info("productstate ${productImport.id} and transfer id: ${productImport.transferId} " +
+                "for supplierId: ${productImport.supplierId} supplierRef: ${productImport.supplierRef} push to rapid")
+        importRapidPushService.pushDTOToKafka(productImport.toDTO(), eventName)
+        return productImport
     }
 
     private suspend fun ProductTransferDTO.toProductDTO(productId: UUID, supplierId: UUID, seriesStateDTO: SeriesStateDTO?): ProductRapidDTO = ProductRapidDTO (
