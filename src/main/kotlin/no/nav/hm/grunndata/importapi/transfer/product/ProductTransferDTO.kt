@@ -62,7 +62,8 @@ data class AgreementInfo (
 enum class TransferMediaType {
     PDF,
     JPG,
-    PNG
+    PNG,
+    VIDEO
 }
 
 data class CompatibleWith (

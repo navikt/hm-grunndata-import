@@ -16,7 +16,7 @@ data class ProductAdminState(
     val supplierRef: String,
     val productStatus: ProductStatus = ProductStatus.INACTIVE,
     val adminStatus: AdminStatus = AdminStatus.PENDING,
-    val adminMessage: String,
+    val adminMessage: String?,
     val version: Long,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now()

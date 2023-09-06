@@ -93,6 +93,7 @@ open class ProductImportKafkaService(private val productImportRepository: Produc
             TransferMediaType.JPG -> "jpg"
             TransferMediaType.PNG -> "png"
             TransferMediaType.PDF -> "pdf"
+            TransferMediaType.VIDEO ->  "mp4"
         }
         return "import/${productId}/${sourceUri.toMD5Hex()}.$extension"
     }
