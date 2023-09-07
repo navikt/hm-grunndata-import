@@ -14,6 +14,7 @@ import no.nav.hm.grunndata.rapid.dto.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.UUID
+import kotlin.math.exp
 
 
 @Singleton
@@ -62,6 +63,7 @@ open class ProductImportKafkaService(private val productImportRepository: Produc
         title = title,
         articleName = articleName,
         supplierRef = supplierRef,
+        status = mapStatus(published, expired),
         attributes = Attributes (
             series = seriesStateDTO?.name,
             shortdescription = shortDescription,
@@ -87,6 +89,12 @@ open class ProductImportKafkaService(private val productImportRepository: Produc
         createdBy = IMPORT,
         updatedBy = IMPORT,
     )
+
+    private fun mapStatus(published: LocalDateTime, expired: LocalDateTime): ProductStatus {
+        return if (published.isBefore(LocalDateTime.now()) && expired.isAfter(LocalDateTime.now())) {
+            ProductStatus.ACTIVE
+        } else ProductStatus.INACTIVE
+    }
 
     private fun generateMediaUri(productId: UUID, sourceUri: String, type: TransferMediaType): String {
         val extension = when (type) {

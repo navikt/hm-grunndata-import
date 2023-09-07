@@ -23,7 +23,7 @@ import java.time.LocalDateTime
 @Requires(bean = KafkaRapid::class)
 class AdminStatusSyncRiver(river: RiverHead,
                            private val objectMapper: ObjectMapper,
-                           private val productImportRepository: ProductImportRepository
+                           productAdminStateRepository: ProductAdminStateRepository
 ): River.PacketListener {
 
     companion object {
@@ -46,8 +46,8 @@ class AdminStatusSyncRiver(river: RiverHead,
         val dto = objectMapper.treeToValue(packet["payload"], ProductRegistrationRapidDTO::class.java)
         if (DraftStatus.DONE == dto.draftStatus && IMPORT == dto.productDTO.createdBy) {
             runBlocking {
-                // TODO
                 LOG.info("adminstatus sync for ${dto.id} with adminstatus ${dto.adminStatus}")
+
             }
         }
     }
