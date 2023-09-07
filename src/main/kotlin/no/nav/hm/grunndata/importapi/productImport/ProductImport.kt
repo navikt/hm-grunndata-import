@@ -36,16 +36,6 @@ fun ProductImport.toDTO(): ProductImportRapidDTO = ProductImportRapidDTO(
     version = version!!
 )
 
-data class ProductImportRapidDTO(
-    override val id: UUID,
-    val transferId: UUID,
-    val supplierId: UUID,
-    val supplierRef: String,
-    val version: Long,
-    val productDTO: ProductRapidDTO,
-    val created: LocalDateTime = LocalDateTime.now(),
-    val updated: LocalDateTime = LocalDateTime.now()
-): RapidDTO
 
 data class ProductStateResponseDTO (
     val id: UUID,

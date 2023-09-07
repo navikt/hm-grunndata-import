@@ -71,7 +71,7 @@ open class ProductImportKafkaService(private val productImportRepository: Produc
         ),
         hmsArtNr = hmsArtNr,
         identifier = productId.toString(),
-        isoCategory =isoCategory,
+        isoCategory = isoCategory,
         accessory = accessory,
         sparePart = sparePart,
         seriesId = seriesStateDTO?.id ?: productId.toString(), // use the productId if it's a single product
