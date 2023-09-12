@@ -8,5 +8,7 @@ import java.util.*
 @JdbcRepository(dialect = Dialect.POSTGRES)
 interface ProductAdminStateRepository: CoroutineCrudRepository<ProductAdminState, UUID> {
 
+    suspend fun findBySupplierIdAndSupplierRef(supplierId: UUID, supplierRef: String): ProductAdminState?
+
 
 }

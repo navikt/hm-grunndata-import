@@ -22,3 +22,28 @@ data class ProductAdminState(
     val updated: LocalDateTime = LocalDateTime.now()
 )
 
+data class ProductAdminStateDTO (
+    val id: UUID,
+    val transferId: UUID,
+    val supplierId: UUID,
+    val supplierRef: String,
+    val productStatus: ProductStatus = ProductStatus.INACTIVE,
+    val adminStatus: AdminStatus = AdminStatus.PENDING,
+    val adminMessage: String?=null,
+    val version: Long?,
+    val created: LocalDateTime = LocalDateTime.now(),
+    val updated: LocalDateTime = LocalDateTime.now()
+)
+
+fun ProductAdminState.toDTO() = ProductAdminStateDTO(
+    id = id,
+    transferId = transferId,
+    supplierId = supplierId,
+    supplierRef = supplierRef,
+    productStatus = productStatus,
+    adminStatus = adminStatus,
+    adminMessage = adminMessage,
+    version = version,
+    created = created,
+    updated = updated
+)
