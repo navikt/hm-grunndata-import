@@ -17,6 +17,7 @@ import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.techdata.GdbApiClient
 import no.nav.hm.grunndata.importapi.techdata.TechDataLabelDTO
 import no.nav.hm.grunndata.importapi.token.TokenService
+import no.nav.hm.grunndata.rapid.dto.IsoCategoryDTO
 import org.junit.jupiter.api.Test
 import java.util.*
 
@@ -58,6 +59,13 @@ class ProductAccessoryTransferTest(private val client: ProductTransferClient,
                     type = "N",
                     unit = "kg")
 
+            )
+        }
+        every { mock.retrieveIsoCategories() } answers {
+            listOf(
+                IsoCategoryDTO(
+                    isoCode = "12230301", isoTitle = "Test title", isoText = "Test text", isoLevel = 4
+                )
             )
         }
         return mock

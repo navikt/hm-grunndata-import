@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.asPublisher
 import no.nav.hm.grunndata.importapi.ImportErrorException
+import no.nav.hm.grunndata.importapi.iso.IsoCategoryService
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.techdata.TechDataLabelService
 import no.nav.hm.grunndata.importapi.toMD5Hex
@@ -26,7 +27,8 @@ import java.util.UUID
 @SecurityRequirement(name = "bearer-auth")
 class ProductTransferAPIController(private val transferStateRepository: TransferStateRepository,
                                    private val techDataLabelService: TechDataLabelService,
-                                   private val objectMapper: ObjectMapper) {
+                                   private val objectMapper: ObjectMapper,
+                                   private val isoCategoryService: IsoCategoryService) {
 
 
     companion object {
@@ -70,6 +72,10 @@ class ProductTransferAPIController(private val transferStateRepository: Transfer
         }
         if ((transfer.accessory || transfer.sparePart) && transfer.compatibleWith == null) {
             throw ImportErrorException("It is accessory or sparePart, must set compatibleWidth")
+        }
+
+        if (isoCategoryService.lookUpCode(transfer.isoCategory) == null) {
+            throw ImportErrorException("Isocategory ${transfer.isoCategory} does not exist")
         }
     }
 
