@@ -7,7 +7,7 @@ import io.kotest.matchers.shouldBe
 import io.micronaut.http.HttpStatus
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import kotlinx.coroutines.runBlocking
-import no.nav.hm.grunndata.importapi.token.TokenService
+import no.nav.hm.grunndata.importapi.security.TokenService
 import no.nav.hm.grunndata.importapi.supplier.Supplier
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import org.junit.jupiter.api.Test

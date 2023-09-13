@@ -6,7 +6,7 @@ import io.micronaut.http.annotation.Post
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
-import no.nav.hm.grunndata.importapi.token.TokenService
+import no.nav.hm.grunndata.importapi.security.TokenService
 import no.nav.hm.grunndata.importapi.supplier.SupplierTokenController.Companion.API_V1_TOKEN
 import org.slf4j.LoggerFactory
 import java.util.*

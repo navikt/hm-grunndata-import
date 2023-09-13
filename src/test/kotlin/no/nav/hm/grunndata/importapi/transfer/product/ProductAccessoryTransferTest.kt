@@ -16,7 +16,7 @@ import no.nav.hm.grunndata.importapi.supplier.Supplier
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.techdata.GdbApiClient
 import no.nav.hm.grunndata.importapi.techdata.TechDataLabelDTO
-import no.nav.hm.grunndata.importapi.token.TokenService
+import no.nav.hm.grunndata.importapi.security.TokenService
 import no.nav.hm.grunndata.rapid.dto.IsoCategoryDTO
 import org.junit.jupiter.api.Test
 import java.util.*

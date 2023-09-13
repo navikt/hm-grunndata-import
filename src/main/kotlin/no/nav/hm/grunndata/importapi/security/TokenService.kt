@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.importapi.token
+package no.nav.hm.grunndata.importapi.security
 
 import com.nimbusds.jose.JWSAlgorithm
 import com.nimbusds.jose.JWSHeader
@@ -20,7 +20,7 @@ class TokenService(private val secretSignatureConfiguration: SecretSignatureConf
         val claimsSet = JWTClaimsSet.Builder()
                 .subject(supplier.name)
                 .jwtID(supplier.jwtid)
-                .issuer("https://hjelpemiddeldabasen.nav.no")
+                .issuer("https://finnhjelpemidler.nav.no")
                 .issueTime(Date())
                 .claim("roles", Roles.ROLE_SUPPLIER)
                 .claim("supplierId", supplier.id)
@@ -35,7 +35,7 @@ class TokenService(private val secretSignatureConfiguration: SecretSignatureConf
         val claimsSet = JWTClaimsSet.Builder()
                 .subject(subject)
                 .jwtID(UUID.randomUUID().toString())
-                .issuer("https://hjelpemiddeldabasen.nav.no")
+                .issuer("https://finnhjelpemidler.nav.no")
                 .issueTime(Date())
                 .claim("roles", Roles.ROLE_ADMIN)
                 .build()

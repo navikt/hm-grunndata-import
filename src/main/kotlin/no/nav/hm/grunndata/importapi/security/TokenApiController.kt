@@ -1,9 +1,8 @@
-package no.nav.hm.grunndata.importapi.token
+package no.nav.hm.grunndata.importapi.security
 
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
 import io.micronaut.security.annotation.Secured
-import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import org.slf4j.LoggerFactory
 import java.util.UUID
@@ -26,5 +25,10 @@ class TokenApiController(private val tokenService: TokenService,
     }
 
 
+    @Post("/admin/{subject}")
+    suspend  fun createAdminToken(subject: String): String {
+        LOG.info("Request for token for admin")
+        return tokenService.adminToken(subject)
+    }
 
 }
