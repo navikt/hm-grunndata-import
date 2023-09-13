@@ -20,8 +20,14 @@ enum class SeriesStatus {
     ACTIVE, INACTIVE
 }
 
+data class SeriesTransferDTO(
+    val id: String? = null,
+    val name: String,
+    val status: SeriesStatus = SeriesStatus.ACTIVE
+)
+
 data class SeriesStateDTO(
-    val id: String? = UUID.randomUUID().toString(),
+    val id: String = UUID.randomUUID().toString(),
     val supplierId: UUID,
     val name: String,
     val status: SeriesStatus = SeriesStatus.ACTIVE,

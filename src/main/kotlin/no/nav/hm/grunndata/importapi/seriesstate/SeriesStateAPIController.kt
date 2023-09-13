@@ -27,13 +27,15 @@ class SeriesStateAPIController(private val seriesStateService: SeriesStateServic
 
 
     @Post("/{supplierId}")
-    suspend fun createSeries(supplierId: UUID, @Body dto: SeriesStateDTO): HttpResponse<SeriesStateDTO> =
+    suspend fun createSeries(supplierId: UUID, @Body dto: SeriesTransferDTO): HttpResponse<SeriesStateDTO> =
         seriesStateService.findBySupplierIdAndName(supplierId, dto.name)?.let {
             throw BadRequestException("series name ${dto.name} already exist with this id ${it.id}")
-        } ?: HttpResponse.created(seriesStateService.save(dto))
+        } ?: HttpResponse.created(seriesStateService.save( SeriesStateDTO(
+            id = dto.id ?: UUID.randomUUID().toString(), name = dto.name, supplierId = supplierId
+        )))
 
     @Put("/{supplierId}/{id}")
-    fun updateSeries(supplierId: UUID, id: String, @Body dto: SeriesStateDTO): HttpResponse<SeriesStateDTO> =
+    fun updateSeries(supplierId: UUID, id: String, @Body dto: SeriesTransferDTO): HttpResponse<SeriesStateDTO> =
         seriesStateService.findByIdCacheable(id)?.let { inDb ->
             HttpResponse.ok(
                 seriesStateService.update(
