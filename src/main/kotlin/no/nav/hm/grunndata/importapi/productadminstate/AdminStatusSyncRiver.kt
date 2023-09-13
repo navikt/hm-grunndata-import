@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.importapi.adminstate
+package no.nav.hm.grunndata.importapi.productadminstate
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.context.annotation.Context

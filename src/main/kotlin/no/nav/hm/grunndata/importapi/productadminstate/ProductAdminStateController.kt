@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.importapi.adminstate
+package no.nav.hm.grunndata.importapi.productadminstate
 
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get

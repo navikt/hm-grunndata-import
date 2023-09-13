@@ -8,8 +8,8 @@ import io.kotest.matchers.shouldBe
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.mockk
-import no.nav.hm.grunndata.importapi.adminstate.ProductAdminState
-import no.nav.hm.grunndata.importapi.adminstate.ProductAdminStateRepository
+import no.nav.hm.grunndata.importapi.productadminstate.ProductAdminState
+import no.nav.hm.grunndata.importapi.productadminstate.ProductAdminStateRepository
 import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.importapi.productImport.TransferToProductImport
 import no.nav.hm.grunndata.importapi.seriesstate.SeriesStateDTO
@@ -30,7 +30,8 @@ class ProductToProductImportTest(private val transferToProductImport: TransferTo
                                  private val productImportRepository: ProductImportRepository,
                                  private val seriesStateService: SeriesStateService,
                                  private val objectMapper: ObjectMapper,
-                                 private val productAdminStateRepository: ProductAdminStateRepository) {
+                                 private val productAdminStateRepository: ProductAdminStateRepository
+) {
 
     private val supplierId: UUID = UUID.randomUUID()
     private val seriesId: UUID = UUID.randomUUID()

@@ -4,6 +4,8 @@ import io.kotest.common.runBlocking
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import no.nav.hm.grunndata.importapi.productadminstate.ProductAdminState
+import no.nav.hm.grunndata.importapi.productadminstate.ProductAdminStateRepository
 import no.nav.hm.grunndata.rapid.dto.AdminStatus
 import org.junit.jupiter.api.Test
 import java.util.*

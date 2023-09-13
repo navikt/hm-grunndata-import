@@ -1,8 +1,8 @@
 package no.nav.hm.grunndata.importapi.productImport
 
 import jakarta.inject.Singleton
-import no.nav.hm.grunndata.importapi.adminstate.ProductAdminState
-import no.nav.hm.grunndata.importapi.adminstate.ProductAdminStateRepository
+import no.nav.hm.grunndata.importapi.productadminstate.ProductAdminState
+import no.nav.hm.grunndata.importapi.productadminstate.ProductAdminStateRepository
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStateRepository
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
 import no.nav.hm.grunndata.rapid.dto.ProductStatus

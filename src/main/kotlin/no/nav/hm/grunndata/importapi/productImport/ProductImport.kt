@@ -36,25 +36,3 @@ fun ProductImport.toDTO(): ProductImportRapidDTO = ProductImportRapidDTO(
     version = version!!
 )
 
-
-data class ProductStateResponseDTO (
-    val id: UUID,
-    val transferId: UUID,
-    val supplierId: UUID,
-    val supplierRef: String,
-    val productStatus: ProductStatus,
-    val adminStatus: AdminStatus?=null,
-    val adminMessage: String? = null,
-    val created: LocalDateTime = LocalDateTime.now(),
-    val updated: LocalDateTime = LocalDateTime.now()
-)
-
-fun ProductImport.toResponseDTO(): ProductStateResponseDTO = ProductStateResponseDTO (
-    id = id,
-    transferId = transferId,
-    supplierId = supplierId,
-    supplierRef = supplierRef,
-    productStatus = productDTO.status,
-    created = created,
-    updated = updated
-)
