@@ -9,13 +9,13 @@ import org.slf4j.LoggerFactory
 import java.util.*
 
 @SecuritySupplierRule(value = [Roles.ROLE_SUPPLIER])
-@Controller(AdminStateController.API_V1_ADMINSTATE)
+@Controller(ProductAdminStateController.API_V1_PRODUCT_STATE)
 @SecurityRequirement(name = "bearer-auth")
-class AdminStateController(private val productAdminStateRepository: ProductAdminStateRepository) {
+class ProductAdminStateController(private val productAdminStateRepository: ProductAdminStateRepository) {
 
     companion object {
-        const val API_V1_ADMINSTATE = "/api/v1/adminstate"
-        private val LOG = LoggerFactory.getLogger(AdminStateController::class.java)
+        const val API_V1_PRODUCT_STATE = "/api/v1/products/state"
+        private val LOG = LoggerFactory.getLogger(ProductAdminStateController::class.java)
     }
 
     @Get("/{supplierId}/{supplierRef}")
