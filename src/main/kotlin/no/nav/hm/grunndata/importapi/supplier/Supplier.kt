@@ -28,11 +28,6 @@ data class TokenResponseDTO(
     val name: String,
     val jwtid: String = UUID.randomUUID().toString(),
     val token: String,
-    val identifier: String,
-    val createdBy: String = "REGISTER",
-    val updatedBy: String = "REGISTER",
-    val updated: LocalDateTime = LocalDateTime.now(),
-    val created: LocalDateTime = LocalDateTime.now()
 )
 
 fun SupplierDTO.toEntity(): Supplier = Supplier(
@@ -46,5 +41,4 @@ fun Supplier.toDTO(): SupplierDTO = SupplierDTO (
 )
 
 fun Supplier.toTokenResponseDTO(token: String): TokenResponseDTO =
-    TokenResponseDTO( id = id, name = name, jwtid = jwtid, token = token, identifier = identifier,
-        createdBy = createdBy, updatedBy = updatedBy, updated = updated, created = created)
+    TokenResponseDTO( id = id, name = name, jwtid = jwtid, token = token)

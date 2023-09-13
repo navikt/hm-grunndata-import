@@ -1,6 +1,8 @@
 package no.nav.hm.grunndata.importapi.security
 
 import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
+import io.micronaut.http.HttpStatus
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import kotlinx.coroutines.runBlocking
 import no.nav.hm.grunndata.importapi.supplier.Supplier
@@ -28,7 +30,9 @@ class TokenAPIControllerTest(private val tokenAPIClient: TokenAPIClient,
         val bearerToken = "bearer ${tokenService.adminToken("tester")}"
         val supplierToken = tokenAPIClient.createSupplierToken(supplierId, bearerToken)
         val adminToken = tokenAPIClient.createAdminToken("Admin Token", bearerToken)
-        supplierToken.shouldNotBeNull()
-        adminToken.shouldNotBeNull()
+        supplierToken.status shouldBe HttpStatus.OK
+        supplierToken.body().id shouldBe supplierId
+        supplierToken.body().token.shouldNotBeNull()
+        adminToken.status shouldBe  HttpStatus.OK
     }
 }
