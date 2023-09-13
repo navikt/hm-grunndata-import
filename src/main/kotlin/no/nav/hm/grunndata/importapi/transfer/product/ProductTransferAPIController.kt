@@ -32,7 +32,7 @@ class ProductTransferAPIController(private val transferStateRepository: Transfer
 
 
     companion object {
-        const val API_V1_TRANSFERS = "/api/v1/transfers"
+        const val API_V1_TRANSFERS = "/api/v1/products/transfers"
         private val LOG = LoggerFactory.getLogger(ProductTransferAPIController::class.java)
 
     }

@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.info.License
 
 @OpenAPIDefinition(
     info = Info(
-        title = "Hjelpemiddel API",
+        title = "Accessibility Devices Vendor API",
         version = "0.1",
         description = "NAVs Api for transferring accessibility devices"
     )
