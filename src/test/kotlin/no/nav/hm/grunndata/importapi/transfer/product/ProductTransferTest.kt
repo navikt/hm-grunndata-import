@@ -90,7 +90,7 @@ class ProductTransferTest(private val client: ProductTransferClient,
                 it.transferStatus shouldBe TransferStatus.RECEIVED
                 transferId = it.transferId
             }.collect()
-            val transfers = client.getTransfersBySupplierIdSupplierRef(authorization = token, supplier!!.id, supplierRef = "mini-crosser-x1-x2-4w")
+            val transfers = client.getTransfersBySupplierIdSupplierRef(authorization = token, supplier!!.id, supplierRef = "1500-1530")
             transfers.totalSize shouldBe 1
 
             val transfer = client.getTransferBySupplierIdAndTransferId(authorization = token, supplierId = supplier!!.id, transferId = transferId!!)
@@ -106,7 +106,7 @@ class ProductTransferTest(private val client: ProductTransferClient,
             }.collect()
 
             // test "delete" product
-            val delete = client.deleteProduct(authorization = token, supplierId = supplier!!.id, supplierRef = "mini-crosser-x1-x2-4w")
+            val delete = client.deleteProduct(authorization = token, supplierId = supplier!!.id, supplierRef = "1500-1530")
             delete.body().message shouldBe "deleted by supplier"
         }
 
