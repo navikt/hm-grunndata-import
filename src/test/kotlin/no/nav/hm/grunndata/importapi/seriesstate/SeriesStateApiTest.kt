@@ -35,8 +35,7 @@ class SeriesStateApiTest(private val client: SeriesStateAPIClient,
 
     @Test
     fun testCrudApi() {
-        val dto = SeriesStateDTO(
-            supplierId = supplierId,
+        val dto = SeriesTransferDTO (
             name = "Unique series name"
         )
         val response = client.createSeries(supplierId = supplierId, dto = dto, authorization = token)
@@ -44,10 +43,11 @@ class SeriesStateApiTest(private val client: SeriesStateAPIClient,
         val created = response.body()
         created.shouldNotBeNull()
         created.name shouldBe "Unique series name"
-        val dto2 = SeriesStateDTO(supplierId = supplierId, name = "Unique series name 2")
-        client.createSeries(supplierId, dto2, token)
+        val dto2 = SeriesTransferDTO(name = "Unique series name 2")
+        val created2 = client.createSeries(supplierId, dto2, token)
+        created2.shouldNotBeNull()
         val changed = dto.copy(name = "Unique series name 3")
-        val updated = client.updateSeries(supplierId, changed.id!!, changed, token)
+        val updated = client.updateSeries(supplierId, created2.body().id!!, changed, token)
         updated.shouldNotBeNull()
         updated.body().name shouldBe "Unique series name 3"
         client.getSeriesBySupplierId(supplierId = supplierId, authorization = token).size shouldBeGreaterThanOrEqual  2

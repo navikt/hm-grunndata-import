@@ -24,6 +24,7 @@ import java.util.UUID
 
 @Secured(Roles.ROLE_SUPPLIER)
 @Controller(API_V1_TRANSFERS)
+@SecurityRequirement(name = "bearer-auth")
 class ProductTransferAPIController(private val transferStateRepository: TransferStateRepository,
                                    private val techDataLabelService: TechDataLabelService,
                                    private val objectMapper: ObjectMapper,

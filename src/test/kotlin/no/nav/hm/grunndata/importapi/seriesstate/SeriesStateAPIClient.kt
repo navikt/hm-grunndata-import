@@ -11,10 +11,10 @@ import java.util.*
 interface SeriesStateAPIClient {
 
     @Post("/{supplierId}", processes = [MediaType.APPLICATION_JSON])
-    fun createSeries(supplierId: UUID, @Body dto: SeriesStateDTO, @Header authorization: String): HttpResponse<SeriesStateDTO>
+    fun createSeries(supplierId: UUID, @Body dto: SeriesTransferDTO, @Header authorization: String): HttpResponse<SeriesStateDTO>
 
     @Put("/{supplierId}/{id}", processes = [MediaType.APPLICATION_JSON])
-    fun updateSeries(supplierId: UUID, id: String, @Body dto: SeriesStateDTO, @Header authorization: String): HttpResponse<SeriesStateDTO>
+    fun updateSeries(supplierId: UUID, id: String, @Body dto: SeriesTransferDTO, @Header authorization: String): HttpResponse<SeriesStateDTO>
 
     @Get("/{supplierId}")
     fun getSeriesBySupplierId(supplierId: UUID, @Header authorization: String): List<SeriesStateDTO>
