@@ -14,7 +14,7 @@ class SeriesStateRepositoryTest(private val repository: SeriesStateRepository) {
     @Test
     fun crudTest() {
         val id = "seriesid +${UUID.randomUUID()}"
-        val state = SeriesState(id = id, supplierId = UUID.randomUUID(),
+        val state = SeriesState(id = id, supplierId = UUID.randomUUID(), transferId = UUID.randomUUID(),
             name= "Unik navn på serien +${UUID.randomUUID()}", status = SeriesStatus.ACTIVE)
         runBlocking {
             val saved = repository.save(state)

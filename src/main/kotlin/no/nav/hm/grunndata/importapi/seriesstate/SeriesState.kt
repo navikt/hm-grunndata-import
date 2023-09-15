@@ -2,6 +2,7 @@ package no.nav.hm.grunndata.importapi.seriesstate
 
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
+import io.micronaut.data.annotation.Version
 import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransfer
 import java.time.LocalDateTime
 import java.util.*
@@ -17,6 +18,7 @@ data class SeriesState (
     val status: SeriesStatus,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now(),
+    @field:Version
     val version: Long? = 0L
 )
 
