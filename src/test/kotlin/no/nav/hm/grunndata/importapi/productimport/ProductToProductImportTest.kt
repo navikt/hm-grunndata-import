@@ -10,7 +10,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.mockk
 import no.nav.hm.grunndata.importapi.productadminstate.ProductAdminStateRepository
 import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
-import no.nav.hm.grunndata.importapi.productImport.TransferToProductImport
+import no.nav.hm.grunndata.importapi.productImport.ProductTransferToProductImport
 import no.nav.hm.grunndata.importapi.seriesstate.SeriesStateDTO
 import no.nav.hm.grunndata.importapi.seriesstate.SeriesStateService
 import no.nav.hm.grunndata.importapi.supplier.Supplier
@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test
 import java.util.*
 
 @MicronautTest
-class ProductToProductImportTest(private val transferToProductImport: TransferToProductImport,
+class ProductToProductImportTest(private val productTransferToProductImport: ProductTransferToProductImport,
                                  private val supplierRepository: SupplierRepository,
                                  private val productTransferRepository: ProductTransferRepository,
                                  private val productImportRepository: ProductImportRepository,
@@ -77,7 +77,7 @@ class ProductToProductImportTest(private val transferToProductImport: TransferTo
             saved.transferStatus shouldBe TransferStatus.RECEIVED
             saved.transferId.shouldNotBeNull()
             productImportRepository.findBySupplierIdAndSupplierRef(saved.supplierId, saved.supplierRef).shouldBeNull()
-            transferToProductImport.receivedTransfersToProductState()
+            productTransferToProductImport.receivedTransfersToProductState()
             val found = productImportRepository.findBySupplierIdAndSupplierRef(saved.supplierId, saved.supplierRef)
             found.shouldNotBeNull()
             found.transferId shouldBe saved.transferId

@@ -9,12 +9,12 @@ import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 
 @Singleton
-class TransferToProductImport(private val productTransferRepository: ProductTransferRepository,
-                              private val productAdminStateRepository: ProductAdminStateRepository,
-                              private val productImportKafkaService: ProductImportKafkaService
+class ProductTransferToProductImport(private val productTransferRepository: ProductTransferRepository,
+                                     private val productAdminStateRepository: ProductAdminStateRepository,
+                                     private val productImportKafkaService: ProductImportKafkaService
 ) {
     companion object {
-        private val LOG = LoggerFactory.getLogger(TransferToProductImport::class.java)
+        private val LOG = LoggerFactory.getLogger(ProductTransferToProductImport::class.java)
     }
 
     suspend fun receivedTransfersToProductState() {

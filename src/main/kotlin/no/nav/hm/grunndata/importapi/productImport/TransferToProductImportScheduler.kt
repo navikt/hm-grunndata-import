@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory
 
 @Singleton
 @Requires(property = "schedulers.enabled", value = "true")
-class TransferToProductImportScheduler(private val transferToProductImport: TransferToProductImport) {
+class TransferToProductImportScheduler(private val productTransferToProductImport: ProductTransferToProductImport) {
 
 
     companion object {
@@ -18,7 +18,7 @@ class TransferToProductImportScheduler(private val transferToProductImport: Tran
     fun transferToProductStateTask() {
         LOG.info("Running receivedTransfers to ProductState scheduler")
         runBlocking {
-            transferToProductImport.receivedTransfersToProductState()
+            productTransferToProductImport.receivedTransfersToProductState()
         }
     }
 
