@@ -110,7 +110,7 @@ rapidsandrivers:
 
 kafka:
   topic: teamdigihot.hm-grunndata-v1
-  consumerGroupId: hm-grunndata-register-g1
+  consumerGroupId: hm-grunndata-import-g1
   trustStorePath: ${KAFKA_TRUSTSTORE_PATH:}
   trustStorePassword: ${KAFKA_CREDSTORE_PASSWORD:}
   keystorePath: ${KAFKA_KEYSTORE_PATH:}
