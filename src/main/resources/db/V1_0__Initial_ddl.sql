@@ -58,11 +58,13 @@ CREATE INDEX series_transfer_v1_supplier_id_series_id_idx ON series_transfer_v1(
 CREATE TABLE IF NOT EXISTS series_state_v1(
     id VARCHAR(255) NOT NULL PRIMARY KEY,
     supplier_id UUID NOT NULL,
+    transfer_id UUID NOT NULL,
     name VARCHAR(255) NOT NULL,
     message TEXT,
     status VARCHAR(32) NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    version BIGINT NOT NULL,
     UNIQUE (name, supplier_id)
 );
 
