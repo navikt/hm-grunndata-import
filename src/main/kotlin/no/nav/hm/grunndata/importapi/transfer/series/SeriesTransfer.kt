@@ -13,6 +13,7 @@ import java.util.*
 data class SeriesTransfer(
     @field:Id
     val transferId: UUID = UUID.randomUUID(),
+    val seriesId: String,
     val supplierId: UUID,
     @field:TypeDef(type = DataType.JSON)
     val json_payload: SeriesTransferDTO,
