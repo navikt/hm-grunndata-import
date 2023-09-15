@@ -25,10 +25,14 @@ data class SeriesTransfer(
 )
 
 data class SeriesTransferDTO(
-    val id: String? = null,
+    val id: String?=null,
     val name: String,
     val status: SeriesStatus = SeriesStatus.ACTIVE
-)
+){
+    init {
+        require(name.isNotBlank() && name.length < 256) { "name is blank or name size > 255" }
+    }
+}
 
 
 data class SeriesTransferResponse(
@@ -39,4 +43,14 @@ data class SeriesTransferResponse(
     val message: String? = null,
     val transferStatus: TransferStatus,
     val created: LocalDateTime
+)
+
+fun SeriesTransfer.toResponse() = SeriesTransferResponse(
+    transferId = transferId,
+    supplierId = supplierId,
+    seriesId = seriesId,
+    md5 = md5,
+    message = message,
+    transferStatus = transferStatus,
+    created = created
 )

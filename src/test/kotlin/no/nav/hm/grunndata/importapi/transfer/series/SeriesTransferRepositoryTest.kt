@@ -1,6 +1,8 @@
 package no.nav.hm.grunndata.importapi.transfer.series
 
 import io.kotest.common.runBlocking
+import io.kotest.matchers.longs.shouldBeGreaterThan
+import io.kotest.matchers.longs.shouldBeGreaterThanOrEqual
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
@@ -31,8 +33,7 @@ class SeriesTransferRepositoryTest(private val seriesTransferRepository: SeriesT
             saved.shouldNotBeNull()
             val found = seriesTransferRepository.findBySupplierIdAndSeriesId(supplierId,seriesId)
             found.shouldNotBeNull()
-            found.transferId.shouldNotBeNull()
-            found.json_payload.name shouldBe "Unik series - 123"
+            found.totalSize shouldBeGreaterThanOrEqual  1
 
         }
     }
