@@ -4,7 +4,7 @@
 
 Create a new test supplier: 
 ```
-insert into supplier_v1(id, name, status, identifier,jwtid,updated_by,created_by) values (gen_random_uuid(), 'test supplier', 'ACTIVE', gen_random_uuid(), gen_random_uuid(), 'IMPORT', 'IMPORT');
+insert into supplier_v1(id, name, status, identifier,jwtid,updated_by,created_by) values ('0e54eade-f3ff-43dd-adee-274f48be5173', 'test supplier', 'ACTIVE', 'test-supplier-1', '89a239b3-61fe-4f45-8601-da10de10ddda', 'IMPORT', 'IMPORT');
 ```
 
 A test token, can be used in localhost:

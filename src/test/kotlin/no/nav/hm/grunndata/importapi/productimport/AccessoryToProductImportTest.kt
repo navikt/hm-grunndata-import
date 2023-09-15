@@ -16,7 +16,7 @@ import no.nav.hm.grunndata.importapi.supplier.SupplierRepository
 import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transfer.product.ProductTransfer
 import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferDTO
-import no.nav.hm.grunndata.importapi.transfer.product.TransferStateRepository
+import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferRepository
 import no.nav.hm.rapids_rivers.micronaut.RapidPushService
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -24,7 +24,7 @@ import java.util.*
 @MicronautTest
 class AccessoryToProductImportTest(private val transferToProductImport: TransferToProductImport,
                                    private val supplierRepository: SupplierRepository,
-                                   private val transferStateRepository: TransferStateRepository,
+                                   private val productTransferRepository: ProductTransferRepository,
                                    private val productImportRepository: ProductImportRepository,
                                    private val seriesStateService: SeriesStateService,
                                    private val objectMapper: ObjectMapper) {
@@ -46,7 +46,7 @@ class AccessoryToProductImportTest(private val transferToProductImport: Transfer
 
         runBlocking {
             val savedSupplier = supplierRepository.save(supplier)
-            val savedTransfer = transferStateRepository.save(transfer)
+            val savedTransfer = productTransferRepository.save(transfer)
             transferToProductImport.receivedTransfersToProductState()
             val productImport = productImportRepository.findBySupplierIdAndSupplierRef(supplierId, accessory.supplierRef)
             productImport.shouldNotBeNull()

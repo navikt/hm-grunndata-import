@@ -4,6 +4,7 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.http.client.annotation.Client
+import no.nav.hm.grunndata.importapi.transfer.series.SeriesStateAPIController
 import java.util.*
 
 

@@ -8,7 +8,6 @@ import io.kotest.matchers.shouldBe
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.mockk
-import no.nav.hm.grunndata.importapi.productadminstate.ProductAdminState
 import no.nav.hm.grunndata.importapi.productadminstate.ProductAdminStateRepository
 import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.importapi.productImport.TransferToProductImport
@@ -26,7 +25,7 @@ import java.util.*
 @MicronautTest
 class ProductToProductImportTest(private val transferToProductImport: TransferToProductImport,
                                  private val supplierRepository: SupplierRepository,
-                                 private val transferStateRepository: TransferStateRepository,
+                                 private val productTransferRepository: ProductTransferRepository,
                                  private val productImportRepository: ProductImportRepository,
                                  private val seriesStateService: SeriesStateService,
                                  private val objectMapper: ObjectMapper,
@@ -73,7 +72,7 @@ class ProductToProductImportTest(private val transferToProductImport: TransferTo
             val savedSeries = seriesStateService.save(seriesDTO)
             savedSup.id shouldBe supplierId
             savedSeries.id shouldBe seriesId.toString()
-            val saved = transferStateRepository.save(transfer)
+            val saved = productTransferRepository.save(transfer)
             saved.transferId.shouldNotBeNull()
             saved.transferStatus shouldBe TransferStatus.RECEIVED
             saved.transferId.shouldNotBeNull()

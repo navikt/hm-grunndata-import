@@ -11,25 +11,21 @@ data class SeriesState (
     val id: String,
     val supplierId: UUID,
     val name: String,
+    val message: String?=null,
     val status: SeriesStatus,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now()
 )
 
 enum class SeriesStatus {
-    ACTIVE, INACTIVE
+    ACTIVE, INACTIVE, PENDING, REJECTED
 }
-
-data class SeriesTransferDTO(
-    val id: String? = null,
-    val name: String,
-    val status: SeriesStatus = SeriesStatus.ACTIVE
-)
 
 data class SeriesStateDTO(
     val id: String = UUID.randomUUID().toString(),
     val supplierId: UUID,
     val name: String,
+    val message: String?,
     val status: SeriesStatus = SeriesStatus.ACTIVE,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now()
@@ -41,10 +37,10 @@ data class SeriesStateDTO(
 
 
 fun SeriesState.toDTO(): SeriesStateDTO = SeriesStateDTO(
-    id = id, supplierId = supplierId, name = name, status = status, created = created, updated = updated
+    id = id, supplierId = supplierId, name = name, status = status, message = message, created = created, updated = updated
 )
 
 fun SeriesStateDTO.toEntity(): SeriesState = SeriesState(
-    id = id ?: UUID.randomUUID().toString(), supplierId = supplierId, name = name, status = status, created = created, updated = updated
+    id = id, supplierId = supplierId, name = name, status = status, message = message, created = created, updated = updated
 )
 

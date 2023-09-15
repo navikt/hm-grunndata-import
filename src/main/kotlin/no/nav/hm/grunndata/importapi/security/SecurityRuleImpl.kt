@@ -53,7 +53,7 @@ class SecurityRuleImpl(rolesFinder: RolesFinder,
                 return runBlocking {
                     val supplier = supplierService.findById(UUID.fromString(supplierId))
                     if (authentication.attributes["jti"] != supplier?.jwtid || SupplierStatus.ACTIVE != supplier?.status ) {
-                        LOG.warn("Rejected because jwt id does not match with claims, or supplier is not longer active")
+                        LOG.warn("Rejected because jwt id does not match with claims, or supplier $supplierId is no longer active")
                         just(SecurityRuleResult.REJECTED)
                     }
                     else

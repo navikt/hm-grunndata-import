@@ -3,14 +3,13 @@ package no.nav.hm.grunndata.importapi.productImport
 import jakarta.inject.Singleton
 import no.nav.hm.grunndata.importapi.productadminstate.ProductAdminState
 import no.nav.hm.grunndata.importapi.productadminstate.ProductAdminStateRepository
-import no.nav.hm.grunndata.importapi.transfer.product.TransferStateRepository
+import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferRepository
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
-import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 
 @Singleton
-class TransferToProductImport(private val transferStateRepository: TransferStateRepository,
+class TransferToProductImport(private val productTransferRepository: ProductTransferRepository,
                               private val productAdminStateRepository: ProductAdminStateRepository,
                               private val productImportKafkaService: ProductImportKafkaService
 ) {
@@ -19,7 +18,7 @@ class TransferToProductImport(private val transferStateRepository: TransferState
     }
 
     suspend fun receivedTransfersToProductState() {
-        val contents = transferStateRepository.findByTransferStatus(TransferStatus.RECEIVED).content
+        val contents = productTransferRepository.findByTransferStatus(TransferStatus.RECEIVED).content
         LOG.info("Got ${contents.size} transfers to map to products")
         contents.forEach {
             val productImport = productImportKafkaService.mapSaveTransferToProductImport(it)
@@ -41,7 +40,7 @@ class TransferToProductImport(private val transferStateRepository: TransferState
                 )
             )
             LOG.info("Product admin state created for ${productAdminState.id} and transfer: ${productAdminState.transferId}")
-            transferStateRepository.update(it.copy(transferStatus = TransferStatus.DONE, updated = LocalDateTime.now()))
+            productTransferRepository.update(it.copy(transferStatus = TransferStatus.DONE, updated = LocalDateTime.now()))
         }
         //TODO feilhåndtering her
     }

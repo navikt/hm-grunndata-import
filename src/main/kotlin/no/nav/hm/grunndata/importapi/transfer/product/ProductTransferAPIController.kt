@@ -25,7 +25,7 @@ import java.util.UUID
 @Secured(Roles.ROLE_SUPPLIER)
 @Controller(API_V1_TRANSFERS)
 @SecurityRequirement(name = "bearer-auth")
-class ProductTransferAPIController(private val transferStateRepository: TransferStateRepository,
+class ProductTransferAPIController(private val productTransferRepository: ProductTransferRepository,
                                    private val techDataLabelService: TechDataLabelService,
                                    private val objectMapper: ObjectMapper,
                                    private val isoCategoryService: IsoCategoryService) {
@@ -38,22 +38,22 @@ class ProductTransferAPIController(private val transferStateRepository: Transfer
     }
 
     @Get(value="/{supplierId}/{supplierRef}")
-    suspend fun getTransfersBySupplierIdSupplierRef(supplierId: UUID, supplierRef: String): Page<TransferResponseDTO> =
-        transferStateRepository.findBySupplierIdAndSupplierRef(supplierId, supplierRef).map {
+    suspend fun getTransfersBySupplierIdSupplierRef(supplierId: UUID, supplierRef: String): Page<ProductTransferResponse> =
+        productTransferRepository.findBySupplierIdAndSupplierRef(supplierId, supplierRef).map {
             it.toResponseDTO()
         }
 
     @Get(value="/{supplierId}/transferId/{transferId}")
-    suspend fun getTransfersBySupplierIdAndTransferId(supplierId: UUID, transferId: UUID): TransferResponseDTO? =
-        transferStateRepository.findBySupplierIdAndTransferId(supplierId, transferId)?.toResponseDTO()
+    suspend fun getTransfersBySupplierIdAndTransferId(supplierId: UUID, transferId: UUID): ProductTransferResponse? =
+        productTransferRepository.findBySupplierIdAndTransferId(supplierId, transferId)?.toResponseDTO()
 
     @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])
-    suspend fun productStream(@PathVariable supplierId: UUID, @Body jsonNode: Publisher<JsonNode>): Publisher<TransferResponseDTO> =
+    suspend fun productStream(@PathVariable supplierId: UUID, @Body jsonNode: Publisher<JsonNode>): Publisher<ProductTransferResponse> =
         jsonNode.asFlow().map { json ->
             val md5 = objectMapper.writeValueAsString(json).toMD5Hex()
             val transfer = objectMapper.treeToValue(json, ProductTransferDTO::class.java)
             LOG.info("Got product stream from $supplierId with supplierRef: ${transfer.supplierRef}")
-            transferStateRepository.findBySupplierIdAndMd5(supplierId, md5)?.let { identical ->
+            productTransferRepository.findBySupplierIdAndMd5(supplierId, md5)?.let { identical ->
                 LOG.info("Identical product ${identical.md5} with previous transfer ${identical.transferId}")
                 identical.toResponseDTO()
             } ?: run {
@@ -80,23 +80,23 @@ class ProductTransferAPIController(private val transferStateRepository: Transfer
     }
 
     @Delete("/{supplierId}/{supplierRef}")
-    suspend fun delete(supplierId: UUID, supplierRef: String): HttpResponse<TransferResponseDTO>  {
+    suspend fun delete(supplierId: UUID, supplierRef: String): HttpResponse<ProductTransferResponse>  {
         LOG.info("delete has been called for $supplierId and $supplierRef")
-        return transferStateRepository.findOneBySupplierIdAndSupplierRefOrderByCreatedDesc(supplierId, supplierRef)?.let {
+        return productTransferRepository.findOneBySupplierIdAndSupplierRefOrderByCreatedDesc(supplierId, supplierRef)?.let {
             val expiredPayload = it.json_payload.copy(expired = LocalDateTime.now().minusMinutes(1))
             val md5 = objectMapper.writeValueAsString(expiredPayload).toMD5Hex()
             val expiredState = it.copy(
                 transferId = UUID.randomUUID(), json_payload = expiredPayload,
                 message = "deleted by supplier", md5 = md5
             )
-            HttpResponse.created(transferStateRepository.save(expiredState).toResponseDTO())
+            HttpResponse.created(productTransferRepository.save(expiredState).toResponseDTO())
         } ?: HttpResponse.notFound()
     }
 
     private suspend fun createTransferState(supplierId: UUID,
                                             productTransfer: ProductTransferDTO,
                                             md5: String) =
-        transferStateRepository.save(
+        productTransferRepository.save(
             ProductTransfer(
                 supplierId = supplierId, supplierRef = productTransfer.supplierRef, md5 = md5,
                 json_payload = productTransfer

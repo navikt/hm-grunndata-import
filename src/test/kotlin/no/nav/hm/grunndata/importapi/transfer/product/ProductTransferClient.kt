@@ -16,16 +16,16 @@ interface ProductTransferClient {
     @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])
     fun productStream(@PathVariable supplierId: UUID,
                       @Header authorization: String,
-                      @Body json: Publisher<JsonNode>): Publisher<TransferResponseDTO>
+                      @Body json: Publisher<JsonNode>): Publisher<ProductTransferResponse>
 
     @Get(value="/{supplierId}/{supplierRef}")
     fun getTransfersBySupplierIdSupplierRef(@Header authorization: String, supplierId: UUID, supplierRef: String):
-            Page<TransferResponseDTO>
+            Page<ProductTransferResponse>
 
     @Get(value="/{supplierId}/transferId/{transferId}")
-    fun getTransferBySupplierIdAndTransferId(@Header authorization: String, supplierId: UUID, transferId: UUID): TransferResponseDTO?
+    fun getTransferBySupplierIdAndTransferId(@Header authorization: String, supplierId: UUID, transferId: UUID): ProductTransferResponse?
 
     @Delete("/{supplierId}/{supplierRef}")
-    fun deleteProduct(@Header authorization: String, supplierId: UUID, supplierRef: String): HttpResponse<TransferResponseDTO>
+    fun deleteProduct(@Header authorization: String, supplierId: UUID, supplierRef: String): HttpResponse<ProductTransferResponse>
 
 }

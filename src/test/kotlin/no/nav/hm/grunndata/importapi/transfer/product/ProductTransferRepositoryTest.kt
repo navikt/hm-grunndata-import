@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 import java.util.*
 
 @MicronautTest
-class ProductTransferRepositoryTest(private val transferStateRepository: TransferStateRepository,
+class ProductTransferRepositoryTest(private val productTransferRepository: ProductTransferRepository,
                                     private val supplierRepository: SupplierRepository,
                                     private val objectMapper: ObjectMapper) {
 
@@ -47,17 +47,17 @@ class ProductTransferRepositoryTest(private val transferStateRepository: Transfe
         runBlocking {
             val savedSup = supplierRepository.save(supplier)
             savedSup.id shouldBe supplierId
-            val saved = transferStateRepository.save(transfer)
+            val saved = productTransferRepository.save(transfer)
             saved.transferId.shouldNotBeNull()
 
-            val db = transferStateRepository.findById(saved.transferId)
+            val db = productTransferRepository.findById(saved.transferId)
             db.shouldNotBeNull()
             db.json_payload.shouldNotBeNull()
             db.json_payload.title shouldBe "Mini Crosser X1 4W"
             db.transferStatus shouldBe TransferStatus.RECEIVED
 
-            transferStateRepository.update(db.copy(transferStatus = TransferStatus.DONE))
-            val done = transferStateRepository.findById(saved.transferId)
+            productTransferRepository.update(db.copy(transferStatus = TransferStatus.DONE))
+            val done = productTransferRepository.findById(saved.transferId)
             done.shouldNotBeNull()
             done.transferStatus shouldBe TransferStatus.DONE
         }
