@@ -5,6 +5,7 @@ import io.micronaut.cache.annotation.CacheInvalidate
 import io.micronaut.cache.annotation.Cacheable
 import jakarta.inject.Singleton
 import kotlinx.coroutines.runBlocking
+import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransfer
 import java.util.*
 
 @Singleton
@@ -29,6 +30,10 @@ open class SeriesStateService(private val seriesStateRepository: SeriesStateRepo
     @CacheInvalidate(parameters = ["id"])
     open fun update(dto: SeriesStateDTO, id: String? = dto.id): SeriesStateDTO? = runBlocking {
         seriesStateRepository.update(dto.toEntity()).toDTO()
+    }
+
+    fun mapSaveSeriesTransferToSeriesState(seriesTransfer: SeriesTransfer): SeriesState {
+        TODO()
     }
 
 }
