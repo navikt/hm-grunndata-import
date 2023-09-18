@@ -15,10 +15,10 @@ class TransferToSeriesImportScheduler(private val seriesTransferToSeriesImport: 
         private val LOG = LoggerFactory.getLogger(TransferToSeriesImportScheduler::class.java)
     }
     @Scheduled(fixedDelay = "1m")
-    fun transferToProductStateTask() {
+    fun transferToSeriesImportTask() {
         LOG.info("Running receivedTransfers to ProductState scheduler")
         runBlocking {
-            seriesTransferToSeriesImport.receivedTransfersToProductState()
+            seriesTransferToSeriesImport.receivedTransfersToSeriesImport()
         }
     }
 

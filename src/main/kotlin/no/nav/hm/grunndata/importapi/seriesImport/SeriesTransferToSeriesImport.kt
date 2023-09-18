@@ -19,7 +19,7 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
     }
 
     @Transactional
-    open suspend fun receivedTransfersToProductState() {
+    open suspend fun receivedTransfersToSeriesImport() {
         val contents = seriesTransferRepository.findByTransferStatus(TransferStatus.RECEIVED).content
         LOG.info("Got ${contents.size} transfers to map to series")
         contents.forEach {
