@@ -3,8 +3,8 @@ package no.nav.hm.grunndata.importapi.productImport
 import jakarta.inject.Singleton
 import jakarta.transaction.Transactional
 import no.nav.hm.grunndata.importapi.*
-import no.nav.hm.grunndata.importapi.seriesstate.SeriesStateDTO
-import no.nav.hm.grunndata.importapi.seriesstate.SeriesStateService
+import no.nav.hm.grunndata.importapi.seriesImport.SeriesStateDTO
+import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportService
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.supplier.toDTO
 import no.nav.hm.grunndata.importapi.transfer.product.TransferMediaType
@@ -14,14 +14,14 @@ import no.nav.hm.grunndata.rapid.dto.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.UUID
-import kotlin.math.exp
 
 
 @Singleton
 open class ProductImportKafkaService(private val productImportRepository: ProductImportRepository,
                                      private val supplierService: SupplierService,
                                      private val importRapidPushService: ImportRapidPushService,
-                                     private val seriesStateService: SeriesStateService) {
+                                     private val seriesImportService: SeriesImportService
+) {
 
     val eventName = "hm-grunndata-import-productstate-transfer"
 
@@ -32,7 +32,7 @@ open class ProductImportKafkaService(private val productImportRepository: Produc
     @Transactional
     open suspend fun mapSaveTransferToProductImport(transfer: ProductTransfer): ProductImport {
         val seriesId = transfer.json_payload.seriesId
-        val seriesStateDTO = if (seriesId != null) seriesStateService.findByIdCacheable(seriesId) else null
+        val seriesStateDTO = if (seriesId != null) seriesImportService.findByIdCacheable(seriesId) else null
         val productImport = productImportRepository.findBySupplierIdAndSupplierRef(transfer.supplierId, transfer.supplierRef)?.let { inDb ->
             productImportRepository.update(
                 inDb.copy(

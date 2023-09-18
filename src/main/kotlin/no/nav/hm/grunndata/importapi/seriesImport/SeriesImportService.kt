@@ -1,39 +1,34 @@
-package no.nav.hm.grunndata.importapi.seriesstate
+package no.nav.hm.grunndata.importapi.seriesImport
 
 import io.micronaut.cache.annotation.CacheConfig
 import io.micronaut.cache.annotation.CacheInvalidate
 import io.micronaut.cache.annotation.Cacheable
 import jakarta.inject.Singleton
 import kotlinx.coroutines.runBlocking
-import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransfer
 import java.util.*
 
 @Singleton
 @CacheConfig("series")
-open class SeriesStateService(private val seriesStateRepository: SeriesStateRepository) {
+open class SeriesImportService(private val seriesImportRepository: SeriesImportRepository) {
 
     @Cacheable
     open fun findByIdCacheable(id: String): SeriesStateDTO? = runBlocking {
-        seriesStateRepository.findById(id)?.toDTO()
+        seriesImportRepository.findById(id)?.toDTO()
     }
 
-    suspend fun findBySupplierId(supplierId: UUID) = seriesStateRepository.findBySupplierId(supplierId).map { it.toDTO() }
+    suspend fun findBySupplierId(supplierId: UUID) = seriesImportRepository.findBySupplierId(supplierId).map { it.toDTO() }
 
     suspend fun findBySupplierIdAndName(supplierId: UUID, name: String) =
-        seriesStateRepository.findBySupplierIdAndName(supplierId, name)?.toDTO()
+        seriesImportRepository.findBySupplierIdAndName(supplierId, name)?.toDTO()
 
     @CacheInvalidate(parameters = ["id"])
     open fun save(dto: SeriesStateDTO, id: String? = dto.id): SeriesStateDTO = runBlocking {
-        seriesStateRepository.save(dto.toEntity()).toDTO()
+        seriesImportRepository.save(dto.toEntity()).toDTO()
     }
 
     @CacheInvalidate(parameters = ["id"])
     open fun update(dto: SeriesStateDTO, id: String? = dto.id): SeriesStateDTO? = runBlocking {
-        seriesStateRepository.update(dto.toEntity()).toDTO()
-    }
-
-    fun mapSaveSeriesTransferToSeriesState(seriesTransfer: SeriesTransfer): SeriesState {
-        TODO()
+        seriesImportRepository.update(dto.toEntity()).toDTO()
     }
 
 }

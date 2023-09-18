@@ -10,7 +10,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.mockk
 import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.importapi.productImport.ProductTransferToProductImport
-import no.nav.hm.grunndata.importapi.seriesstate.SeriesStateService
+import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportService
 import no.nav.hm.grunndata.importapi.supplier.Supplier
 import no.nav.hm.grunndata.importapi.supplier.SupplierRepository
 import no.nav.hm.grunndata.importapi.toMD5Hex
@@ -26,7 +26,7 @@ class AccessoryToProductImportTest(private val productTransferToProductImport: P
                                    private val supplierRepository: SupplierRepository,
                                    private val productTransferRepository: ProductTransferRepository,
                                    private val productImportRepository: ProductImportRepository,
-                                   private val seriesStateService: SeriesStateService,
+                                   private val seriesImportService: SeriesImportService,
                                    private val objectMapper: ObjectMapper) {
 
 

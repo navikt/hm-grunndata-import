@@ -4,7 +4,8 @@ import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.TypeDef
 import io.micronaut.data.model.DataType
 import jakarta.persistence.Id
-import no.nav.hm.grunndata.importapi.seriesstate.SeriesStatus
+import no.nav.hm.grunndata.importapi.seriesImport.SeriesImport
+import no.nav.hm.grunndata.importapi.seriesImport.SeriesStatus
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
 import java.time.LocalDateTime
 import java.util.*
@@ -53,4 +54,13 @@ fun SeriesTransfer.toResponse() = SeriesTransferResponse(
     message = message,
     transferStatus = transferStatus,
     created = created
+)
+
+fun SeriesTransfer.toSeriesState() = SeriesImport(
+    id = seriesId,
+    transferId = transferId,
+    supplierId = supplierId,
+    name = json_payload.name,
+    created = created,
+    status = json_payload.status
 )

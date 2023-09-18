@@ -1,14 +1,13 @@
-package no.nav.hm.grunndata.importapi.seriesstate
+package no.nav.hm.grunndata.importapi.seriesImport
 
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.Version
-import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransfer
 import java.time.LocalDateTime
 import java.util.*
 
 @MappedEntity("series_state_v1")
-data class SeriesState (
+data class SeriesImport (
     @field:Id
     val id: String,
     val supplierId: UUID,
@@ -43,12 +42,12 @@ data class SeriesStateDTO(
 }
 
 
-fun SeriesState.toDTO(): SeriesStateDTO = SeriesStateDTO(
+fun SeriesImport.toDTO(): SeriesStateDTO = SeriesStateDTO(
     id = id, supplierId = supplierId, transferId = transferId, name = name, status = status, message = message,
     version = version!!, created = created, updated = updated
 )
 
-fun SeriesStateDTO.toEntity(): SeriesState = SeriesState(
+fun SeriesStateDTO.toEntity(): SeriesImport = SeriesImport(
     id = id, supplierId = supplierId, transferId = transferId, name = name, status = status, message = message,
     version = version, created = created, updated = updated
 )
