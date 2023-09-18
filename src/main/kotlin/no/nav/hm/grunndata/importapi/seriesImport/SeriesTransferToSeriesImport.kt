@@ -24,7 +24,7 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
         LOG.info("Got ${contents.size} transfers to map to series")
         contents.forEach {
             val seriesState = it.toSeriesState()
-            val seriesStateDTO = seriesImportService.findByIdCacheable(seriesState.id)?.let { inDb ->
+            val seriesImportDTO = seriesImportService.findByIdCacheable(seriesState.id)?.let { inDb ->
                 seriesImportService.update(
                     inDb.copy(
                         transferId = seriesState.transferId,
@@ -32,14 +32,14 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
                         status = seriesState.status
                 ))
             } ?: seriesImportService.save(
-                SeriesStateDTO (
+                SeriesImportDTO (
                     id = seriesState.id,
                     transferId = seriesState.transferId,
                     name = seriesState.name,
                     supplierId = seriesState.supplierId)
             )
-            LOG.info("Series state created for ${seriesStateDTO.id} and transfer: ${seriesStateDTO.transferId} " +
-                    "with version $${seriesStateDTO.version}")
+            LOG.info("Series state created for ${seriesImportDTO.id} and transfer: ${seriesImportDTO.transferId} " +
+                    "with version $${seriesImportDTO.version}")
             seriesTransferRepository.update(it.copy(transferStatus = TransferStatus.DONE, updated = LocalDateTime.now()))
         }
         //TODO feilhåndtering her

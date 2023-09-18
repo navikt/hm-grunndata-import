@@ -25,7 +25,7 @@ enum class SeriesStatus {
     ACTIVE, INACTIVE, PENDING, REJECTED
 }
 
-data class SeriesStateDTO(
+data class SeriesImportDTO(
     val id: String = UUID.randomUUID().toString(),
     val supplierId: UUID,
     val transferId: UUID,
@@ -42,12 +42,12 @@ data class SeriesStateDTO(
 }
 
 
-fun SeriesImport.toDTO(): SeriesStateDTO = SeriesStateDTO(
+fun SeriesImport.toDTO(): SeriesImportDTO = SeriesImportDTO(
     id = id, supplierId = supplierId, transferId = transferId, name = name, status = status, message = message,
     version = version!!, created = created, updated = updated
 )
 
-fun SeriesStateDTO.toEntity(): SeriesImport = SeriesImport(
+fun SeriesImportDTO.toEntity(): SeriesImport = SeriesImport(
     id = id, supplierId = supplierId, transferId = transferId, name = name, status = status, message = message,
     version = version, created = created, updated = updated
 )

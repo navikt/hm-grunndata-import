@@ -3,7 +3,7 @@ package no.nav.hm.grunndata.importapi.productImport
 import jakarta.inject.Singleton
 import jakarta.transaction.Transactional
 import no.nav.hm.grunndata.importapi.*
-import no.nav.hm.grunndata.importapi.seriesImport.SeriesStateDTO
+import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportDTO
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportService
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.supplier.toDTO
@@ -57,7 +57,7 @@ open class ProductImportKafkaService(private val productImportRepository: Produc
         return productImport
     }
 
-    private suspend fun ProductTransferDTO.toProductDTO(productId: UUID, supplierId: UUID, seriesStateDTO: SeriesStateDTO?): ProductRapidDTO = ProductRapidDTO (
+    private suspend fun ProductTransferDTO.toProductDTO(productId: UUID, supplierId: UUID, seriesImportDTO: SeriesImportDTO?): ProductRapidDTO = ProductRapidDTO (
         id = productId,
         supplier = supplierService.findById(supplierId)!!.toDTO(),
         title = title,
@@ -65,7 +65,7 @@ open class ProductImportKafkaService(private val productImportRepository: Produc
         supplierRef = supplierRef,
         status = mapStatus(published, expired),
         attributes = Attributes (
-            series = seriesStateDTO?.name,
+            series = seriesImportDTO?.name,
             shortdescription = shortDescription,
             text = text,
             compatibleWidth = if (this.compatibleWith!=null) CompatibleWith(ids = compatibleWith.ids,
@@ -76,7 +76,7 @@ open class ProductImportKafkaService(private val productImportRepository: Produc
         isoCategory = isoCategory,
         accessory = accessory,
         sparePart = sparePart,
-        seriesId = seriesStateDTO?.id ?: productId.toString(), // use the productId if it's a single product
+        seriesId = seriesImportDTO?.id ?: productId.toString(), // use the productId if it's a single product
         techData = transferTechData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
         media = media.map { MediaInfo( sourceUri = it.sourceUri,
             uri = generateMediaUri(productId, it.sourceUri, it.type),

@@ -11,7 +11,7 @@ import io.mockk.mockk
 import no.nav.hm.grunndata.importapi.productadminstate.ProductAdminStateRepository
 import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.importapi.productImport.ProductTransferToProductImport
-import no.nav.hm.grunndata.importapi.seriesImport.SeriesStateDTO
+import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportDTO
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportService
 import no.nav.hm.grunndata.importapi.supplier.Supplier
 import no.nav.hm.grunndata.importapi.supplier.SupplierRepository
@@ -41,7 +41,7 @@ class ProductToProductImportTest(private val productTransferToProductImport: Pro
     @Test
     fun testProductTransferToProductImport() {
         val supplier = Supplier(id= supplierId, name = "Medema AS", identifier = "medema_as", jwtid = UUID.randomUUID().toString())
-        val seriesDTO = SeriesStateDTO(id = seriesId.toString(), supplierId=supplierId, transferId = UUID.randomUUID(), name = "Mini Crosser")
+        val seriesDTO = SeriesImportDTO(id = seriesId.toString(), supplierId=supplierId, transferId = UUID.randomUUID(), name = "Mini Crosser")
         val product = ProductTransferDTO(title = "Mini Crosser X1 4W",  isoCategory = "12230301" ,
             hmsArtNr = "250464",
             seriesId = seriesId.toString(),
