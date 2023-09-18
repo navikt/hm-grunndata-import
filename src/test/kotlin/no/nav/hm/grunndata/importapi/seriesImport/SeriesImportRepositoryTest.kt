@@ -1,12 +1,9 @@
-package no.nav.hm.grunndata.importapi.seriesstate
+package no.nav.hm.grunndata.importapi.seriesImport
 
 import io.kotest.common.runBlocking
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import no.nav.hm.grunndata.importapi.seriesImport.SeriesImport
-import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportRepository
-import no.nav.hm.grunndata.importapi.seriesImport.SeriesStatus
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.util.*

@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 
 @Singleton
-class SeriesTransferToSeriesImport(private val seriesTransferRepository: SeriesTransferRepository,
+open class SeriesTransferToSeriesImport(private val seriesTransferRepository: SeriesTransferRepository,
                                    private val seriesImportService: SeriesImportService,
                                    private val importRapidPushService: ImportRapidPushService,
 ) {
