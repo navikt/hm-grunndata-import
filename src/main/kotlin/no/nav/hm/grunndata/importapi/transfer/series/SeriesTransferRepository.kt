@@ -12,7 +12,7 @@ import java.util.*
 @JdbcRepository(dialect = Dialect.POSTGRES)
 interface SeriesTransferRepository: CoroutineCrudRepository<SeriesTransfer, UUID> {
 
-    suspend fun findBySupplierIdAndSeriesId(supplierId: UUID, seriesId: String, pageable: Pageable = Pageable.from(0, 100,
+    suspend fun findBySupplierIdAndSeriesId(supplierId: UUID, seriesId: UUID, pageable: Pageable = Pageable.from(0, 100,
                                                                                       Sort.of(Sort.Order("created"))
                                                                                   )): Page<SeriesTransfer>
     suspend fun findBySupplierIdAndTransferId(supplierId: UUID, transferId: UUID): SeriesTransfer?

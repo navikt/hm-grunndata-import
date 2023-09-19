@@ -32,7 +32,7 @@ open class ProductImportKafkaService(private val productImportRepository: Produc
     @Transactional
     open suspend fun mapSaveTransferToProductImport(transfer: ProductTransfer): ProductImport {
         val seriesId = transfer.json_payload.seriesId
-        val seriesStateDTO = if (seriesId != null) seriesImportService.findByIdCacheable(seriesId) else null
+        val seriesStateDTO = if (seriesId != null) seriesImportService.findByIdCacheable(UUID.fromString(seriesId)) else null
         val productImport = productImportRepository.findBySupplierIdAndSupplierRef(transfer.supplierId, transfer.supplierRef)?.let { inDb ->
             productImportRepository.update(
                 inDb.copy(
@@ -76,7 +76,7 @@ open class ProductImportKafkaService(private val productImportRepository: Produc
         isoCategory = isoCategory,
         accessory = accessory,
         sparePart = sparePart,
-        seriesId = seriesImportDTO?.id ?: productId.toString(), // use the productId if it's a single product
+        seriesId = seriesImportDTO?.id?.toString() ?: productId.toString(), // use the productId if it's a single product
         techData = transferTechData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
         media = media.map { MediaInfo( sourceUri = it.sourceUri,
             uri = generateMediaUri(productId, it.sourceUri, it.type),

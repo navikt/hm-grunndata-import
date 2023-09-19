@@ -6,10 +6,11 @@ import io.micronaut.data.annotation.Version
 import java.time.LocalDateTime
 import java.util.*
 
-@MappedEntity("series_state_v1")
+@MappedEntity("series_import_v1")
 data class SeriesImport (
     @field:Id
-    val id: String,
+    val seriesId: UUID,
+    val identifier: String,
     val supplierId: UUID,
     val transferId: UUID,
     val name: String,
@@ -26,7 +27,8 @@ enum class SeriesStatus {
 }
 
 data class SeriesImportDTO(
-    val id: String = UUID.randomUUID().toString(),
+    val id: UUID,
+    val identifier: String,
     val supplierId: UUID,
     val transferId: UUID,
     val name: String,
@@ -35,20 +37,15 @@ data class SeriesImportDTO(
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now(),
     val version: Long=0L
-) {
-    init {
-        require(name.isNotBlank()) {"name must be unique and not blank"}
-    }
-}
-
+)
 
 fun SeriesImport.toDTO(): SeriesImportDTO = SeriesImportDTO(
-    id = id, supplierId = supplierId, transferId = transferId, name = name, status = status, message = message,
+    id = seriesId, identifier = identifier, supplierId = supplierId, transferId = transferId, name = name, status = status, message = message,
     version = version!!, created = created, updated = updated
 )
 
 fun SeriesImportDTO.toEntity(): SeriesImport = SeriesImport(
-    id = id, supplierId = supplierId, transferId = transferId, name = name, status = status, message = message,
+    seriesId = id, identifier = identifier, supplierId = supplierId, transferId = transferId, name = name, status = status, message = message,
     version = version, created = created, updated = updated
 )
 

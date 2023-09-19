@@ -6,7 +6,7 @@ import io.micronaut.data.repository.kotlin.CoroutineCrudRepository
 import java.util.*
 
 @JdbcRepository(dialect = Dialect.POSTGRES)
-interface SeriesImportRepository: CoroutineCrudRepository<SeriesImport, String> {
+interface SeriesImportRepository: CoroutineCrudRepository<SeriesImport, UUID> {
 
     suspend fun findBySupplierIdAndName(supplierId: UUID, name: String): SeriesImport?
 

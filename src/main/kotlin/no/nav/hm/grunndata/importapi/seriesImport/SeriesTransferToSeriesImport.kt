@@ -24,7 +24,7 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
         LOG.info("Got ${contents.size} transfers to map to series")
         contents.forEach {
             val seriesState = it.toSeriesState()
-            val seriesImportDTO = seriesImportService.findByIdCacheable(seriesState.id)?.let { inDb ->
+            val seriesImportDTO = seriesImportService.findByIdCacheable(seriesState.seriesId)?.let { inDb ->
                 seriesImportService.update(
                     inDb.copy(
                         transferId = seriesState.transferId,
@@ -33,7 +33,8 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
                 ))
             } ?: seriesImportService.save(
                 SeriesImportDTO (
-                    id = seriesState.id,
+                    id = seriesState.seriesId,
+                    identifier = seriesState.seriesId.toString(),
                     transferId = seriesState.transferId,
                     name = seriesState.name,
                     supplierId = seriesState.supplierId)

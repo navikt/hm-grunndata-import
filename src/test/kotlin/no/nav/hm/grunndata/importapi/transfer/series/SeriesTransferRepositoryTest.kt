@@ -1,10 +1,8 @@
 package no.nav.hm.grunndata.importapi.transfer.series
 
 import io.kotest.common.runBlocking
-import io.kotest.matchers.longs.shouldBeGreaterThan
 import io.kotest.matchers.longs.shouldBeGreaterThanOrEqual
 import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.matchers.shouldBe
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -14,7 +12,7 @@ class SeriesTransferRepositoryTest(private val seriesTransferRepository: SeriesT
 
     @Test
     fun crudTest() {
-        val seriesId = UUID.randomUUID().toString()
+        val seriesId = UUID.randomUUID()
         val supplierId = UUID.randomUUID()
         val seriesName = "Unik series - 123"
         val transfer = SeriesTransfer(

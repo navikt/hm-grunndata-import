@@ -12,7 +12,7 @@ import java.util.*
 open class SeriesImportService(private val seriesImportRepository: SeriesImportRepository) {
 
     @Cacheable
-    open fun findByIdCacheable(id: String): SeriesImportDTO? = runBlocking {
+    open fun findByIdCacheable(id: UUID): SeriesImportDTO? = runBlocking {
         seriesImportRepository.findById(id)?.toDTO()
     }
 
@@ -22,12 +22,12 @@ open class SeriesImportService(private val seriesImportRepository: SeriesImportR
         seriesImportRepository.findBySupplierIdAndName(supplierId, name)?.toDTO()
 
     @CacheInvalidate(parameters = ["id"])
-    open fun save(dto: SeriesImportDTO, id: String? = dto.id): SeriesImportDTO = runBlocking {
+    open fun save(dto: SeriesImportDTO, id: UUID = dto.id): SeriesImportDTO = runBlocking {
         seriesImportRepository.save(dto.toEntity()).toDTO()
     }
 
     @CacheInvalidate(parameters = ["id"])
-    open fun update(dto: SeriesImportDTO, id: String? = dto.id): SeriesImportDTO? = runBlocking {
+    open fun update(dto: SeriesImportDTO, id: UUID = dto.id): SeriesImportDTO? = runBlocking {
         seriesImportRepository.update(dto.toEntity()).toDTO()
     }
 

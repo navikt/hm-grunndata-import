@@ -3,7 +3,6 @@ package no.nav.hm.grunndata.importapi.transfer.series
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.data.model.Page
-import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.security.annotation.Secured
@@ -11,13 +10,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.asPublisher
-import no.nav.hm.grunndata.importapi.ImportErrorException
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransferAPIController.Companion.API_V1_SERIES_TRANSFERS
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
-import java.time.LocalDateTime
 import java.util.UUID
 
 @Secured(Roles.ROLE_SUPPLIER)
@@ -34,7 +31,7 @@ class SeriesTransferAPIController(private val seriesTransferRepository: SeriesTr
     }
 
     @Get(value="/{supplierId}/{seriesId}")
-    suspend fun getTransfersBySupplierIdSeriesID(supplierId: UUID, seriesId: String): Page<SeriesTransferResponse> =
+    suspend fun getTransfersBySupplierIdSeriesID(supplierId: UUID, seriesId: UUID): Page<SeriesTransferResponse> =
         seriesTransferRepository.findBySupplierIdAndSeriesId(supplierId, seriesId).map {
             it.toResponse()
         }
@@ -64,11 +61,10 @@ class SeriesTransferAPIController(private val seriesTransferRepository: SeriesTr
                                             md5: String) =
         seriesTransferRepository.save(
             SeriesTransfer(
-                seriesId = seriesTransferDTO.id ?: UUID.randomUUID().toString(), supplierId = supplierId,
+                seriesId = seriesTransferDTO.id!!,
+                supplierId = supplierId,
                 json_payload = seriesTransferDTO, md5 = md5
             )
         ).toResponse()
-
-
 
 }
