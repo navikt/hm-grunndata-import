@@ -66,7 +66,6 @@ CREATE TABLE IF NOT EXISTS series_import_v1 (
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     version BIGINT NOT NULL,
-    UNIQUE (name, supplier_id),
     UNIQUE (identifier)
 );
 

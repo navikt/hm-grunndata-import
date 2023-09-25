@@ -76,7 +76,7 @@ open class ProductImportKafkaService(private val productImportRepository: Produc
         isoCategory = isoCategory,
         accessory = accessory,
         sparePart = sparePart,
-        seriesId = seriesImportDTO?.id?.toString() ?: productId.toString(), // use the productId if it's a single product
+        seriesId = seriesImportDTO?.seriesId?.toString() ?: productId.toString(), // use the productId if it's a single product
         techData = transferTechData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
         media = media.map { MediaInfo( sourceUri = it.sourceUri,
             uri = generateMediaUri(productId, it.sourceUri, it.type),

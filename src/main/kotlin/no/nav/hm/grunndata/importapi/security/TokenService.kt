@@ -8,7 +8,6 @@ import com.nimbusds.jwt.SignedJWT
 import io.micronaut.security.token.jwt.signature.secret.SecretSignatureConfiguration
 import java.util.*
 import jakarta.inject.Singleton
-import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.supplier.Supplier
 
 @Singleton
