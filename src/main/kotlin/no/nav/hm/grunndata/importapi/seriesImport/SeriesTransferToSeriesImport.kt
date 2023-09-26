@@ -5,10 +5,10 @@ import jakarta.inject.Singleton
 import no.nav.hm.grunndata.importapi.ImportRapidPushService
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
 import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransferRepository
-import no.nav.hm.grunndata.importapi.transfer.series.seriesImport
 import no.nav.hm.grunndata.rapid.event.EventName
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
+import java.util.*
 
 @Singleton
 open class SeriesTransferToSeriesImport(private val seriesTransferRepository: SeriesTransferRepository,
@@ -23,25 +23,31 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
     open suspend fun receivedTransfersToSeriesImport() {
         val contents = seriesTransferRepository.findByTransferStatus(TransferStatus.RECEIVED).content
         LOG.info("Got ${contents.size} transfers to map to series")
-        contents.forEach {
-            val seriesImport = it.seriesImport()
-            val seriesImportDTO = seriesImportService.findByIdCacheable(seriesImport.seriesId)?.let { inDb ->
+        contents.forEach { transfer ->
+            val seriesImportDTO = seriesImportService
+                    .findBySupplierIdAndSupplierSeriesRef(transfer.supplierId, transfer.supplierSeriesRef)?.let { inDb ->
                 seriesImportService.update(
                     inDb.copy(
-                        transferId = seriesImport.transferId,
-                        name = seriesImport.name,
-                        status = seriesImport.status
+                        transferId = transfer.transferId,
+                        name = transfer.json_payload.name,
+                        status = transfer.json_payload.status,
+                        updated = LocalDateTime.now(),
                 ))
-            } ?: seriesImportService.save(
-                SeriesImportDTO (
-                    seriesId = seriesImport.seriesId,
-                    identifier = seriesImport.seriesId.toString(),
-                    transferId = seriesImport.transferId,
-                    name = seriesImport.name,
-                    supplierId = seriesImport.supplierId)
-            )
+            } ?: run {
+                val seriesId = UUID.randomUUID()
+                seriesImportService.save(
+                    SeriesImportDTO(
+                        seriesId = seriesId,
+                        supplierSeriesRef = transfer.supplierSeriesRef,
+                        transferId = transfer.transferId,
+                        name = transfer.json_payload.name,
+                        supplierId = transfer.supplierId,
+                        status = transfer.json_payload.status,
+                    )
+                )
+            }
             importRapidPushService.pushDTOToKafka(seriesImportDTO.toRapidDTO(), EventName.importedSeriesV1)
-            seriesTransferRepository.update(it.copy(transferStatus = TransferStatus.DONE, updated = LocalDateTime.now()))
+            seriesTransferRepository.update(transfer.copy(transferStatus = TransferStatus.DONE, updated = LocalDateTime.now()))
             LOG.info("Series import created for seriesId: ${seriesImportDTO.seriesId} and transfer: ${seriesImportDTO.transferId} " +
                     "with version $${seriesImportDTO.version}")
         }

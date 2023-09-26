@@ -17,6 +17,9 @@ open class SeriesImportService(private val seriesImportRepository: SeriesImportR
 
     suspend fun findBySupplierId(supplierId: UUID) = seriesImportRepository.findBySupplierId(supplierId).map { it.toDTO() }
 
+    suspend fun findBySupplierIdAndSupplierSeriesRef(supplierId: UUID, supplierSeriesRef: String) =
+        seriesImportRepository.findBySupplierIdAndSupplierSeriesRef(supplierId, supplierSeriesRef)?.toDTO()
+
     @CacheInvalidate(parameters = ["id"])
     open fun save(dto: SeriesImportDTO, id: UUID = dto.seriesId): SeriesImportDTO = runBlocking {
         seriesImportRepository.save(dto.toEntity()).toDTO()

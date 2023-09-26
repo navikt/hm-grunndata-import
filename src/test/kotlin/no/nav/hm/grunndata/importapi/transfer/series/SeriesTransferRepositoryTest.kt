@@ -12,14 +12,14 @@ class SeriesTransferRepositoryTest(private val seriesTransferRepository: SeriesT
 
     @Test
     fun crudTest() {
-        val seriesId = UUID.randomUUID()
+        val  supplierSeriesRef = UUID.randomUUID().toString()
         val supplierId = UUID.randomUUID()
         val seriesName = "Unik series - 123"
         val transfer = SeriesTransfer(
             supplierId = supplierId,
-            seriesId = seriesId,
+            supplierSeriesRef = supplierSeriesRef,
             json_payload = SeriesTransferDTO(
-                id = seriesId,
+                supplierSeriesRef = supplierSeriesRef,
                 name = seriesName
             ),
             md5 = "hexvaluemd5"
@@ -29,7 +29,7 @@ class SeriesTransferRepositoryTest(private val seriesTransferRepository: SeriesT
                 transfer
             )
             saved.shouldNotBeNull()
-            val found = seriesTransferRepository.findBySupplierIdAndSeriesId(supplierId,seriesId)
+            val found = seriesTransferRepository.findBySupplierIdAndSupplierSeriesRef(supplierId, supplierSeriesRef)
             found.shouldNotBeNull()
             found.totalSize shouldBeGreaterThanOrEqual  1
 

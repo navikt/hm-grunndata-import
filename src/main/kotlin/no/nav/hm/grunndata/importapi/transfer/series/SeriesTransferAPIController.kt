@@ -30,12 +30,6 @@ class SeriesTransferAPIController(private val seriesTransferRepository: SeriesTr
 
     }
 
-    @Get(value="/{supplierId}/{seriesId}")
-    suspend fun getTransfersBySupplierIdSeriesID(supplierId: UUID, seriesId: UUID): Page<SeriesTransferResponse> =
-        seriesTransferRepository.findBySupplierIdAndSeriesId(supplierId, seriesId).map {
-            it.toResponse()
-        }
-
     @Get(value="/{supplierId}/transferId/{transferId}")
     suspend fun getTransfersBySupplierIdAndTransferId(supplierId: UUID, transferId: UUID): SeriesTransferResponse? =
         seriesTransferRepository.findBySupplierIdAndTransferId(supplierId, transferId)?.toResponse()
@@ -61,7 +55,7 @@ class SeriesTransferAPIController(private val seriesTransferRepository: SeriesTr
                                             md5: String) =
         seriesTransferRepository.save(
             SeriesTransfer(
-                seriesId = seriesTransferDTO.id!!,
+                supplierSeriesRef = seriesTransferDTO.supplierSeriesRef,
                 supplierId = supplierId,
                 json_payload = seriesTransferDTO, md5 = md5
             )

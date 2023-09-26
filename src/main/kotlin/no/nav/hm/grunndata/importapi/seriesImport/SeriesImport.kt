@@ -3,8 +3,8 @@ package no.nav.hm.grunndata.importapi.seriesImport
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.Version
-import no.nav.hm.grunndata.rapid.dto.SeriesImportRapidDTO
-import no.nav.hm.grunndata.rapid.dto.SeriesStatus
+import no.nav.hm.grunndata.importapi.IMPORT
+import no.nav.hm.grunndata.rapid.dto.*
 import java.time.LocalDateTime
 import java.util.*
 
@@ -12,11 +12,12 @@ import java.util.*
 data class SeriesImport (
     @field:Id
     val seriesId: UUID,
-    val identifier: String,
+    val supplierSeriesRef: String,
     val supplierId: UUID,
     val transferId: UUID,
     val name: String,
-    val message: String?=null,
+    val adminStatus: AdminStatus = AdminStatus.APPROVED,
+    val adminMessage: String?=null,
     val status: SeriesStatus,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now(),
@@ -27,11 +28,12 @@ data class SeriesImport (
 
 data class SeriesImportDTO (
     val seriesId: UUID,
-    val identifier: String,
+    val supplierSeriesRef: String,
     val supplierId: UUID,
     val transferId: UUID,
     val name: String,
-    val message: String?=null,
+    val adminStatus: AdminStatus = AdminStatus.APPROVED,
+    val adminMessage: String?=null,
     val status: SeriesStatus = SeriesStatus.ACTIVE,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now(),
@@ -39,17 +41,19 @@ data class SeriesImportDTO (
 )
 
 fun SeriesImport.toDTO(): SeriesImportDTO = SeriesImportDTO(
-    seriesId = seriesId, identifier = identifier, supplierId = supplierId, transferId = transferId, name = name, status = status, message = message,
-    version = version!!, created = created, updated = updated
+    seriesId = seriesId, supplierSeriesRef = supplierSeriesRef, supplierId = supplierId, transferId = transferId, name = name, status = status,
+    adminStatus = adminStatus, adminMessage = adminMessage, version = version!!, created = created, updated = updated
 )
 
 
 fun SeriesImportDTO.toEntity(): SeriesImport = SeriesImport(
-    seriesId = seriesId, identifier = identifier, supplierId = supplierId, transferId = transferId, name = name, status = status, message = message,
-    version = version, created = created, updated = updated
+    seriesId = seriesId, supplierSeriesRef = supplierSeriesRef, supplierId = supplierId, transferId = transferId, name = name, status = status,
+    adminStatus = adminStatus, adminMessage = adminMessage, version = version, created = created, updated = updated
 )
 
-fun SeriesImportDTO.toRapidDTO(): SeriesImportRapidDTO = SeriesImportRapidDTO(
-    id = seriesId, identifier = identifier, supplierId = supplierId, transferId = transferId, name = name, status = status, message = message,
-    version = version!!, created = created, updated = updated
+fun SeriesImportDTO.toRapidDTO(): SeriesImportRapidDTO = SeriesImportRapidDTO (
+    id = seriesId, supplierSeriesRef= supplierSeriesRef, transferId = transferId, seriesDTO =
+    SeriesRapidDTO(id = seriesId, status = status, name = name, createdBy = IMPORT, supplierId = supplierId,
+        identifier = seriesId.toString(), updatedBy = IMPORT, created = created, updated = updated), version = version!!,
+    adminMessage = adminMessage, adminStatus = adminStatus
 )

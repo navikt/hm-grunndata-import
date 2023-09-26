@@ -14,7 +14,7 @@ import java.util.*
 data class SeriesTransfer(
     @field:Id
     val transferId: UUID = UUID.randomUUID(),
-    val seriesId: UUID,
+    val supplierSeriesRef: String,
     val supplierId: UUID,
     @field:TypeDef(type = DataType.JSON)
     val json_payload: SeriesTransferDTO,
@@ -26,7 +26,7 @@ data class SeriesTransfer(
 )
 
 data class SeriesTransferDTO(
-    val id: UUID ? = UUID.randomUUID(),
+    val supplierSeriesRef: String = UUID.randomUUID().toString(),
     val name: String,
     val status: SeriesStatus = SeriesStatus.ACTIVE
 ){
@@ -38,7 +38,7 @@ data class SeriesTransferDTO(
 
 data class SeriesTransferResponse(
     val transferId: UUID,
-    val seriesId: UUID,
+    val supplierSeriesRef: String,
     val supplierId: UUID,
     val md5: String,
     val message: String? = null,
@@ -48,20 +48,10 @@ data class SeriesTransferResponse(
 
 fun SeriesTransfer.toResponse() = SeriesTransferResponse(
     transferId = transferId,
-    seriesId = seriesId,
+    supplierSeriesRef = supplierSeriesRef,
     supplierId = supplierId,
     md5 = md5,
     message = message,
     transferStatus = transferStatus,
     created = created
-)
-
-fun SeriesTransfer.seriesImport() = SeriesImport (
-    seriesId = seriesId,
-    identifier = seriesId.toString(),
-    transferId = transferId,
-    supplierId = supplierId,
-    name = json_payload.name,
-    created = created,
-    status = json_payload.status
 )
