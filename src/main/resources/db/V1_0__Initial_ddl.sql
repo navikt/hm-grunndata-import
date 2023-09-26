@@ -40,6 +40,20 @@ CREATE TABLE IF NOT EXISTS product_import_v1 (
 
 CREATE INDEX product_import_v1_transferId_idx ON product_import_v1(transfer_id);
 
+CREATE TABLE IF NOT EXISTS product_admin_state_v1 (
+    id uuid NOT NULL PRIMARY KEY,
+    transfer_id UUID NOT NULL,
+    supplier_id uuid NOT NULL,
+    supplier_ref VARCHAR(255) NOT NULL,
+    product_status VARCHAR(32) NOT NULL,
+    admin_status VARCHAR(32),
+    admin_message TEXT,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    version BIGINT NOT NULL,
+    UNIQUE (supplier_id, supplier_ref)
+);
+
 CREATE TABLE IF NOT EXISTS series_transfer_v1 (
     transfer_id uuid NOT NULL PRIMARY KEY,
     supplier_series_ref VARCHAR(255) NOT NULL,
@@ -70,16 +84,15 @@ CREATE TABLE IF NOT EXISTS series_import_v1 (
     UNIQUE (supplier_id, supplier_series_ref)
 );
 
-CREATE TABLE IF NOT EXISTS product_admin_state_v1 (
-    id uuid NOT NULL PRIMARY KEY,
-    transfer_id UUID NOT NULL,
-    supplier_id uuid NOT NULL,
-    supplier_ref VARCHAR(255) NOT NULL,
-    product_status VARCHAR(32) NOT NULL,
-    admin_status VARCHAR(32),
-    admin_message TEXT,
+CREATE TABLE IF NOT EXISTS series_v1 (
+    id UUID NOT NULL PRIMARY KEY,
+    supplier_id UUID NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    status VARCHAR(32) NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    version BIGINT NOT NULL,
-    UNIQUE (supplier_id, supplier_ref)
-)
+    expired TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_by VARCHAR(32) NOT NULL,
+    updated_by VARCHAR(32) NOT NULL,
+    version BIGINT NOT NULL
+);
