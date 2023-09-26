@@ -44,7 +44,7 @@ class ProductToProductImportTest(private val productTransferToProductImport: Pro
         val seriesDTO = SeriesImportDTO(seriesId = seriesId, supplierSeriesRef = UUID.randomUUID().toString(), supplierId=supplierId, transferId = UUID.randomUUID(), name = "Mini Crosser")
         val product = ProductTransferDTO(title = "Mini Crosser X1 4W",  isoCategory = "12230301" ,
             hmsArtNr = "250464",
-            seriesId = seriesId.toString(),
+            seriesId = seriesId,
             articleName = "mini-crosser-x1-x2-4w",
             supplierRef = "mini-crosser-x1-x2-4w",
             manufacturer = "Medema AS",

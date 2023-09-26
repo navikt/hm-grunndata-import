@@ -32,7 +32,10 @@ open class ProductImportKafkaService(private val productImportRepository: Produc
     @Transactional
     open suspend fun mapSaveTransferToProductImport(transfer: ProductTransfer): ProductImport {
         val seriesId = transfer.json_payload.seriesId
-        val seriesStateDTO = if (seriesId != null) seriesImportService.findByIdCacheable(UUID.fromString(seriesId)) else null
+        val seriesRef = transfer.json_payload.supplierSeriesRef
+        val seriesStateDTO = if (seriesId != null) seriesImportService.findByIdCacheable(seriesId)
+            else if ( seriesRef!=null ) seriesImportService.findBySupplierIdAndSupplierSeriesRef(transfer.supplierId, seriesRef)
+            else null
         val productImport = productImportRepository.findBySupplierIdAndSupplierRef(transfer.supplierId, transfer.supplierRef)?.let { inDb ->
             productImportRepository.update(
                 inDb.copy(

@@ -24,7 +24,7 @@ class ProductTransferRepositoryTest(private val productTransferRepository: Produ
         val product = ProductTransferDTO(title = "Mini Crosser X1 4W",  isoCategory = "12230301" , hmsArtNr = "250464",
             articleName = "mini-crosser-x1-x2-4w",
             supplierRef = "mini-crosser-x1-x2-4w",
-            seriesId = "mini-crosser-x1-x2",
+            seriesId = UUID.randomUUID(),
             manufacturer = "Medema AS",
             compatibleWith = null,
             shortDescription = "4-hjuls scooter med manuell regulering av seteløft, ryggvinkel og seterotasjon. Leveres som standard med Ergo2 sitteenhet.",
