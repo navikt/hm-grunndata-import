@@ -2,7 +2,10 @@ package no.nav.hm.grunndata.importapi.seriesImport
 
 import io.micronaut.transaction.annotation.Transactional
 import jakarta.inject.Singleton
+import no.nav.hm.grunndata.importapi.IMPORT
 import no.nav.hm.grunndata.importapi.ImportRapidPushService
+import no.nav.hm.grunndata.importapi.series.SeriesDTO
+import no.nav.hm.grunndata.importapi.series.SeriesService
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
 import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransferRepository
 import no.nav.hm.grunndata.rapid.event.EventName
@@ -12,8 +15,9 @@ import java.util.*
 
 @Singleton
 open class SeriesTransferToSeriesImport(private val seriesTransferRepository: SeriesTransferRepository,
-                                   private val seriesImportService: SeriesImportService,
-                                   private val importRapidPushService: ImportRapidPushService,
+                                        private val seriesImportService: SeriesImportService,
+                                        private val seriesService: SeriesService,
+                                        private val importRapidPushService: ImportRapidPushService,
 ) {
     companion object {
         private val LOG = LoggerFactory.getLogger(SeriesTransferToSeriesImport::class.java)
@@ -48,6 +52,16 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
             }
             importRapidPushService.pushDTOToKafka(seriesImportDTO.toRapidDTO(), EventName.importedSeriesV1)
             seriesTransferRepository.update(transfer.copy(transferStatus = TransferStatus.DONE, updated = LocalDateTime.now()))
+            seriesService.findById(seriesImportDTO.seriesId)?.let { inDB -> inDB.copy(
+                    status = seriesImportDTO.status, expired = seriesImportDTO.expired, name = seriesImportDTO.name,  updated = LocalDateTime.now(),
+                    updatedBy = IMPORT
+                )
+            } ?: seriesService.save(
+                SeriesDTO(
+                    id = seriesImportDTO.seriesId, supplierId = seriesImportDTO.supplierId, name = seriesImportDTO.name,
+                    status = seriesImportDTO.status, expired = seriesImportDTO.expired, createdBy = IMPORT, updatedBy = IMPORT
+                )
+            )
             LOG.info("Series import created for seriesId: ${seriesImportDTO.seriesId} and transfer: ${seriesImportDTO.transferId} " +
                     "with version $${seriesImportDTO.version}")
         }
