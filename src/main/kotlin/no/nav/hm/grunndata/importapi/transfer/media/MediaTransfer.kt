@@ -12,6 +12,7 @@ data class MediaTransfer (
     val transferId: UUID = UUID.randomUUID(),
     val supplierRef: String,
     val supplierId: UUID,
+    val oid: UUID,
     val md5: String,
     val filename: String,
     val sourceUri: String,
@@ -20,4 +21,22 @@ data class MediaTransfer (
     val message: String?=null,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now(),
+)
+
+data class MediaTransferResponse(
+    val transferId: UUID,
+    val supplierRef: String,
+    val supplierId: UUID,
+    val md5: String,
+    val filename: String,
+    val sourceUri: String,
+    val uri: String,
+    val transferStatus: TransferStatus,
+    val message: String?=null,
+    val created: LocalDateTime,
+    val updated: LocalDateTime,
+)
+
+fun MediaTransfer.toTransferResponse() = MediaTransferResponse(
+    transferId, supplierRef, supplierId, md5, filename, sourceUri, uri, transferStatus, message, created, updated
 )
