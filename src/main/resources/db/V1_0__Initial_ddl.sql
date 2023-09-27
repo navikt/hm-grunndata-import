@@ -102,6 +102,7 @@ CREATE TABLE IF NOT EXISTS media_transfer_v1 (
     transfer_id uuid NOT NULL PRIMARY KEY,
     supplier_ref VARCHAR(255) NOT NULL,
     supplier_id uuid NOT NULL,
+    oid uuid NOT NULL,
     md5 VARCHAR(32) NOT NULL,
     filename VARCHAR(255) NOT NULL,
     source_uri VARCHAR(2048) NOT NULL,

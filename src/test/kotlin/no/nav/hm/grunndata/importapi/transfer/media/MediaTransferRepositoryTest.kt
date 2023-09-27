@@ -16,6 +16,7 @@ class MediaTransferRepositoryTest(private val mediaTransferRepository: MediaTran
         val media = MediaTransfer(
             supplierId = UUID.randomUUID(),
             supplierRef = UUID.randomUUID().toString(),
+            oid = UUID.randomUUID(),
             md5 = "12345",
             filename = "12345.jpg",
             sourceUri = "http://localhost/12345.jpg",
