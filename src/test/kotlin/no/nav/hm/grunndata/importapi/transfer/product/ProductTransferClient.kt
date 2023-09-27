@@ -10,7 +10,7 @@ import io.micronaut.http.client.annotation.Client
 import org.reactivestreams.Publisher
 import java.util.*
 
-@Client(ProductTransferAPIController.API_V1_TRANSFERS)
+@Client(ProductTransferAPIController.API_V1_PRODUCT_TRANSFERS)
 interface ProductTransferClient {
 
     @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])

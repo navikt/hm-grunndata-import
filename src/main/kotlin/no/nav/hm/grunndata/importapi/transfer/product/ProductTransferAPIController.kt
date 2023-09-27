@@ -16,14 +16,14 @@ import no.nav.hm.grunndata.importapi.iso.IsoCategoryService
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.techdata.TechDataLabelService
 import no.nav.hm.grunndata.importapi.toMD5Hex
-import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferAPIController.Companion.API_V1_TRANSFERS
+import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferAPIController.Companion.API_V1_PRODUCT_TRANSFERS
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.UUID
 
 @Secured(Roles.ROLE_SUPPLIER)
-@Controller(API_V1_TRANSFERS)
+@Controller(API_V1_PRODUCT_TRANSFERS)
 @SecurityRequirement(name = "bearer-auth")
 class ProductTransferAPIController(private val productTransferRepository: ProductTransferRepository,
                                    private val techDataLabelService: TechDataLabelService,
@@ -32,7 +32,7 @@ class ProductTransferAPIController(private val productTransferRepository: Produc
 
 
     companion object {
-        const val API_V1_TRANSFERS = "/api/v1/products/transfers"
+        const val API_V1_PRODUCT_TRANSFERS = "/api/v1/products/transfers"
         private val LOG = LoggerFactory.getLogger(ProductTransferAPIController::class.java)
 
     }
