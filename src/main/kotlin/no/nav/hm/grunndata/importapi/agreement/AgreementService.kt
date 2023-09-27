@@ -4,6 +4,7 @@ import io.micronaut.cache.annotation.CacheConfig
 import io.micronaut.cache.annotation.Cacheable
 import jakarta.inject.Singleton
 import no.nav.hm.grunndata.rapid.dto.*
+import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.*
 
@@ -11,11 +12,21 @@ import java.util.*
 @CacheConfig("agreements")
 open class AgreementService(private val agreementGdbApiClient: AgreementGdbApiClient) {
 
+    companion object {
+        private val LOG = LoggerFactory.getLogger(AgreementService::class.java)
+    }
     @Cacheable
     open fun findAllActiveAgreements(): List<AgreementResponse> {
+        LOG.info("Getting all active agreements from grunndata db")
         val params = mapOf("status" to "ACTIVE")
         return agreementGdbApiClient.findAgreements(params).map { it.toResponse() }.content
     }
+
+    fun findAgreementByReference(reference: String): AgreementResponse? {
+        val agreementLists = findAllActiveAgreements()
+        return agreementLists.find { it.reference == reference }
+    }
+
 
 }
 

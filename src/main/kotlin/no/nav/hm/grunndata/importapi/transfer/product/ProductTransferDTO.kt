@@ -25,7 +25,7 @@ data class ProductTransferDTO (
     val media: List<TransferMediaDTO> = emptyList(),
     val published: LocalDateTime = LocalDateTime.now(),
     val expired: LocalDateTime = published.plusYears(10),
-    val agreements: List<AgreementInfo> = emptyList()
+    val agreements: List<ProductAgreement> = emptyList()
 ) {
     init {
         require(title.isNotBlank() && title.length<512) {"title is blank or title size > 512"}
@@ -54,7 +54,7 @@ data class TransferTechData (
     val unit:   String
 )
 
-data class AgreementInfo (
+data class ProductAgreement (
     val rank: Int,
     val postNr: Int,
     val reference: String
@@ -71,5 +71,3 @@ data class CompatibleWith (
     val ids: List<UUID> = emptyList(),
     val seriesIds: List<String> = emptyList(),
 )
-
-data class NameId(val id: String, val name: String)
