@@ -38,7 +38,7 @@ class ProductTransferRepositoryTest(private val productTransferRepository: Produ
                 TransferTechData("Kjørelengde maks", "45", "km")
             ),
             media = listOf(
-                TransferMediaDTO(sourceUri="https://medema.no/medias/2019-02/mc_x_4w_orange_10637_570x570px.jpg")
+                TransferMediaDTO(uri="https://medema.no/medias/2019-02/mc_x_4w_orange_10637_570x570px.jpg")
         ))
         val json = objectMapper.writeValueAsString(product)
         val transfer = ProductTransfer(supplierId=supplierId, json_payload = product, md5 = json.toMD5Hex(),

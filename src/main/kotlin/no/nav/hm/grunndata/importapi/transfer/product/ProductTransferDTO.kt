@@ -37,11 +37,11 @@ data class ProductTransferDTO (
 }
 
 data class TransferMediaDTO (
-    val sourceUri: String,
+    val uri: String,
     val priority: Int = 1,
     val type: TransferMediaType = TransferMediaType.PNG,
     val text:   String?=null,
-    val sourceType: MediaSourceType = MediaSourceType.IMPORTAPI
+    val sourceType: MediaSourceType = MediaSourceType.IMPORT
 )
 
 enum class TransferProductStatus {

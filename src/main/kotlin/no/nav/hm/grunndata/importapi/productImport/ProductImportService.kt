@@ -10,6 +10,7 @@ import no.nav.hm.grunndata.importapi.supplier.toDTO
 import no.nav.hm.grunndata.importapi.transfer.product.TransferMediaType
 import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferDTO
 import no.nav.hm.grunndata.importapi.transfer.product.ProductTransfer
+import no.nav.hm.grunndata.importapi.transfer.product.TransferMediaDTO
 import no.nav.hm.grunndata.rapid.dto.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
@@ -78,10 +79,7 @@ open class ProductImportService(private val productImportRepository: ProductImpo
         sparePart = sparePart,
         seriesId = seriesImportDTO?.seriesId?.toString() ?: productId.toString(), // use the productId if it's a single product
         techData = transferTechData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
-        media = media.map { MediaInfo( sourceUri = it.sourceUri,
-            uri = generateMediaUri(productId, it.sourceUri, it.type),
-            priority = it.priority, source = it.sourceType,
-            type = if (it.type == TransferMediaType.PDF) MediaType.PDF else MediaType.IMAGE) },
+        media = media.map { mapMedia(it)},
         published = published,
         expired = expired,
         agreements = emptyList(), // TODO,
@@ -96,14 +94,19 @@ open class ProductImportService(private val productImportRepository: ProductImpo
         } else ProductStatus.INACTIVE
     }
 
-    private fun generateMediaUri(productId: UUID, sourceUri: String, type: TransferMediaType): String {
-        val extension = when (type) {
-            TransferMediaType.JPG -> "jpg"
-            TransferMediaType.PNG -> "png"
-            TransferMediaType.PDF -> "pdf"
-            TransferMediaType.VIDEO ->  "mp4"
-        }
-        return "import/${productId}/${sourceUri.toMD5Hex()}.$extension"
+
+    private fun mapMedia(media: TransferMediaDTO): MediaInfo {
+        return MediaInfo(
+            sourceUri = media.uri,
+            uri = media.uri,
+            priority = media.priority,
+            source = media.sourceType,
+            type = when (media.type) {
+                TransferMediaType.PNG, TransferMediaType.JPG -> MediaType.IMAGE
+                TransferMediaType.VIDEO -> MediaType.VIDEO
+                TransferMediaType.PDF -> MediaType.PDF
+            }
+        )
     }
 
 }

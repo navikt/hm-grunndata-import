@@ -20,11 +20,18 @@
     "unit" : "km"
   } ],
   "media" : [ {
-    "sourceUri" : "https://medema.no/medias/2019-02/mc_x_4w_orange_10637_570x570px.jpg",
+    "uri" : "12345/1223456.jpg",
     "priority" : 1,
     "type" : "JPG",
-    "sourceType" : "EXTERNALURL"
-  } ],
+    "sourceType": "IMPORT"
+    },
+    {
+      "uri": "https://host.to/123.mp4",
+      "priority": 2,
+      "type": "VIDEO",
+      "sourceType": "EXTERNALURL"
+    }
+  ],
   "published" : "2023-08-22T13:39:51.884163",
   "expired" : "2033-08-22T13:39:51.884163",
   "agreements" : [ ]
