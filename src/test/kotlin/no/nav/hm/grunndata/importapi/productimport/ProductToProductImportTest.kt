@@ -60,7 +60,7 @@ class ProductToProductImportTest(private val productTransferToProductImport: Pro
                 TransferTechData("Kjørelengde maks", "45", "km")
             ),
             media = listOf(
-                TransferMediaDTO(uri="https://medema.no/medias/2019-02/mc_x_4w_orange_10637_570x570px.jpg")
+                TransferMediaDTO(uri="12345/12356.png")
             ))
         val json = objectMapper.writeValueAsString(product)
         println(json)

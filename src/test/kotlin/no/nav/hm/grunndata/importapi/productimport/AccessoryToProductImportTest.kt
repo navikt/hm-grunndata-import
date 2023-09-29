@@ -26,7 +26,6 @@ class AccessoryToProductImportTest(private val productTransferToProductImport: P
                                    private val supplierRepository: SupplierRepository,
                                    private val productTransferRepository: ProductTransferRepository,
                                    private val productImportRepository: ProductImportRepository,
-                                   private val seriesImportService: SeriesImportService,
                                    private val objectMapper: ObjectMapper) {
 
 

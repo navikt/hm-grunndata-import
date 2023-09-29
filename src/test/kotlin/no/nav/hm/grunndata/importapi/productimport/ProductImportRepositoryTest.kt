@@ -36,8 +36,8 @@ class ProductImportRepositoryTest(private val productImportRepository: ProductIm
             seriesId = "series-123",
             techData = listOf(TechData(key = "maksvekt", unit = "kg", value = "120")),
             media = listOf(
-                MediaInfo(uri="123.jpg", text = "bilde av produktet", source = MediaSourceType.EXTERNALURL,
-                sourceUri = "https://ekstern.url/123.jpg")
+                MediaInfo(uri="123.mp4", text = "video av produktet", source = MediaSourceType.EXTERNALURL,
+                sourceUri = "https://ekstern.url/123.mp4")
             ),
             agreementInfo = AgreementInfo(id = UUID.randomUUID(), identifier = "hmdbid-1", rank = 1, postNr = 1,
                 reference = "AV-142", expired = LocalDateTime.now()), createdBy = "IMPORT", updatedBy = "IMPORT"
