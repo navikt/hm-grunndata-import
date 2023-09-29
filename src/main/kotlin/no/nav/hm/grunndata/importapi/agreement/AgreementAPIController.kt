@@ -17,7 +17,11 @@ class AgreementAPIController(private val agreementService: AgreementService) {
     }
 
     @Get("/")
-    fun getAllActiveAgreements() = agreementService.findAllActiveAgreements()
+    fun getAllActiveAgreements() =
+        agreementService.getAllActiveAgreements().map { it.toResponse() }
 
+
+    @Get("/reference/{reference}")
+    fun getByReference(reference: String) = agreementService.getAgreementByReference(reference)?.toResponse()
 
 }

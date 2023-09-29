@@ -3,24 +3,25 @@ package no.nav.hm.grunndata.importapi.productImport
 import jakarta.inject.Singleton
 import jakarta.transaction.Transactional
 import no.nav.hm.grunndata.importapi.*
+import no.nav.hm.grunndata.importapi.agreement.AgreementService
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportDTO
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportService
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.supplier.toDTO
-import no.nav.hm.grunndata.importapi.transfer.product.TransferMediaType
-import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferDTO
-import no.nav.hm.grunndata.importapi.transfer.product.ProductTransfer
-import no.nav.hm.grunndata.importapi.transfer.product.TransferMediaDTO
+import no.nav.hm.grunndata.importapi.transfer.product.*
 import no.nav.hm.grunndata.rapid.dto.*
+import no.nav.hm.grunndata.rapid.dto.CompatibleWith
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.UUID
+import kotlin.math.exp
 
 
 @Singleton
 open class ProductImportService(private val productImportRepository: ProductImportRepository,
                                 private val supplierService: SupplierService,
-                                private val seriesImportService: SeriesImportService
+                                private val seriesImportService: SeriesImportService,
+                                private val agreementService: AgreementService
 ) {
 
     companion object {
@@ -82,11 +83,21 @@ open class ProductImportService(private val productImportRepository: ProductImpo
         media = media.map { mapMedia(it)},
         published = published,
         expired = expired,
-        agreements = emptyList(), // TODO,
+        agreements = agreements.map { mapProductAgreement(it) },
         hasAgreement = false,
         createdBy = IMPORT,
         updatedBy = IMPORT,
     )
+
+    private fun mapProductAgreement(agree: ProductAgreement): AgreementInfo {
+        val byRef = agreementService.getAgreementByReference(agree.reference)
+            ?: throw ImportErrorException("Agreement with reference ${agree.reference} could not be found or is no longer active")
+        val post = byRef.posts.find { it.nr == agree.postNr }
+            ?: throw ImportErrorException("Agreement with postnr ${agree.postNr} does not exists")
+        return AgreementInfo(id = byRef.id, identifier = byRef.identifier, title = byRef.title, rank = agree.rank, postNr = post.nr,
+            postIdentifier = post.identifier, postTitle = post.title, reference = byRef.reference, expired = byRef.expired
+        )
+    }
 
     private fun mapStatus(published: LocalDateTime, expired: LocalDateTime): ProductStatus {
         return if (published.isBefore(LocalDateTime.now()) && expired.isAfter(LocalDateTime.now())) {

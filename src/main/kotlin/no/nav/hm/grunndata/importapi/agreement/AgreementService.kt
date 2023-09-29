@@ -15,18 +15,16 @@ open class AgreementService(private val agreementGdbApiClient: AgreementGdbApiCl
     companion object {
         private val LOG = LoggerFactory.getLogger(AgreementService::class.java)
     }
+
     @Cacheable
-    open fun findAllActiveAgreements(): List<AgreementResponse> {
+    open fun getAllActiveAgreements(): List<AgreementDTO> {
         LOG.info("Getting all active agreements from grunndata db")
         val params = mapOf("status" to "ACTIVE")
-        return agreementGdbApiClient.findAgreements(params).map { it.toResponse() }.content
+        return agreementGdbApiClient.findAgreements(params).content
     }
 
-    fun findAgreementByReference(reference: String): AgreementResponse? {
-        val agreementLists = findAllActiveAgreements()
-        return agreementLists.find { it.reference == reference }
-    }
-
+    fun getAgreementByReference(reference: String): AgreementDTO?
+        = getAllActiveAgreements().find { it.reference == reference }
 
 }
 
