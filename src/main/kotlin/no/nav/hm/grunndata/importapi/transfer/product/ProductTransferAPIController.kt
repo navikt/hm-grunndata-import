@@ -48,10 +48,9 @@ class ProductTransferAPIController(private val productTransferRepository: Produc
         productTransferRepository.findBySupplierIdAndTransferId(supplierId, transferId)?.toResponseDTO()
 
     @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])
-    suspend fun productStream(@PathVariable supplierId: UUID, @Body jsonNode: Publisher<JsonNode>): Publisher<ProductTransferResponse> =
-        jsonNode.asFlow().map { json ->
-            val md5 = objectMapper.writeValueAsString(json).toMD5Hex()
-            val transfer = objectMapper.treeToValue(json, ProductTransferDTO::class.java)
+    suspend fun productStream(@PathVariable supplierId: UUID, @Body transfers: Publisher<ProductTransferDTO>): Publisher<ProductTransferResponse> =
+        transfers.asFlow().map { transfer ->
+            val md5 = objectMapper.writeValueAsString(transfer).toMD5Hex()
             LOG.info("Got product stream from $supplierId with supplierRef: ${transfer.supplierRef}")
             productTransferRepository.findBySupplierIdAndMd5(supplierId, md5)?.let { identical ->
                 LOG.info("Identical product ${identical.md5} with previous transfer ${identical.transferId}")

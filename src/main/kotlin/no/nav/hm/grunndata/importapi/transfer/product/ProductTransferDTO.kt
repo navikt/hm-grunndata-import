@@ -23,8 +23,8 @@ data class ProductTransferDTO (
     val supplierSeriesRef: String?=null,
     val transferTechData: List<TransferTechData> = emptyList(),
     val media: List<TransferMediaDTO> = emptyList(),
-    val published: LocalDateTime = LocalDateTime.now(),
-    val expired: LocalDateTime = published.plusYears(10),
+    val published: LocalDateTime?=null,
+    val expired: LocalDateTime?=null,
     val agreements: List<ProductAgreement> = emptyList()
 ) {
     init {

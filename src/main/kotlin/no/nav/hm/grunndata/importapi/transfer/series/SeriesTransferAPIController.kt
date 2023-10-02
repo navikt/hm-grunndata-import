@@ -6,7 +6,10 @@ import io.micronaut.data.model.Page
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.security.annotation.Secured
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import io.swagger.v3.oas.models.examples.Example
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.asPublisher
@@ -35,16 +38,15 @@ class SeriesTransferAPIController(private val seriesTransferRepository: SeriesTr
         seriesTransferRepository.findBySupplierIdAndTransferId(supplierId, transferId)?.toResponse()
 
     @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])
-    suspend fun productStream(@PathVariable supplierId: UUID, @Body jsonNode: Publisher<JsonNode>): Publisher<SeriesTransferResponse> =
-        jsonNode.asFlow().map { json ->
-            val md5 = objectMapper.writeValueAsString(json).toMD5Hex()
-            val transfer = objectMapper.treeToValue(json, SeriesTransferDTO::class.java)
-            LOG.info("Got product stream from $supplierId with name ${transfer.name}")
+    suspend fun productStream(@PathVariable supplierId: UUID, @Body series: Publisher<SeriesTransferDTO>): Publisher<SeriesTransferResponse> =
+        series.asFlow().map { s ->
+            val md5 = objectMapper.writeValueAsString(s).toMD5Hex()
+            LOG.info("Got product stream from $supplierId with name ${s.name}")
             seriesTransferRepository.findBySupplierIdAndMd5(supplierId, md5)?.let { identical ->
-                LOG.info("Identical series ${identical.md5} with previous transfer ${identical.transferId} and name: ${transfer.name}")
+                LOG.info("Identical series ${identical.md5} with previous transfer ${identical.transferId} and name: ${s.name}")
                 identical.toResponse()
             } ?: run {
-                createTransferState(supplierId, transfer, md5)
+                createTransferState(supplierId, s, md5)
             }
         }.asPublisher()
 

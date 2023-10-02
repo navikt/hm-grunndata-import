@@ -81,8 +81,8 @@ open class ProductImportService(private val productImportRepository: ProductImpo
         seriesId = seriesImportDTO?.seriesId?.toString() ?: productId.toString(), // use the productId if it's a single product
         techData = transferTechData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
         media = media.map { mapMedia(it)},
-        published = published,
-        expired = expired,
+        published = published ?: LocalDateTime.now(),
+        expired = expired ?: LocalDateTime.now().plusYears(10),
         agreements = agreements.map { mapProductAgreement(it) },
         hasAgreement = false,
         createdBy = IMPORT,
@@ -99,8 +99,8 @@ open class ProductImportService(private val productImportRepository: ProductImpo
         )
     }
 
-    private fun mapStatus(published: LocalDateTime, expired: LocalDateTime): ProductStatus {
-        return if (published.isBefore(LocalDateTime.now()) && expired.isAfter(LocalDateTime.now())) {
+    private fun mapStatus(published: LocalDateTime? = LocalDateTime.now().minusMinutes(5), expired: LocalDateTime? = LocalDateTime.now().plusYears(10)): ProductStatus {
+        return if (published!!.isBefore(LocalDateTime.now()) && expired!!.isAfter(LocalDateTime.now())) {
             ProductStatus.ACTIVE
         } else ProductStatus.INACTIVE
     }
