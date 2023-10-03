@@ -27,6 +27,8 @@ spec:
   prometheus:
     enabled: true
     path: /internal/prometheus
+  envFrom:
+    - secret: hm-grunndata-import
   env:
     - name: DB_DRIVER
       value: "org.postgresql.Driver"
