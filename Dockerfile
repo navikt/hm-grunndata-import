@@ -2,6 +2,5 @@ FROM navikt/java:17
 USER root
 RUN apt-get update && apt-get install -y curl
 USER apprunner
-COPY scripts/init-env.sh /init-scripts/init-env.sh
 COPY build/libs/hm-grunndata-import-all.jar ./app.jar
 
