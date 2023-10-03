@@ -1,5 +1,5 @@
 {
-  "id" : "f6663a69-ed51-48a4-9fa1-3f8594f96474",
-  "name" : "Mini Crosser X1 4W",
-  "status" : "ACTIVE"
+  "supplierSeriesRef": "1234567",
+  "name": "Series 1",
+  "status": "ACTIVE"
 }

@@ -33,9 +33,9 @@ class SeriesTransferAPIController(private val seriesTransferRepository: SeriesTr
 
     }
 
-    @Get(value="/{supplierId}/transferId/{transferId}")
-    suspend fun getTransfersBySupplierIdAndTransferId(supplierId: UUID, transferId: UUID): SeriesTransferResponse? =
-        seriesTransferRepository.findBySupplierIdAndTransferId(supplierId, transferId)?.toResponse()
+    @Get(value="/{supplierId}/{supplierSeriesRef}")
+    suspend fun getTransfersBySupplierIdAndSupplierSeriesRef(supplierId: UUID, supplierSeriesRef: String): Page<SeriesTransferResponse> =
+        seriesTransferRepository.findBySupplierIdAndSupplierSeriesRef(supplierId, supplierSeriesRef).map { it.toResponse() }
 
     @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])
     suspend fun productStream(@PathVariable supplierId: UUID, @Body series: Publisher<SeriesTransferDTO>): Publisher<SeriesTransferResponse> =

@@ -59,35 +59,39 @@ open class ProductImportService(private val productImportRepository: ProductImpo
         return productImport
     }
 
-    private suspend fun ProductTransferDTO.toProductDTO(productId: UUID, supplierId: UUID, seriesImportDTO: SeriesImportDTO?): ProductRapidDTO = ProductRapidDTO (
-        id = productId,
-        supplier = supplierService.findById(supplierId)!!.toDTO(),
-        title = title,
-        articleName = articleName,
-        supplierRef = supplierRef,
-        status = mapStatus(published, expired),
-        attributes = Attributes (
-            series = seriesImportDTO?.name,
-            shortdescription = shortDescription,
-            text = text,
-            compatibleWidth = if (this.compatibleWith!=null) CompatibleWith(ids = compatibleWith.ids,
-                seriesIds = compatibleWith.seriesIds) else null
-        ),
-        hmsArtNr = hmsArtNr,
-        identifier = productId.toString(),
-        isoCategory = isoCategory,
-        accessory = accessory,
-        sparePart = sparePart,
-        seriesId = seriesImportDTO?.seriesId?.toString() ?: productId.toString(), // use the productId if it's a single product
-        techData = transferTechData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
-        media = media.map { mapMedia(it)},
-        published = published ?: LocalDateTime.now(),
-        expired = expired ?: LocalDateTime.now().plusYears(10),
-        agreements = agreements.map { mapProductAgreement(it) },
-        hasAgreement = false,
-        createdBy = IMPORT,
-        updatedBy = IMPORT,
-    )
+    private suspend fun ProductTransferDTO.toProductDTO(productId: UUID, supplierId: UUID, seriesImportDTO: SeriesImportDTO?): ProductRapidDTO {
+        val nPublished = published ?: LocalDateTime.now().minusMinutes(1)
+        val nExpired = expired ?: LocalDateTime.now().plusYears(10)
+        return ProductRapidDTO (
+            id = productId,
+            supplier = supplierService.findById(supplierId)!!.toDTO(),
+            title = title,
+            articleName = articleName,
+            supplierRef = supplierRef,
+            attributes = Attributes (
+                series = seriesImportDTO?.name,
+                shortdescription = shortDescription,
+                text = text,
+                compatibleWidth = if (this.compatibleWith!=null) CompatibleWith(ids = compatibleWith.ids,
+                    seriesIds = compatibleWith.seriesIds) else null
+            ),
+            hmsArtNr = hmsArtNr,
+            identifier = productId.toString(),
+            isoCategory = isoCategory,
+            accessory = accessory,
+            sparePart = sparePart,
+            seriesId = seriesImportDTO?.seriesId?.toString() ?: productId.toString(), // use the productId if it's a single product
+            techData = transferTechData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
+            media = media.map { mapMedia(it)},
+            published = nPublished,
+            expired = nExpired,
+            status = mapStatus(nPublished, nExpired),
+            agreements = agreements.map { mapProductAgreement(it) },
+            hasAgreement = false,
+            createdBy = IMPORT,
+            updatedBy = IMPORT,
+        )
+    }
 
     private fun mapProductAgreement(agree: ProductAgreement): AgreementInfo {
         val byRef = agreementService.getAgreementByReference(agree.reference)
@@ -99,8 +103,8 @@ open class ProductImportService(private val productImportRepository: ProductImpo
         )
     }
 
-    private fun mapStatus(published: LocalDateTime? = LocalDateTime.now().minusMinutes(5), expired: LocalDateTime? = LocalDateTime.now().plusYears(10)): ProductStatus {
-        return if (published!!.isBefore(LocalDateTime.now()) && expired!!.isAfter(LocalDateTime.now())) {
+    private fun mapStatus(published: LocalDateTime, expired: LocalDateTime): ProductStatus {
+        return if (published.isBefore(LocalDateTime.now()) && expired.isAfter(LocalDateTime.now())) {
             ProductStatus.ACTIVE
         } else ProductStatus.INACTIVE
     }
