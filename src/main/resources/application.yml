@@ -131,4 +131,4 @@ grunndata:
 
 media:
   upload:
-    url: ${MEDIA_UPLOAD_URL:`http://localhost:8081/api/v1/upload/media/import`}
+    url: ${MEDIA_UPLOAD_URL:`http://localhost:8081`}
