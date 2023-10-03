@@ -7,5 +7,6 @@
   "max_replicas": 2,
   "java_opts": "-Xms256m -Xmx512m -XX:+UseG1GC",
   "schedulers_enabled": true,
-  "media_storage_cdnurl": "https://cdn.nav.no/teamdigihot/grunndata/media/v1"
+  "media_storage_cdnurl": "https://cdn.nav.no/teamdigihot/grunndata/media/v1",
+  "ingress": ["https://finnhjelpemidler-api.nav.no/import"]
 }

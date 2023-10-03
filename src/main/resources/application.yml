@@ -1,7 +1,7 @@
 micronaut:
   server:
     port: ${SERVER_PORT:8080}
-    context-path: /
+    context-path: /import
   http:
     client:
       connect-timeout: 10s
