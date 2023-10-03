@@ -1,0 +1,11 @@
+{
+  "disk_tier": "db-custom-1-3840",
+  "disk_size": 20,
+  "kafka_cluster": "nav-prod",
+  "rapidsandrivers_enabled": true,
+  "min_replicas": 2,
+  "max_replicas": 2,
+  "java_opts": "-Xms256m -Xmx512m -XX:+UseG1GC",
+  "schedulers_enabled": true,
+  "media_storage_cdnurl": "https://cdn.nav.no/teamdigihot/grunndata/media/v1"
+}
