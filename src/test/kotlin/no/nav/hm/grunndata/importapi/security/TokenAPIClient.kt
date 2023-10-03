@@ -8,7 +8,7 @@ import io.micronaut.http.client.annotation.Client
 import no.nav.hm.grunndata.importapi.supplier.TokenResponseDTO
 import java.util.*
 
-@Client(TokenApiController.TOKEN_ENDPOINT)
+@Client("\${micronaut.server.context-path}${TokenApiController.TOKEN_ENDPOINT}")
 interface TokenAPIClient {
 
     @Post("/{supplierId}", processes = [MediaType.APPLICATION_JSON])
