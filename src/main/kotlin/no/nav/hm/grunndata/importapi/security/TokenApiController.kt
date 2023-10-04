@@ -4,6 +4,7 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
 import io.micronaut.security.annotation.Secured
+import io.swagger.v3.oas.annotations.Hidden
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.supplier.TokenResponseDTO
@@ -14,6 +15,7 @@ import java.util.UUID
 @Controller(TokenApiController.TOKEN_ENDPOINT)
 @Secured(Roles.ROLE_ADMIN)
 @SecurityRequirement(name = "bearer-auth")
+@Hidden
 class TokenApiController(private val tokenService: TokenService,
                          private val supplierService: SupplierService) {
 
