@@ -18,7 +18,7 @@ class TransferToProductImportScheduler(private val productTransferToProductImpor
     fun transferToProductStateTask() {
         LOG.info("Running receivedTransfers to ProductState scheduler")
         runBlocking {
-            productTransferToProductImport.receivedTransfersToProductState()
+            productTransferToProductImport.receivedTransfersToProductImport()
         }
     }
 

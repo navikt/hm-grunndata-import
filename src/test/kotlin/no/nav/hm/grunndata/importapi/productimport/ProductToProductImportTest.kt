@@ -8,7 +8,6 @@ import io.kotest.matchers.shouldBe
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.mockk
-import no.nav.hm.grunndata.importapi.productadminstate.ProductAdminStateRepository
 import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.importapi.productImport.ProductTransferToProductImport
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportDTO
@@ -28,8 +27,7 @@ class ProductToProductImportTest(private val productTransferToProductImport: Pro
                                  private val productTransferRepository: ProductTransferRepository,
                                  private val productImportRepository: ProductImportRepository,
                                  private val seriesImportService: SeriesImportService,
-                                 private val objectMapper: ObjectMapper,
-                                 private val productAdminStateRepository: ProductAdminStateRepository
+                                 private val objectMapper: ObjectMapper
 ) {
 
     private val supplierId: UUID = UUID.randomUUID()
@@ -77,12 +75,12 @@ class ProductToProductImportTest(private val productTransferToProductImport: Pro
             saved.transferStatus shouldBe TransferStatus.RECEIVED
             saved.transferId.shouldNotBeNull()
             productImportRepository.findBySupplierIdAndSupplierRef(saved.supplierId, saved.supplierRef).shouldBeNull()
-            productTransferToProductImport.receivedTransfersToProductState()
+            productTransferToProductImport.receivedTransfersToProductImport()
             val found = productImportRepository.findBySupplierIdAndSupplierRef(saved.supplierId, saved.supplierRef)
             found.shouldNotBeNull()
             found.transferId shouldBe saved.transferId
             found.id.shouldNotBeNull()
-            val adminState = productAdminStateRepository.findById(found.id)
+            val adminState = productImportRepository.findById(found.id)
             adminState.shouldNotBeNull()
             adminState.adminStatus shouldBe AdminStatus.PENDING
             adminState.transferId shouldBe found.transferId

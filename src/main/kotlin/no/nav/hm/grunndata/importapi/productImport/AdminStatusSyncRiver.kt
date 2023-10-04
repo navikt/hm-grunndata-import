@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.importapi.productadminstate
+package no.nav.hm.grunndata.importapi.productImport
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.context.annotation.Context
@@ -9,7 +9,6 @@ import no.nav.helse.rapids_rivers.KafkaRapid
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.River
 import no.nav.hm.grunndata.importapi.IMPORT
-import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.rapid.dto.DraftStatus
 import no.nav.hm.grunndata.rapid.dto.ProductRegistrationRapidDTO
 import no.nav.hm.grunndata.rapid.dto.rapidDTOVersion
@@ -24,7 +23,7 @@ import java.util.*
 @Requires(bean = KafkaRapid::class)
 class AdminStatusSyncRiver(river: RiverHead,
                            private val objectMapper: ObjectMapper,
-                           private val productAdminStateRepository: ProductAdminStateRepository
+                           private val productImportRepository: ProductImportRepository
 ): River.PacketListener {
 
     companion object {
@@ -53,9 +52,9 @@ class AdminStatusSyncRiver(river: RiverHead,
             runBlocking {
                 LOG.info("adminstatus sync for ${dto.id} with adminstatus ${dto.adminStatus} " +
                         "with transferId $transferId and version: $version ")
-                val adminState = productAdminStateRepository.findById(dto.id)!!
+                val adminState = productImportRepository.findById(dto.id)!!
                 if (adminState.version == version) {
-                    productAdminStateRepository.update(
+                    productImportRepository.update(
                         adminState.copy(
                             productStatus = dto.productDTO.status,
                             adminStatus = dto.adminStatus,

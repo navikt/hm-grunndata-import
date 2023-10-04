@@ -10,7 +10,6 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.mockk
 import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.importapi.productImport.ProductTransferToProductImport
-import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportService
 import no.nav.hm.grunndata.importapi.supplier.Supplier
 import no.nav.hm.grunndata.importapi.supplier.SupplierRepository
 import no.nav.hm.grunndata.importapi.toMD5Hex
@@ -46,7 +45,7 @@ class AccessoryToProductImportTest(private val productTransferToProductImport: P
         runBlocking {
             val savedSupplier = supplierRepository.save(supplier)
             val savedTransfer = productTransferRepository.save(transfer)
-            productTransferToProductImport.receivedTransfersToProductState()
+            productTransferToProductImport.receivedTransfersToProductImport()
             val productImport = productImportRepository.findBySupplierIdAndSupplierRef(supplierId, accessory.supplierRef)
             productImport.shouldNotBeNull()
             productImport.id.shouldNotBeNull()
