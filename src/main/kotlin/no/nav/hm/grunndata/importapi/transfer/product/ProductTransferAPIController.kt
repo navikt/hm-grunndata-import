@@ -14,6 +14,7 @@ import kotlinx.coroutines.reactive.asPublisher
 import no.nav.hm.grunndata.importapi.ImportErrorException
 import no.nav.hm.grunndata.importapi.iso.IsoCategoryService
 import no.nav.hm.grunndata.importapi.security.Roles
+import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
 import no.nav.hm.grunndata.importapi.techdata.TechDataLabelService
 import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferAPIController.Companion.API_V1_PRODUCT_TRANSFERS
@@ -22,7 +23,7 @@ import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.UUID
 
-@Secured(Roles.ROLE_SUPPLIER)
+@SecuritySupplierRule(value = [Roles.ROLE_SUPPLIER])
 @Controller(API_V1_PRODUCT_TRANSFERS)
 @SecurityRequirement(name = "bearer-auth")
 class ProductTransferAPIController(private val productTransferRepository: ProductTransferRepository,

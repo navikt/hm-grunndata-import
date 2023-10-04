@@ -14,13 +14,14 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.asPublisher
 import no.nav.hm.grunndata.importapi.security.Roles
+import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
 import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransferAPIController.Companion.API_V1_SERIES_TRANSFERS
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import java.util.UUID
 
-@Secured(Roles.ROLE_SUPPLIER)
+@SecuritySupplierRule(value = [Roles.ROLE_SUPPLIER])
 @Controller(API_V1_SERIES_TRANSFERS)
 @SecurityRequirement(name = "bearer-auth")
 class SeriesTransferAPIController(private val seriesTransferRepository: SeriesTransferRepository,

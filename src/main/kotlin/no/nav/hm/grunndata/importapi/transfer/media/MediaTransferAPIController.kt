@@ -14,13 +14,14 @@ import kotlinx.coroutines.reactive.asFlow
 import no.nav.hm.grunndata.importapi.BadRequestException
 import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.importapi.security.Roles
+import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
 import no.nav.hm.grunndata.importapi.transfer.media.MediaTransferAPIController.Companion.API_V1_MEDIA_TRANSFERS
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import java.util.*
 
-@Secured(Roles.ROLE_SUPPLIER)
+@SecuritySupplierRule(value = [Roles.ROLE_SUPPLIER])
 @Controller(API_V1_MEDIA_TRANSFERS)
 @SecurityRequirement(name = "bearer-auth")
 class MediaTransferAPIController(private val mediaUploadService: MediaUploadService,
