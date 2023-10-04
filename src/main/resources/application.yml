@@ -126,7 +126,7 @@ schedulers:
 
 grunndata:
   db:
-    url: ${GRUNNDATA_DB_URL:`http://localhost:8888`}
+    url: ${GRUNNDATA_DB_URL:`http://localhost:8080`}
 
 media:
   upload:

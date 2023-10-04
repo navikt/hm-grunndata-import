@@ -53,8 +53,8 @@ open class ProductImportService(private val productImportRepository: ProductImpo
                 )
             )
         }
-        LOG.info("productstate ${productImport.id} and transfer id: ${productImport.transferId} " +
-                "for supplierId: ${productImport.supplierId} supplierRef: ${productImport.supplierRef} push to rapid")
+        LOG.info("mapped product ${productImport.id} and transfer id: ${productImport.transferId} " +
+                "for supplierId: ${productImport.supplierId} supplierRef: ${productImport.supplierRef}")
 
         return productImport
     }
