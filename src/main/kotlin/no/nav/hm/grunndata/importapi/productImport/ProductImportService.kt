@@ -36,20 +36,24 @@ open class ProductImportService(private val productImportRepository: ProductImpo
             else if ( seriesRef!=null ) seriesImportService.findBySupplierIdAndSupplierSeriesRef(transfer.supplierId, seriesRef)
             else null
         val productImport = productImportRepository.findBySupplierIdAndSupplierRef(transfer.supplierId, transfer.supplierRef)?.let { inDb ->
+            val productDTO = transfer.json_payload.toProductDTO(inDb.id, transfer.supplierId, seriesStateDTO)
             productImportRepository.update(
                 inDb.copy(
                     transferId = transfer.transferId,
-                    productDTO = transfer.json_payload.toProductDTO(inDb.id, transfer.supplierId, seriesStateDTO),
-                    updated = LocalDateTime.now()
+                    productDTO = productDTO,
+                    updated = LocalDateTime.now(),
+                    productStatus = productDTO.status
                 )
             )
         } ?: run {
             val productId = UUID.randomUUID()
+            val productDTO = transfer.json_payload.toProductDTO(productId, transfer.supplierId, seriesStateDTO)
             productImportRepository.save(
                 ProductImport(
                     id = productId, transferId = transfer.transferId, supplierId = transfer.supplierId,
                     supplierRef = transfer.supplierRef,
-                    productDTO = transfer.json_payload.toProductDTO(productId, transfer.supplierId, seriesStateDTO)
+                    productDTO = productDTO,
+                    productStatus = productDTO.status, adminStatus = AdminStatus.PENDING
                 )
             )
         }

@@ -106,7 +106,10 @@ flyway:
   datasources:
     default:
       locations: classpath:db
-      clean-on-validation-error: true # only during dev and poc, will remove when we go to production.
+      clean-on-validation-error: true
+      clean-disabled: false
+      clean-schema: false
+      enabled: true
 
 rapidsandrivers:
   enabled: ${RAPIDSANDRIVERS_ENABLED:false}

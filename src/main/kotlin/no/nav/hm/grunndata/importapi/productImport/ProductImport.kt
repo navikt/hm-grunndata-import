@@ -17,6 +17,9 @@ data class ProductImport(
     val transferId: UUID,
     val supplierId: UUID,
     val supplierRef: String,
+    val productStatus: ProductStatus,
+    val adminStatus: AdminStatus = AdminStatus.PENDING,
+    val adminMessage: String ?= null,
     @field:TypeDef(type = DataType.JSON)
     val productDTO: ProductRapidDTO,
     val created: LocalDateTime = LocalDateTime.now(),

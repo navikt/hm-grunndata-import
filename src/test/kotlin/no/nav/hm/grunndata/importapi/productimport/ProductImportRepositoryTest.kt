@@ -43,7 +43,7 @@ class ProductImportRepositoryTest(private val productImportRepository: ProductIm
                 reference = "AV-142", expired = LocalDateTime.now()), createdBy = "IMPORT", updatedBy = "IMPORT"
         )
         val state = ProductImport(id = productDTO.id, supplierId = supplierId, supplierRef = "referanse-123",
-        productDTO = productDTO, transferId = UUID.randomUUID())
+        productDTO = productDTO, transferId = UUID.randomUUID(), productStatus = productDTO.status)
         runBlocking {
             val saved = productImportRepository.save(state)
             val find = productImportRepository.findBySupplierIdAndSupplierRef(supplierId, "referanse-123")
@@ -52,6 +52,7 @@ class ProductImportRepositoryTest(private val productImportRepository: ProductIm
             val updated = productImportRepository.update(find.copy(productDTO = find.productDTO.copy(title = "ny tittel")))
             updated.shouldNotBeNull()
             updated.productDTO.title shouldBe "ny tittel"
+            updated.adminStatus shouldBe AdminStatus.PENDING
         }
     }
 }
