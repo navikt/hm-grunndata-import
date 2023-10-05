@@ -90,8 +90,9 @@ class SeriesTransferTest(private val client: SeriesTransferClient,
                 md5.shouldNotBeNull()
                 it.transferStatus shouldBe TransferStatus.RECEIVED
                 transferId = it.transferId
+                seriesId = it.seriesId
             }.collect()
-            val transfers = client.getTransfersBySupplierIdAndSupplierSeriesRef(authorization = token, supplier!!.id, supplierSeriesRef = "1234567")
+            val transfers = client.getTransfersBySupplierIdAndSupplierSeriesId(authorization = token, supplier!!.id, seriesId!!)
             transfers.totalSize shouldBe 1
 
         }

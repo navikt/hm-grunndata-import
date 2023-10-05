@@ -3,6 +3,7 @@ package no.nav.hm.grunndata.importapi.transfer.series
 import io.kotest.common.runBlocking
 import io.kotest.matchers.longs.shouldBeGreaterThanOrEqual
 import io.kotest.matchers.nulls.shouldNotBeNull
+import io.micronaut.data.model.Pageable
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -15,11 +16,12 @@ class SeriesTransferRepositoryTest(private val seriesTransferRepository: SeriesT
         val  supplierSeriesRef = UUID.randomUUID().toString()
         val supplierId = UUID.randomUUID()
         val seriesName = "Unik series - 123"
+        val seriesId = UUID.randomUUID()
         val transfer = SeriesTransfer(
             supplierId = supplierId,
-            supplierSeriesRef = supplierSeriesRef,
+            seriesId = seriesId,
             json_payload = SeriesTransferDTO(
-                supplierSeriesRef = supplierSeriesRef,
+                seriesId = seriesId,
                 name = seriesName
             ),
             md5 = "hexvaluemd5"
@@ -29,7 +31,7 @@ class SeriesTransferRepositoryTest(private val seriesTransferRepository: SeriesT
                 transfer
             )
             saved.shouldNotBeNull()
-            val found = seriesTransferRepository.findBySupplierIdAndSupplierSeriesRef(supplierId, supplierSeriesRef)
+            val found = seriesTransferRepository.findBySupplierIdAndSeriesId(supplierId, seriesId, Pageable.unpaged())
             found.shouldNotBeNull()
             found.totalSize shouldBeGreaterThanOrEqual  1
 

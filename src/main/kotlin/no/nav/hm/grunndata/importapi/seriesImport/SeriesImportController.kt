@@ -19,9 +19,9 @@ class SeriesImportController(private val seriesImportService: SeriesImportServic
         const val API_V1_SERIES_IMPORT = "/api/v1/series/import"
     }
 
-    @Get("/{supplierId}/{supplierSeriesRef}")
-    suspend fun getImportedSeriesBySupplierIdAndSupplierRef(supplierId: UUID, supplierSeriesRef: String) =
-        seriesImportService.findBySupplierIdAndSupplierSeriesRef(supplierId, supplierSeriesRef)
+    @Get("/{supplierId}/{seriesId}")
+    suspend fun getImportedSeriesBySupplierIdAndSupplierRef(supplierId: UUID, seriesId: UUID) =
+        seriesImportService.findBySupplierIdAndSeriesId(supplierId, seriesId)
 
     @Get("/{supplierId}")
     suspend fun GetImportedSeriesBySupplierId(supplierId: UUID) = seriesImportService.findBySupplierId(supplierId)

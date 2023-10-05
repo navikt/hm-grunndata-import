@@ -8,7 +8,7 @@ import java.util.*
 @JdbcRepository(dialect = Dialect.POSTGRES)
 interface SeriesImportRepository: CoroutineCrudRepository<SeriesImport, UUID> {
 
-    suspend fun findBySupplierIdAndSupplierSeriesRef(supplierId: UUID, supplierSeriesRef: String): SeriesImport?
+    suspend fun findBySupplierIdAndSeriesId(supplierId: UUID, seriesId: UUID): SeriesImport?
 
     suspend fun findBySupplierId(supplierId: UUID): List<SeriesImport>
 

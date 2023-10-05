@@ -1,15 +1,11 @@
 package no.nav.hm.grunndata.importapi.transfer.series
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.data.model.Page
+import io.micronaut.data.model.Pageable
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
-import io.micronaut.security.annotation.Secured
-import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
-import io.swagger.v3.oas.models.examples.Example
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.asPublisher
@@ -34,9 +30,9 @@ class SeriesTransferAPIController(private val seriesTransferRepository: SeriesTr
 
     }
 
-    @Get(value="/{supplierId}/{supplierSeriesRef}")
-    suspend fun getTransfersBySupplierIdAndSupplierSeriesRef(supplierId: UUID, supplierSeriesRef: String): Page<SeriesTransferResponse> =
-        seriesTransferRepository.findBySupplierIdAndSupplierSeriesRef(supplierId, supplierSeriesRef).map { it.toResponse() }
+    @Get(value="/{supplierId}/{seriesId}")
+    suspend fun getTransfersBySupplierIdAndSupplierSeriesRef(supplierId: UUID, seriesId: UUID, pageable: Pageable): Page<SeriesTransferResponse> =
+        seriesTransferRepository.findBySupplierIdAndSeriesId(supplierId, seriesId, pageable).map { it.toResponse() }
 
     @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])
     suspend fun productStream(@PathVariable supplierId: UUID, @Body series: Publisher<SeriesTransferDTO>): Publisher<SeriesTransferResponse> =
@@ -58,9 +54,10 @@ class SeriesTransferAPIController(private val seriesTransferRepository: SeriesTr
                                             md5: String) =
         seriesTransferRepository.save(
             SeriesTransfer(
-                supplierSeriesRef = seriesTransferDTO.supplierSeriesRef,
+                seriesId = seriesTransferDTO.seriesId,
                 supplierId = supplierId,
-                json_payload = seriesTransferDTO, md5 = md5
+                json_payload = seriesTransferDTO,
+                md5 = md5
             )
         ).toResponse()
 

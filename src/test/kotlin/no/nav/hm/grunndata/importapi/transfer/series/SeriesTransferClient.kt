@@ -18,8 +18,8 @@ interface SeriesTransferClient {
                       @Header authorization: String,
                       @Body dto: Publisher<SeriesTransferDTO>): Publisher<SeriesTransferResponse>
 
-    @Get(value="/{supplierId}/{supplierSeriesRef}")
-    fun getTransfersBySupplierIdAndSupplierSeriesRef(@Header authorization: String, supplierId: UUID, supplierSeriesRef: String):
+    @Get(value="/{supplierId}/{seriesId}")
+    fun getTransfersBySupplierIdAndSupplierSeriesId(@Header authorization: String, supplierId: UUID, seriesId: UUID):
             Page<SeriesTransferResponse>
 
 }

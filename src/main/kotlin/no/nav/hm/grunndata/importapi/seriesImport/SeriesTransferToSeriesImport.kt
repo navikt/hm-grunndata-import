@@ -8,6 +8,7 @@ import no.nav.hm.grunndata.importapi.series.SeriesDTO
 import no.nav.hm.grunndata.importapi.series.SeriesService
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
 import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransferRepository
+import no.nav.hm.grunndata.rapid.dto.SeriesStatus
 import no.nav.hm.grunndata.rapid.event.EventName
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
@@ -29,37 +30,37 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
         LOG.info("Got ${contents.size} transfers to map to series")
         contents.forEach { transfer ->
             val seriesImportDTO = seriesImportService
-                    .findBySupplierIdAndSupplierSeriesRef(transfer.supplierId, transfer.supplierSeriesRef)?.let { inDb ->
+                    .findBySupplierIdAndSeriesId(transfer.supplierId, transfer.seriesId)?.let { inDb ->
                 seriesImportService.update(
                     inDb.copy(
                         transferId = transfer.transferId,
                         name = transfer.json_payload.name,
                         status = transfer.json_payload.status,
                         updated = LocalDateTime.now(),
+                        expired = setExpiredIfNotActive(transfer.json_payload.status)
                 ))
             } ?: run {
-                val seriesId = UUID.randomUUID()
                 seriesImportService.save(
                     SeriesImportDTO(
-                        seriesId = seriesId,
-                        supplierSeriesRef = transfer.supplierSeriesRef,
+                        seriesId = transfer.seriesId,
                         transferId = transfer.transferId,
                         name = transfer.json_payload.name,
                         supplierId = transfer.supplierId,
                         status = transfer.json_payload.status,
+                        expired = setExpiredIfNotActive(transfer.json_payload.status)
                     )
                 )
             }
             importRapidPushService.pushDTOToKafka(seriesImportDTO.toRapidDTO(), EventName.importedSeriesV1)
             seriesTransferRepository.update(transfer.copy(transferStatus = TransferStatus.DONE, updated = LocalDateTime.now()))
             seriesService.findById(seriesImportDTO.seriesId)?.let { inDB -> inDB.copy(
-                    status = seriesImportDTO.status, expired = seriesImportDTO.expired, name = seriesImportDTO.name,  updated = LocalDateTime.now(),
+                    status = seriesImportDTO.status, name = seriesImportDTO.name,  updated = LocalDateTime.now(),
                     updatedBy = IMPORT
                 )
             } ?: seriesService.save(
                 SeriesDTO(
                     id = seriesImportDTO.seriesId, supplierId = seriesImportDTO.supplierId, name = seriesImportDTO.name,
-                    status = seriesImportDTO.status, expired = seriesImportDTO.expired, createdBy = IMPORT, updatedBy = IMPORT
+                    status = seriesImportDTO.status, createdBy = IMPORT, updatedBy = IMPORT
                 )
             )
             LOG.info("Series import created for seriesId: ${seriesImportDTO.seriesId} and transfer: ${seriesImportDTO.transferId} " +
@@ -67,5 +68,11 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
         }
         //TODO feilhåndtering her
     }
+
+    private fun setExpiredIfNotActive(status: SeriesStatus): LocalDateTime =
+        if (status != SeriesStatus.ACTIVE) LocalDateTime.now().minusMinutes(1)
+        else LocalDateTime.now().plusYears(15)
+
+
 
 }

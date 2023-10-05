@@ -32,7 +32,6 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
         val seriesId = transfer.json_payload.seriesId
         val seriesRef = transfer.json_payload.supplierSeriesRef
         val seriesStateDTO = if (seriesId != null) seriesImportService.findByIdCacheable(seriesId)
-            else if ( seriesRef!=null ) seriesImportService.findBySupplierIdAndSupplierSeriesRef(transfer.supplierId, seriesRef)
             else null
         val productImport = productImportRepository.findBySupplierIdAndSupplierRef(transfer.supplierId, transfer.supplierRef)?.let { inDb ->
             val productDTO = transfer.json_payload.toProductRapidDTO(inDb.id, transfer.supplierId, seriesStateDTO)
@@ -84,7 +83,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
             isoCategory = isoCategory,
             accessory = accessory,
             sparePart = sparePart,
-            seriesId = seriesImportDTO?.seriesId?.toString() ?: productId.toString(), // use the productId if it's a single product
+            seriesId = mapSeries(seriesImportDTO,productId,supplierId, title).toString(),
             techData = transferTechData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
             media = media.map { mapMedia(it)},
             published = nPublished,
@@ -95,6 +94,14 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
             createdBy = IMPORT,
             updatedBy = IMPORT,
         )
+    }
+    private fun mapSeries(seriesImportDTO: SeriesImportDTO?, productId: UUID, supplierId: UUID, seriesName: String): UUID {
+        return seriesImportDTO?.seriesId ?: (seriesImportService.findByIdCacheable(productId)?.let {
+                it.seriesId
+            } ?: seriesImportService.save(
+                SeriesImportDTO (seriesId = productId, supplierId = supplierId, name = seriesName,
+                    transferId = UUID.randomUUID(), expired = LocalDateTime.now().plusYears(15))
+            ).seriesId)
     }
 
     private fun mapProductAgreement(agree: ProductAgreement): AgreementInfo {
@@ -127,5 +134,4 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
             }
         )
     }
-
 }
