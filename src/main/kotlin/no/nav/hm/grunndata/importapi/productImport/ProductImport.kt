@@ -6,7 +6,6 @@ import io.micronaut.data.annotation.TypeDef
 import io.micronaut.data.annotation.Version
 import io.micronaut.data.model.DataType
 import no.nav.hm.grunndata.rapid.dto.*
-import no.nav.hm.grunndata.rapid.dto.ProductStateDTO
 import java.time.LocalDateTime
 import java.util.*
 
@@ -17,6 +16,7 @@ data class ProductImport(
     val transferId: UUID,
     val supplierId: UUID,
     val supplierRef: String,
+    val seriesId: UUID,
     val productStatus: ProductStatus,
     val adminStatus: AdminStatus = AdminStatus.PENDING,
     val adminMessage: String ?= null,
@@ -28,7 +28,37 @@ data class ProductImport(
     val version: Long?=0L
 )
 
-fun ProductImport.toDTO(): ProductImportRapidDTO = ProductImportRapidDTO(
+data class ProductImportDTO(
+    val id: UUID,
+    val transferId: UUID,
+    val supplierId: UUID,
+    val supplierRef: String,
+    val seriesId: UUID,
+    val productStatus: ProductStatus,
+    val adminStatus: AdminStatus = AdminStatus.PENDING,
+    val adminMessage: String ?= null,
+    val productDTO: ProductRapidDTO,
+    val created: LocalDateTime = LocalDateTime.now(),
+    val updated: LocalDateTime = LocalDateTime.now(),
+    val version: Long?=0L
+)
+
+fun ProductImport.toDTO(): ProductImportDTO  = ProductImportDTO (
+    id = id,
+    transferId = transferId,
+    supplierId = supplierId,
+    supplierRef = supplierRef,
+    seriesId = seriesId,
+    productStatus = productStatus,
+    adminStatus = adminStatus,
+    adminMessage = adminMessage,
+    productDTO = productDTO,
+    created = created,
+    updated = updated,
+    version = version
+)
+
+fun ProductImport.toRapidDTO(): ProductImportRapidDTO = ProductImportRapidDTO(
     id = id,
     transferId = transferId,
     supplierId = supplierId,

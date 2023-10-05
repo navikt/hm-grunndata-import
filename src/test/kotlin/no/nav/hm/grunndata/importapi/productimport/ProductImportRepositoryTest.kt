@@ -17,8 +17,9 @@ class ProductImportRepositoryTest(private val productImportRepository: ProductIm
     @Test
     fun crudProductStateTest() {
         val supplierId = UUID.randomUUID()
+        val productId = UUID.randomUUID()
         val productDTO = ProductRapidDTO (
-            id = UUID.randomUUID(),
+            id = productId,
             supplier = SupplierDTO(id= supplierId, identifier = "12345", updated = LocalDateTime.now(),
                 created = LocalDateTime.now(), createdBy = "IMPORT", updatedBy = "IMPORT", info = SupplierInfo(), name = "testsupplier"),
             title = "Dette er produkt title",
@@ -33,7 +34,7 @@ class ProductImportRepositoryTest(private val productImportRepository: ProductIm
             isoCategory = "12001314",
             accessory = false,
             sparePart = false,
-            seriesId = "series-123",
+            seriesId = productId.toString(),
             techData = listOf(TechData(key = "maksvekt", unit = "kg", value = "120")),
             media = listOf(
                 MediaInfo(uri="123.mp4", text = "video av produktet", source = MediaSourceType.EXTERNALURL,
@@ -43,7 +44,7 @@ class ProductImportRepositoryTest(private val productImportRepository: ProductIm
                 reference = "AV-142", expired = LocalDateTime.now()), createdBy = "IMPORT", updatedBy = "IMPORT"
         )
         val state = ProductImport(id = productDTO.id, supplierId = supplierId, supplierRef = "referanse-123",
-        productDTO = productDTO, transferId = UUID.randomUUID(), productStatus = productDTO.status)
+        productDTO = productDTO, transferId = UUID.randomUUID(), productStatus = productDTO.status, seriesId = UUID.fromString(productDTO.seriesId))
         runBlocking {
             val saved = productImportRepository.save(state)
             val find = productImportRepository.findBySupplierIdAndSupplierRef(supplierId, "referanse-123")

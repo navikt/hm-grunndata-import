@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 
 @Singleton
 class ProductTransferToProductImport(private val productTransferRepository: ProductTransferRepository,
-                                     private val productImportService: ProductImportService,
+                                     private val productImportHandler: ProductImportHandler,
                                      private val importRapidPushService: ImportRapidPushService
 ) {
 
@@ -23,10 +23,10 @@ class ProductTransferToProductImport(private val productTransferRepository: Prod
         val contents = productTransferRepository.findByTransferStatus(TransferStatus.RECEIVED).content
         LOG.info("Got ${contents.size} transfers to map to products")
         contents.forEach {
-            val productImport = productImportService.mapSaveTransferToProductImport(it)
+            val productImport = productImportHandler.mapSaveTransferToProductImport(it)
             LOG.info("Product import created for ${productImport.id} and transfer: ${productImport.transferId}")
             productTransferRepository.update(it.copy(transferStatus = TransferStatus.DONE, updated = LocalDateTime.now()))
-            importRapidPushService.pushDTOToKafka(productImport.toDTO(), importedProductV1)
+            importRapidPushService.pushDTOToKafka(productImport.toRapidDTO(), importedProductV1)
         }
         //TODO feilhåndtering her
     }

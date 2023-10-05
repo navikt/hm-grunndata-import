@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS product_import_v1 (
     transfer_id UUID NOT NULL,
     supplier_id uuid NOT NULL,
     supplier_ref VARCHAR(255) NOT NULL,
+    series_id UUID NOT NULL,
     product_status VARCHAR(32) NOT NULL,
     admin_status VARCHAR(32),
     admin_message TEXT,
@@ -42,6 +43,7 @@ CREATE TABLE IF NOT EXISTS product_import_v1 (
 );
 
 CREATE INDEX product_import_v1_transferId_idx ON product_import_v1(transfer_id);
+CREATE INDEX product_import_v1_supplierId_seriesId_idx ON product_import_v1(supplier_id, series_id);
 
 CREATE TABLE IF NOT EXISTS series_transfer_v1 (
     transfer_id uuid NOT NULL PRIMARY KEY,
