@@ -4,6 +4,7 @@ import jakarta.inject.Singleton
 import jakarta.transaction.Transactional
 import no.nav.hm.grunndata.importapi.*
 import no.nav.hm.grunndata.importapi.agreement.AgreementService
+import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportDTO
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportService
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
@@ -20,7 +21,8 @@ import java.util.UUID
 open class ProductImportHandler(private val productImportRepository: ProductImportRepository,
                                 private val supplierService: SupplierService,
                                 private val seriesImportService: SeriesImportService,
-                                private val agreementService: AgreementService
+                                private val agreementService: AgreementService,
+                                private val gdbApiClient: GdbApiClient
 ) {
 
     companion object {
@@ -31,13 +33,17 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
     open suspend fun mapSaveTransferToProductImport(transfer: ProductTransfer): ProductImport {
         val seriesId = transfer.json_payload.seriesId
         val seriesRef = transfer.json_payload.supplierSeriesRef
+        val supplierId = transfer.supplierId
+        val supplierRef = transfer.supplierRef
+        val transferId = transfer.transferId
         val seriesStateDTO = if (seriesId != null) seriesImportService.findByIdCacheable(seriesId)
             else null
-        val productImport = productImportRepository.findBySupplierIdAndSupplierRef(transfer.supplierId, transfer.supplierRef)?.let { inDb ->
-            val productDTO = transfer.json_payload.toProductRapidDTO(inDb.id, transfer.supplierId, seriesStateDTO)
+        val productImport = productImportRepository.findBySupplierIdAndSupplierRef(supplierId, supplierRef)?.let { inDb ->
+            LOG.info("Product from supplier $supplierId and ref $supplierRef found in import database ${inDb.id}")
+            val productDTO = transfer.json_payload.toProductRapidDTO(inDb.id, supplierId, seriesStateDTO)
             productImportRepository.update(
                 inDb.copy(
-                    transferId = transfer.transferId,
+                    transferId = transferId,
                     productDTO = productDTO,
                     updated = LocalDateTime.now(),
                     productStatus = productDTO.status,
@@ -45,7 +51,25 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
                 )
             )
         } ?: run {
+            gdbApiClient.getProductBySupplierIdAndSupplierRef(supplierId, supplierRef)?.let { dto ->
+                LOG.info("Product from supplier $supplierId and ref $supplierRef found in GDB ${dto.id} ")
+                val productDTO = transfer.json_payload.toProductRapidDTO(dto.id, supplierId, seriesStateDTO)
+                productImportRepository.save(
+                    ProductImport(
+                        id = dto.id,
+                        transferId = transferId,
+                        supplierId = supplierId,
+                        supplierRef = supplierRef,
+                        productDTO = productDTO,
+                        productStatus = productDTO.status,
+                        adminStatus = AdminStatus.PENDING,
+                        seriesId = UUID.fromString(productDTO.seriesId)
+                    )
+                )
+            }
+        } ?: run {
             val productId = UUID.randomUUID()
+            LOG.info("New product for $supplierId and ref $supplierRef with new id $productId")
             val productDTO = transfer.json_payload.toProductRapidDTO(productId, transfer.supplierId, seriesStateDTO)
             productImportRepository.save(
                 ProductImport(
@@ -99,7 +123,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
         return seriesImportDTO?.seriesId ?: (seriesImportService.findByIdCacheable(productId)?.let {
                 it.seriesId
             } ?: seriesImportService.save(
-                SeriesImportDTO (seriesId = productId, supplierId = supplierId, name = seriesName,
+                SeriesImportDTO (seriesId = productId, supplierId = supplierId, name = seriesName, // use productId as seriesId, for empty seriesId
                     transferId = UUID.randomUUID(), expired = LocalDateTime.now().plusYears(15))
             ).seriesId)
     }
