@@ -106,9 +106,8 @@ flyway:
   datasources:
     default:
       locations: classpath:db
-      clean-on-validation-error: true
-      clean-disabled: false
-      clean-schema: true
+      clean-on-validation-error: false
+      clean-schema: false
       enabled: true
 
 rapidsandrivers:
