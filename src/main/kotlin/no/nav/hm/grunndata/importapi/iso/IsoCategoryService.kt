@@ -1,7 +1,7 @@
 package no.nav.hm.grunndata.importapi.iso
 
 import jakarta.inject.Singleton
-import no.nav.hm.grunndata.importapi.techdata.GdbApiClient
+import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
 import no.nav.hm.grunndata.rapid.dto.IsoCategoryDTO
 import org.slf4j.LoggerFactory
 

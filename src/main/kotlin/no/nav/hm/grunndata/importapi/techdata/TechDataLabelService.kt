@@ -1,6 +1,7 @@
 package no.nav.hm.grunndata.importapi.techdata
 
 import jakarta.inject.Singleton
+import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
 import org.slf4j.LoggerFactory
 
 @Singleton

@@ -74,19 +74,6 @@ CREATE TABLE IF NOT EXISTS series_import_v1 (
 
 CREATE INDEX series_import_v1_supplier_id_series_id_idx ON series_import_v1(supplier_id, series_id);
 
-CREATE TABLE IF NOT EXISTS series_v1 (
-    id UUID NOT NULL PRIMARY KEY,
-    supplier_id UUID NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    status VARCHAR(32) NOT NULL,
-    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    expired TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    created_by VARCHAR(32) NOT NULL,
-    updated_by VARCHAR(32) NOT NULL,
-    version BIGINT NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS media_transfer_v1 (
     transfer_id uuid NOT NULL PRIMARY KEY,
     supplier_ref VARCHAR(255) NOT NULL,

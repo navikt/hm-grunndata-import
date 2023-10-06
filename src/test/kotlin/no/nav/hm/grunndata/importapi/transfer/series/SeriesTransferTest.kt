@@ -14,7 +14,7 @@ import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.runBlocking
 import no.nav.hm.grunndata.importapi.supplier.Supplier
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
-import no.nav.hm.grunndata.importapi.techdata.GdbApiClient
+import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
 import no.nav.hm.grunndata.importapi.techdata.TechDataLabelDTO
 import no.nav.hm.grunndata.importapi.security.TokenService
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
