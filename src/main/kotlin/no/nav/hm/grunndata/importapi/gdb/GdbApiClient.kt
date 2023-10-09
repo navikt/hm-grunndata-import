@@ -13,8 +13,8 @@ import java.util.*
 @Client("\${grunndata.db.url}")
 interface GdbApiClient {
 
-    @Get(uri="/api/v1/products", consumes = [APPLICATION_JSON])
-    fun findProducts(params: Map<String, String>?=null,
+    @Get(uri="/api/v1/products{?params*}", consumes = [APPLICATION_JSON])
+    fun findProducts(@QueryValue params: Map<String, String>?=null,
                      @QueryValue("size") size: Int? = null,
                      @QueryValue("page") page: Int?=null,
                      @QueryValue("sort") sort: String? = null): Page<ProductRapidDTO>
