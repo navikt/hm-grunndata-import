@@ -9,10 +9,18 @@ import io.micronaut.security.token.jwt.signature.secret.SecretSignatureConfigura
 import java.util.*
 import jakarta.inject.Singleton
 import no.nav.hm.grunndata.importapi.supplier.Supplier
+import org.slf4j.LoggerFactory
 
 @Singleton
 class TokenService(private val secretSignatureConfiguration: SecretSignatureConfiguration) {
 
+    companion object {
+        private val LOG = LoggerFactory.getLogger(TokenService::class.java)
+    }
+    init {
+        if (secretSignatureConfiguration.secret == "MustBeAVeryLongSecretAndUsedThisForTestImportOnly")
+            LOG.warn("Using test key, can only be used in local/dev")
+    }
 
     fun token(supplier: Supplier): String {
         val signer = MACSigner(secretSignatureConfiguration.secret)
