@@ -1,17 +1,16 @@
 package no.nav.hm.grunndata.importapi.transfer.product
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.data.model.Page
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
-import io.micronaut.security.annotation.Secured
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.asPublisher
-import no.nav.hm.grunndata.importapi.ImportErrorException
+import no.nav.hm.grunndata.importapi.error.ErrorType
+import no.nav.hm.grunndata.importapi.error.ImportApiError
 import no.nav.hm.grunndata.importapi.iso.IsoCategoryService
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
@@ -67,15 +66,15 @@ class ProductTransferAPIController(private val productTransferRepository: Produc
             transfer.transferTechData.forEach {
                 val label = techDataLabelService.fetchTechDataLabelByKeyName(it.key)
                 if (label == null ||  label.unit != it.unit)
-                    throw ImportErrorException("Wrong techlabel key ${it.key} and unit: ${it.unit}")
+                    throw ImportApiError("Wrong techlabel key ${it.key} and unit: ${it.unit}", ErrorType.INVALID_VALUE)
             }
         }
         if ((transfer.accessory || transfer.sparePart) && transfer.compatibleWith == null) {
-            throw ImportErrorException("It is accessory or sparePart, must set compatibleWidth")
+            throw ImportApiError("It is accessory or sparePart, must set compatibleWidth", ErrorType.MISSING_PARAMETER)
         }
 
         if (isoCategoryService.lookUpCode(transfer.isoCategory) == null) {
-            throw ImportErrorException("Isocategory ${transfer.isoCategory} does not exist")
+            throw ImportApiError("Isocategory ${transfer.isoCategory} does not exist", ErrorType.INVALID_VALUE)
         }
     }
 

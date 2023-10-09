@@ -4,6 +4,8 @@ import jakarta.inject.Singleton
 import jakarta.transaction.Transactional
 import no.nav.hm.grunndata.importapi.*
 import no.nav.hm.grunndata.importapi.agreement.AgreementService
+import no.nav.hm.grunndata.importapi.error.ErrorType
+import no.nav.hm.grunndata.importapi.error.ImportApiError
 import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportDTO
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportService
@@ -130,9 +132,9 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
 
     private fun mapProductAgreement(agree: ProductAgreement): AgreementInfo {
         val byRef = agreementService.getAgreementByReference(agree.reference)
-            ?: throw ImportErrorException("Agreement with reference ${agree.reference} could not be found or is no longer active")
+            ?: throw ImportApiError("Agreement with reference ${agree.reference} could not be found or is no longer active", ErrorType.NOT_FOUND)
         val post = byRef.posts.find { it.nr == agree.postNr }
-            ?: throw ImportErrorException("Agreement with postnr ${agree.postNr} does not exists")
+            ?: throw ImportApiError("Agreement with postnr ${agree.postNr} does not exists", ErrorType.INVALID_VALUE)
         return AgreementInfo(id = byRef.id, identifier = byRef.identifier, title = byRef.title, rank = agree.rank, postNr = post.nr,
             postIdentifier = post.identifier, postTitle = post.title, reference = byRef.reference, expired = byRef.expired
         )

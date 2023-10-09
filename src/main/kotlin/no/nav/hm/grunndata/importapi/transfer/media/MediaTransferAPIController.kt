@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.asFlow
 import no.nav.hm.grunndata.importapi.BadRequestException
+import no.nav.hm.grunndata.importapi.error.ErrorType
+import no.nav.hm.grunndata.importapi.error.ImportApiError
 import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
@@ -65,7 +67,7 @@ class MediaTransferAPIController(private val mediaUploadService: MediaUploadServ
                 val saved = mediaTransferRepository.save(mediaTransfer)
                 saved.toTransferResponse()
             }.toList())
-        } ?: throw BadRequestException("Wrong supplierRef?")
+        } ?: throw ImportApiError("Wrong supplierRef?", ErrorType.NOT_FOUND)
     }
 
 }
