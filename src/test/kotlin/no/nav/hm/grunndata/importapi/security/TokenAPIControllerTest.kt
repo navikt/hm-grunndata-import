@@ -27,12 +27,13 @@ class TokenAPIControllerTest(private val tokenAPIClient: TokenAPIClient,
     }
     @Test
     fun tokenApiTest() {
-        val bearerToken = "bearer ${tokenService.adminToken("tester")}"
+        val bearerToken = "bearer ${tokenService.adminToken("hm-grunndata-register")}"
         val supplierToken = tokenAPIClient.createSupplierToken(supplierId, bearerToken)
-        val adminToken = tokenAPIClient.createAdminToken("Admin Token", bearerToken)
+        val adminToken = tokenAPIClient.createAdminToken("hm-grunndata-register", bearerToken)
         supplierToken.status shouldBe HttpStatus.OK
         supplierToken.body().id shouldBe supplierId
         supplierToken.body().token.shouldNotBeNull()
         adminToken.status shouldBe  HttpStatus.OK
+        println(adminToken.body().token)
     }
 }

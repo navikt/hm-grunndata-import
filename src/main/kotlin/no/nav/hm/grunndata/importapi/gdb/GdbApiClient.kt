@@ -8,6 +8,7 @@ import io.micronaut.http.client.annotation.Client
 import no.nav.hm.grunndata.importapi.techdata.TechDataLabelDTO
 import no.nav.hm.grunndata.rapid.dto.IsoCategoryDTO
 import no.nav.hm.grunndata.rapid.dto.ProductRapidDTO
+import no.nav.hm.grunndata.rapid.dto.SupplierDTO
 import java.util.*
 
 @Client("\${grunndata.db.url}")
@@ -33,4 +34,8 @@ interface GdbApiClient {
 
     @Get(uri="/api/v1/series/supplier/supplierId", consumes = [APPLICATION_JSON])
     fun getSeriesBySupplierId(supplierId: UUID): List<SeriesDTO>
+
+    @Get(uri="/api/v1/suppliers/{supplierId}", consumes = [APPLICATION_JSON])
+    fun getSupplierById(supplierId: UUID): SupplierDTO?
+
 }

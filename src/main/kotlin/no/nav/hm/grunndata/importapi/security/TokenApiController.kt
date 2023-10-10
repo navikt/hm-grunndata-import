@@ -6,8 +6,10 @@ import io.micronaut.http.annotation.Post
 import io.micronaut.security.annotation.Secured
 import io.swagger.v3.oas.annotations.Hidden
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.supplier.TokenResponseDTO
+import no.nav.hm.grunndata.importapi.supplier.toEntity
 import no.nav.hm.grunndata.importapi.supplier.toTokenResponseDTO
 import org.slf4j.LoggerFactory
 import java.util.UUID
@@ -16,7 +18,8 @@ import java.util.UUID
 @Secured(Roles.ROLE_ADMIN)
 @SecurityRequirement(name = "bearer-auth")
 class TokenApiController(private val tokenService: TokenService,
-                         private val supplierService: SupplierService) {
+                         private val supplierService: SupplierService,
+                         private val gdbApiClient: GdbApiClient) {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(TokenApiController::class.java)
@@ -28,7 +31,14 @@ class TokenApiController(private val tokenService: TokenService,
         LOG.info("Request for token for supplier $supplierId")
         return supplierService.findById(supplierId)?.let {
             HttpResponse.ok(it.toTokenResponseDTO(tokenService.token(it)))
-        } ?: HttpResponse.notFound()
+        } ?: run {
+            // create the supplier if it exist in grunndata-db
+            gdbApiClient.getSupplierById(supplierId)?.let {
+                val saved = supplierService.save(it.toEntity())
+                HttpResponse.ok(saved.toTokenResponseDTO(tokenService.token(saved)))
+            } ?:
+            HttpResponse.notFound()
+        }
     }
 
 
