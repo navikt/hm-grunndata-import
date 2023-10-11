@@ -26,7 +26,7 @@ interface GdbApiClient {
     @Get(uri="/api/v1/techlabels", consumes = [APPLICATION_JSON])
     fun fetchAllTechLabels(): List<TechDataLabelDTO>
 
-    @Get(uri="/api/v1/products/{supplierId}/{supplierRef", consumes = [APPLICATION_JSON])
+    @Get(uri="/api/v1/products/{supplierId}/{supplierRef}", consumes = [APPLICATION_JSON])
     fun getProductBySupplierIdAndSupplierRef(supplierId: UUID, supplierRef: String): ProductRapidDTO?
 
     @Get(uri="/api/v1/series/{id}", consumes = [APPLICATION_JSON])

@@ -12,18 +12,18 @@ A test token, can be used in localhost:
 eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Zpbm5oamVscGVtaWRsZXIubmF2Lm5vIiwic3ViIjoiQWRtaW4gVG9rZW4iLCJpYXQiOjE2OTQ1ODk3NTEsImp0aSI6IjRiMjUzYWVkLWZhMGQtNDhiNy04NGFjLTU0MDgyMWFjNzgwYiIsInJvbGVzIjoiUk9MRV9BRE1JTiJ9.FWdilcw-hBRpv5Vnt3O7rShDoDLEf77bFARSyGxatLc
 ```
 
-create a token for the supplier 0e54eade-f3ff-43dd-adee-274f48be5173:
+create a token for the supplier f639825c-2fc6-49cd-82ae-31b8ffa449a6:
 ``
 curl -X 'POST' \
-'http://localhost:3333/internal/token/0e54eade-f3ff-43dd-adee-274f48be5173' \
+'http://localhost:3333/import/internal/token/f639825c-2fc6-49cd-82ae-31b8ffa449a6' \
 -H 'accept: application/json' \
 -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Zpbm5oamVscGVtaWRsZXIubmF2Lm5vIiwic3ViIjoiQWRtaW4gVG9rZW4iLCJpYXQiOjE2OTQ1ODk3NTEsImp0aSI6IjRiMjUzYWVkLWZhMGQtNDhiNy04NGFjLTU0MDgyMWFjNzgwYiIsInJvbGVzIjoiUk9MRV9BRE1JTiJ9.FWdilcw-hBRpv5Vnt3O7rShDoDLEf77bFARSyGxatLc'
 ``
 {
-"id": "0e54eade-f3ff-43dd-adee-274f48be5173",
-"name": "test supplier",
-"jwtid": "89a239b3-61fe-4f45-8601-da10de10ddda",
-"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IHN1cHBsaWVyIiwic3VwcGxpZXJJZCI6IjBlNTRlYWRlLWYzZmYtNDNkZC1hZGVlLTI3NGY0OGJlNTE3MyIsInJvbGVzIjoiUk9MRV9TVVBQTElFUiIsImlzcyI6Imh0dHBzOi8vZmlubmhqZWxwZW1pZGxlci5uYXYubm8iLCJpYXQiOjE2OTUwMjI1NzIsImp0aSI6Ijg5YTIzOWIzLTYxZmUtNGY0NS04NjAxLWRhMTBkZTEwZGRkYSJ9.6YiFYdUbJ15VQ8Y1wvBIkdFUxnyBOYPJsPNLvbgiCSs"
+"id" : "f639825c-2fc6-49cd-82ae-31b8ffa449a6",
+"name" : "Finn Hans Hjelpmedler Test",
+"jwtid" : "049ef21a-685d-4bfc-9559-88b99f2b057f",
+"token" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGaW5uIEhhbnMgSGplbHBtZWRsZXIgVGVzdCIsInN1cHBsaWVySWQiOiJmNjM5ODI1Yy0yZmM2LTQ5Y2QtODJhZS0zMWI4ZmZhNDQ5YTYiLCJyb2xlcyI6IlJPTEVfU1VQUExJRVIiLCJpc3MiOiJodHRwczovL2Zpbm5oamVscGVtaWRsZXIubmF2Lm5vIiwiaWF0IjoxNjk3MDI2MjA2LCJqdGkiOiIwNDllZjIxYS02ODVkLTRiZmMtOTU1OS04OGI5OWYyYjA1N2YifQ.stcUQU0i-GorPBYfSLL_Oqw7ROFDuH0xDL5j0I8aaKE"
 }
 Use the supplier token from the previous call to access all api endpoints:
 ``

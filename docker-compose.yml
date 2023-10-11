@@ -13,21 +13,6 @@ services:
     command: ["postgres", "-c", "log_statement=none"]
     networks:
       - import-net
-  gdb:
-    image: europe-north1-docker.pkg.dev/nais-management-233d/teamdigihot/hm-grunndata-db:23.272.123130
-    platform: linux/amd64
-    hostname: gdb
-    depends_on:
-      - postgresregister
-    ports:
-      - "8080:8080"
-    networks:
-      - import-net
-    environment:
-      DB_DRIVER: org.postgresql.Driver
-      DB_JDBC_URL: "jdbc:postgresql://postgres:5432/gdb"
-      RAPIDSANDRIVERS_ENABLED: true
-      KAFKA_BROKERS: "kafka:9092"
   kafkaregister:
     hostname: kafka
     image: confluentinc/cp-kafka:7.3.1
@@ -69,7 +54,7 @@ services:
     networks:
       - import-net
   mediaregister:
-    image: europe-north1-docker.pkg.dev/nais-management-233d/teamdigihot/hm-grunndata-media:23.272.123623
+    image: europe-north1-docker.pkg.dev/nais-management-233d/teamdigihot/hm-grunndata-media:23.284.144200
     platform: linux/amd64
     hostname: media
     depends_on:
@@ -86,7 +71,7 @@ services:
       KAFKA_BROKERS: "kafka:9092"
       MEDIA_STORAGE_CDNURL: http://localhost:8081/local
     volumes:
-      - /tmp/teamdigihot/grunndata/media/v1:/app/teamdigihot/grunndata/media/v1
+      - ./build/tmp:/app/teamdigihot/grunndata/media/v1
   mediaproxyregister:
     image: europe-north1-docker.pkg.dev/nais-management-233d/teamdigihot/hm-grunndata-media-proxy:23.275.084731
     platform: linux/amd64
