@@ -14,6 +14,7 @@ data class MediaTransfer (
     val supplierId: UUID,
     val oid: UUID,
     val md5: String,
+    val fileSize: Long,
     val filename: String,
     val sourceUri: String,
     val uri: String,

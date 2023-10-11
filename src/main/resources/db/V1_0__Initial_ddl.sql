@@ -80,6 +80,7 @@ CREATE TABLE IF NOT EXISTS media_transfer_v1 (
     supplier_id uuid NOT NULL,
     oid uuid NOT NULL,
     md5 VARCHAR(32) NOT NULL,
+    file_size BIGINT NOT NULL,
     filename VARCHAR(255) NOT NULL,
     source_uri VARCHAR(2048) NOT NULL,
     uri VARCHAR(2048) NOT NULL,

@@ -15,4 +15,6 @@ interface MediaTransferRepository: CoroutineCrudRepository<MediaTransfer, UUID> 
                                                pageable: Pageable = Pageable.from(0, 100,
                                                    Sort.of(Sort.Order("created"))
                                                )): Page<MediaTransfer>
+    suspend fun findBySupplierIdAndMd5(supplierId: UUID, md5: String): MediaTransfer?
+
 }
