@@ -20,7 +20,6 @@ data class ProductTransferDTO (
     val sparePart: Boolean = false,
     val compatibleWith: CompatibleWith?=null,
     val seriesId: UUID?=null,
-    val supplierSeriesRef: String?=null,
     val transferTechData: List<TransferTechData> = emptyList(),
     val media: List<TransferMediaDTO> = emptyList(),
     val published: LocalDateTime?=null,

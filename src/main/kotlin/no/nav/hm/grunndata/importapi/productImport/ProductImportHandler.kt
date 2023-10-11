@@ -34,7 +34,6 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
     @Transactional
     open suspend fun mapSaveTransferToProductImport(transfer: ProductTransfer): ProductImport {
         val seriesId = transfer.json_payload.seriesId
-        val seriesRef = transfer.json_payload.supplierSeriesRef
         val supplierId = transfer.supplierId
         val supplierRef = transfer.supplierRef
         val transferId = transfer.transferId

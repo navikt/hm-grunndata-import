@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.asFlow
+import no.nav.hm.grunndata.importapi.IMPORT
 import no.nav.hm.grunndata.importapi.error.ErrorType
 import no.nav.hm.grunndata.importapi.error.ImportApiError
 import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
@@ -18,10 +19,11 @@ import no.nav.hm.grunndata.importapi.productImport.ProductImportHandler
 import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
+import no.nav.hm.grunndata.importapi.supplier.SupplierService
+import no.nav.hm.grunndata.importapi.supplier.toDTO
 import no.nav.hm.grunndata.importapi.transfer.media.MediaTransferAPIController.Companion.API_V1_MEDIA_TRANSFERS
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
-import no.nav.hm.grunndata.rapid.dto.AdminStatus
-import no.nav.hm.grunndata.rapid.dto.ProductRapidDTO
+import no.nav.hm.grunndata.rapid.dto.*
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -32,7 +34,8 @@ import java.util.*
 class MediaTransferAPIController(private val mediaUploadService: MediaUploadService,
                                  private val productImportRepository: ProductImportRepository,
                                  private val mediaTransferRepository: MediaTransferRepository,
-                                 private val gdbApiClient: GdbApiClient) {
+                                 private val gdbApiClient: GdbApiClient,
+                                 private val supplierService: SupplierService) {
 
     companion object {
         const val API_V1_MEDIA_TRANSFERS = "/api/v1/media/transfers"
@@ -67,13 +70,40 @@ class MediaTransferAPIController(private val mediaUploadService: MediaUploadServ
                 }.toList())
             } ?: run {
                 val oid = UUID.randomUUID()
-                LOG.info("creating new product oid $oid for media files")
+                LOG.info("creating new product template $oid for media files")
+                createProductImportForMediaFiles(oid, supplierId, supplierRef)
                 return HttpResponse.created(files.asFlow().map {
                     createMediaTransferResponse(it, oid, supplierId, supplierRef)
                 }.toList())
             }
         }
     }
+    suspend fun createProductImportForMediaFiles(oid: UUID, supplierId: UUID, supplierRef: String) = productImportRepository.save(
+            ProductImport(
+                id = oid,
+                supplierId = supplierId,
+                supplierRef = supplierRef,
+                transferId = UUID.randomUUID(),
+                seriesId = oid,
+                productStatus = ProductStatus.INACTIVE,
+                productDTO = ProductRapidDTO (
+                    id = oid,
+                    supplier = supplierService.findById(supplierId)!!.toDTO(),
+                    title = "draft",
+                    articleName = "articleName",
+                    supplierRef = supplierRef,
+                    identifier = oid.toString(),
+                    isoCategory = "",
+                    seriesId = oid.toString(),
+                    status = ProductStatus.INACTIVE,
+                    hasAgreement = false,
+                    createdBy = IMPORT,
+                    updatedBy = IMPORT,
+                    attributes = Attributes()
+                )
+            )
+        )
+
 
     private suspend fun createMediaTransferResponse(
         it: CompletedFileUpload,
