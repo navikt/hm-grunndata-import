@@ -5,6 +5,7 @@ import jakarta.inject.Singleton
 import no.nav.hm.grunndata.importapi.IMPORT
 import no.nav.hm.grunndata.importapi.ImportRapidPushService
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
+import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransfer
 import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransferRepository
 import no.nav.hm.grunndata.rapid.dto.SeriesStatus
 import no.nav.hm.grunndata.rapid.event.EventName
@@ -25,9 +26,21 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
     open suspend fun receivedTransfersToSeriesImport() {
         val contents = seriesTransferRepository.findByTransferStatus(TransferStatus.RECEIVED).content
         LOG.info("Got ${contents.size} transfers to map to series")
-        contents.forEach { transfer ->
-            val seriesImportDTO = seriesImportService
-                    .findBySupplierIdAndSeriesId(transfer.supplierId, transfer.seriesId)?.let { inDb ->
+        contents.forEach {
+            try {
+                createSeriesImport(it)
+            }
+            catch (e: Exception) {
+                LOG.error("Error creating series import for transfer ${it.transferId}", e)
+                seriesTransferRepository.update(it.copy(transferStatus = TransferStatus.ERROR, message = e.message, updated = LocalDateTime.now()))
+            }
+       }
+    }
+
+    @Transactional
+    open suspend fun createSeriesImport(transfer: SeriesTransfer) {
+        val seriesImportDTO = seriesImportService
+            .findBySupplierIdAndSeriesId(transfer.supplierId, transfer.seriesId)?.let { inDb ->
                 seriesImportService.update(
                     inDb.copy(
                         transferId = transfer.transferId,
@@ -35,25 +48,31 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
                         status = transfer.json_payload.status,
                         updated = LocalDateTime.now(),
                         expired = setExpiredIfNotActive(transfer.json_payload.status)
-                ))
-            } ?: run {
-                seriesImportService.save(
-                    SeriesImportDTO(
-                        seriesId = transfer.seriesId,
-                        transferId = transfer.transferId,
-                        name = transfer.json_payload.name,
-                        supplierId = transfer.supplierId,
-                        status = transfer.json_payload.status,
-                        expired = setExpiredIfNotActive(transfer.json_payload.status)
                     )
                 )
-            }
-            importRapidPushService.pushDTOToKafka(seriesImportDTO.toRapidDTO(), EventName.importedSeriesV1)
-            seriesTransferRepository.update(transfer.copy(transferStatus = TransferStatus.DONE, updated = LocalDateTime.now()))
-            LOG.info("Series import created for seriesId: ${seriesImportDTO.seriesId} and transfer: ${seriesImportDTO.transferId} " +
-                    "with version $${seriesImportDTO.version}")
+            } ?: run {
+            seriesImportService.save(
+                SeriesImportDTO(
+                    seriesId = transfer.seriesId,
+                    transferId = transfer.transferId,
+                    name = transfer.json_payload.name,
+                    supplierId = transfer.supplierId,
+                    status = transfer.json_payload.status,
+                    expired = setExpiredIfNotActive(transfer.json_payload.status)
+                )
+            )
         }
-        //TODO feilhåndtering her
+        importRapidPushService.pushDTOToKafka(seriesImportDTO.toRapidDTO(), EventName.importedSeriesV1)
+        seriesTransferRepository.update(
+            transfer.copy(
+                transferStatus = TransferStatus.DONE,
+                updated = LocalDateTime.now()
+            )
+        )
+        LOG.info(
+            "Series import created for seriesId: ${seriesImportDTO.seriesId} and transfer: ${seriesImportDTO.transferId} " +
+                    "with version $${seriesImportDTO.version}"
+        )
     }
 
     private fun setExpiredIfNotActive(status: SeriesStatus): LocalDateTime =
