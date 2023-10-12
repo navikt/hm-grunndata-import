@@ -7,7 +7,9 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import io.mockk.every
 import io.mockk.mockk
+import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
 import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.importapi.productImport.ProductTransferToProductImport
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportDTO
@@ -36,6 +38,13 @@ class ProductToProductImportTest(private val productTransferToProductImport: Pro
 
     @MockBean
     fun rapidPushService(): RapidPushService = mockk(relaxed = true)
+
+    @MockBean(GdbApiClient::class)
+    fun gdbApiClient(): GdbApiClient {
+        val mock = mockk<GdbApiClient>(relaxed = true)
+        every { mock.getProductBySupplierIdAndSupplierRef(any(), any()) } answers {null}
+        return mock
+    }
 
     @Test
     fun testProductTransferToProductImport() {
