@@ -12,7 +12,7 @@
   "compatibleWith": {
     "seriesIds": ["HMDB-66207", "HMDB-66208", "HMDB-66209"]
   },
-  "seriesId" : null,
+  "seriesId" : "603474bc-a8e8-471c-87ef-09bdc57bea59",
   "transferTechData" : [ {
     "key" : "Farge",
     "value" : "RAL 9001",
