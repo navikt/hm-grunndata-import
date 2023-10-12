@@ -12,6 +12,8 @@ import kotlinx.coroutines.reactive.asPublisher
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
 import no.nav.hm.grunndata.importapi.toMD5Hex
+import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferResponse
+import no.nav.hm.grunndata.importapi.transfer.product.toResponseDTO
 import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransferAPIController.Companion.API_V1_SERIES_TRANSFERS
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
@@ -31,8 +33,13 @@ class SeriesTransferAPIController(private val seriesTransferRepository: SeriesTr
     }
 
     @Get(value="/{supplierId}/{seriesId}")
-    suspend fun getTransfersBySupplierIdAndSupplierSeriesRef(supplierId: UUID, seriesId: UUID, pageable: Pageable): Page<SeriesTransferResponse> =
+    suspend fun getTransfersBySupplierIdAndSeriesId(supplierId: UUID, seriesId: UUID, pageable: Pageable): Page<SeriesTransferResponse> =
         seriesTransferRepository.findBySupplierIdAndSeriesId(supplierId, seriesId, pageable).map { it.toResponse() }
+
+
+    @Get(value="/{supplierId}/transfer/{transferId}")
+    suspend fun getTransfersBySupplierIdSupplierRef(supplierId: UUID, transferId: UUID): SeriesTransferResponse? =
+        seriesTransferRepository.findBySupplierIdAndTransferId(supplierId, transferId)?.toResponse()
 
     @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])
     suspend fun productStream(@PathVariable supplierId: UUID, @Body series: Publisher<SeriesTransferDTO>): Publisher<SeriesTransferResponse> =

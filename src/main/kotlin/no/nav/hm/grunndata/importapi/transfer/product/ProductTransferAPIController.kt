@@ -43,7 +43,7 @@ class ProductTransferAPIController(private val productTransferRepository: Produc
             it.toResponseDTO()
         }
 
-    @Get(value="/{supplierId}/transferId/{transferId}")
+    @Get(value="/{supplierId}/transfer/{transferId}")
     suspend fun getTransfersBySupplierIdAndTransferId(supplierId: UUID, transferId: UUID): ProductTransferResponse? =
         productTransferRepository.findBySupplierIdAndTransferId(supplierId, transferId)?.toResponseDTO()
 
