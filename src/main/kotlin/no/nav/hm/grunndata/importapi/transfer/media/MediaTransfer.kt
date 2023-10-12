@@ -14,7 +14,7 @@ data class MediaTransfer (
     val supplierId: UUID,
     val oid: UUID,
     val md5: String,
-    val fileSize: Long,
+    val filesize: Long,
     val filename: String,
     val sourceUri: String,
     val uri: String,
@@ -29,6 +29,7 @@ data class MediaTransferResponse(
     val supplierRef: String,
     val supplierId: UUID,
     val md5: String,
+    val filesize: Long,
     val filename: String,
     val sourceUri: String,
     val uri: String,
@@ -39,5 +40,5 @@ data class MediaTransferResponse(
 )
 
 fun MediaTransfer.toTransferResponse() = MediaTransferResponse(
-    transferId, supplierRef, supplierId, md5, filename, sourceUri, uri, transferStatus, message, created, updated
+    transferId, supplierRef, supplierId, md5, filesize, filename, sourceUri, uri, transferStatus, message, created, updated
 )

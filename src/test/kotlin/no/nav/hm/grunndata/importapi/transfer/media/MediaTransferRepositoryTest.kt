@@ -21,7 +21,7 @@ class MediaTransferRepositoryTest(private val mediaTransferRepository: MediaTran
             filename = "12345.jpg",
             sourceUri = "http://localhost/12345.jpg",
             uri= "12345.jpg",
-            fileSize = 1234L
+            filesize = 1234L
         )
         runBlocking {
             val saved = mediaTransferRepository.save(media)
@@ -34,7 +34,7 @@ class MediaTransferRepositoryTest(private val mediaTransferRepository: MediaTran
             val update = mediaTransferRepository.update(found.copy(transferStatus = TransferStatus.DONE))
             update.shouldNotBeNull()
             update.transferStatus shouldBe TransferStatus.DONE
-            update.fileSize shouldBe 1234L
+            update.filesize shouldBe 1234L
         }
     }
 }

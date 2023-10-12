@@ -11,16 +11,14 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.asFlow
 import no.nav.hm.grunndata.importapi.IMPORT
-import no.nav.hm.grunndata.importapi.error.ErrorType
-import no.nav.hm.grunndata.importapi.error.ImportApiError
 import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
 import no.nav.hm.grunndata.importapi.productImport.ProductImport
-import no.nav.hm.grunndata.importapi.productImport.ProductImportHandler
 import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.supplier.toDTO
+import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transfer.media.MediaTransferAPIController.Companion.API_V1_MEDIA_TRANSFERS
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
 import no.nav.hm.grunndata.rapid.dto.*
@@ -111,6 +109,8 @@ class MediaTransferAPIController(private val mediaUploadService: MediaUploadServ
         supplierId: UUID,
         supplierRef: String
     ): MediaTransferResponse {
+        LOG.info("Storing file ${it.name} size: ${it.size} MD5:${it.bytes.toMD5Hex()}")
+
         val mediaDTO = mediaUploadService.uploadMedia(it, oid)
         val mediaTransfer = MediaTransfer(
             supplierId = supplierId,
@@ -121,7 +121,7 @@ class MediaTransferAPIController(private val mediaUploadService: MediaUploadServ
             sourceUri = mediaDTO.sourceUri,
             uri = mediaDTO.uri,
             transferStatus = TransferStatus.DONE,
-            fileSize = it.size
+            filesize = it.size
         )
         val saved = mediaTransferRepository.save(mediaTransfer)
         return saved.toTransferResponse()

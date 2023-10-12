@@ -16,5 +16,7 @@ interface MediaTransferRepository: CoroutineCrudRepository<MediaTransfer, UUID> 
                                                    Sort.of(Sort.Order("created"))
                                                )): Page<MediaTransfer>
     suspend fun findBySupplierIdAndMd5(supplierId: UUID, md5: String): MediaTransfer?
-    
+
+    suspend fun findBySupplierIdAndFilenameAndFilesize(supplierId: UUID, filename: String, filesize: Long): MediaTransfer?
+
 }

@@ -13,6 +13,13 @@ fun String.toMD5Hex(): String {
     return hex
 }
 
+fun ByteArray.toMD5Hex(): String {
+    val digest = MessageDigest.getInstance("MD5")!!
+    val hex = digest.digest(this).hexBinary()
+    digest.reset()
+    return hex
+}
+
 fun ByteArray.hexBinary(): String {
     val r = StringBuilder(size * 2)
     forEach {
