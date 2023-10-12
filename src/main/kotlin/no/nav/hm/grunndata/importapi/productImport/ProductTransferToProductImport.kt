@@ -8,6 +8,7 @@ import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferRepository
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
 import no.nav.hm.grunndata.rapid.event.EventName.Companion.importedProductV1
 import org.slf4j.LoggerFactory
+import java.lang.Exception
 import java.time.LocalDateTime
 
 @Singleton
@@ -25,7 +26,13 @@ open class ProductTransferToProductImport(private val productTransferRepository:
         val contents = productTransferRepository.findByTransferStatus(TransferStatus.RECEIVED).content
         LOG.info("Got ${contents.size} transfers to map to products")
         contents.forEach {
-            createProductImportFromTransfer(it)
+            try {
+                createProductImportFromTransfer(it)
+            }
+            catch (e: Exception) {
+                LOG.error("Error creating product import for transfer ${it.transferId}", e)
+                productTransferRepository.update(it.copy(transferStatus = TransferStatus.ERROR, message = e.message, updated = LocalDateTime.now()))
+            }
         }
     }
 

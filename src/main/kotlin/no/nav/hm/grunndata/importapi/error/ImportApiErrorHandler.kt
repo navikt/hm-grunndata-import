@@ -84,7 +84,7 @@ enum class ErrorType {
 // Global error logger for errorhandler
 private val LOG = LoggerFactory.getLogger("HttpRequestErrorHandler")
 
-class ImportApiError(message: String, val type: ErrorType) : Throwable(message)
+class ImportApiError(message: String, val type: ErrorType) : Exception(message)
 
 data class ErrorMessage (val message : String, val errorType: ErrorType, val errorRef: UUID = UUID.randomUUID())
 

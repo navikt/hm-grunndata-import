@@ -72,8 +72,6 @@ CREATE TABLE IF NOT EXISTS series_import_v1 (
     version BIGINT NOT NULL
 );
 
-CREATE INDEX series_import_v1_supplier_id_series_id_idx ON series_import_v1(supplier_id, series_id);
-
 CREATE TABLE IF NOT EXISTS media_transfer_v1 (
     transfer_id uuid NOT NULL PRIMARY KEY,
     supplier_ref VARCHAR(255) NOT NULL,

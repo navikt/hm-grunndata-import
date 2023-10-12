@@ -37,7 +37,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
         val supplierId = transfer.supplierId
         val supplierRef = transfer.supplierRef
         val transferId = transfer.transferId
-        val seriesStateDTO = seriesImportService.findByIdCacheable(seriesId)!!
+        val seriesStateDTO = seriesImportService.findByIdCacheable(seriesId) ?: throw ImportApiError("Series with id $seriesId not found", ErrorType.NOT_FOUND)
         val productImport = productImportRepository.findBySupplierIdAndSupplierRef(supplierId, supplierRef)?.let { inDb ->
             LOG.info("Product from supplier $supplierId and ref $supplierRef found in import database ${inDb.id}")
             val productDTO = transfer.json_payload.toProductRapidDTO(inDb.id, supplierId, seriesStateDTO)
