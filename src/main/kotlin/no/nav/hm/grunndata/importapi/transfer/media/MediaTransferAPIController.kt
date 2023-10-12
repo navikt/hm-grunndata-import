@@ -110,21 +110,25 @@ class MediaTransferAPIController(private val mediaUploadService: MediaUploadServ
         supplierRef: String
     ): MediaTransferResponse {
         LOG.info("Storing file ${it.name} size: ${it.size} MD5:${it.bytes.toMD5Hex()}")
-
-        val mediaDTO = mediaUploadService.uploadMedia(it, oid)
-        val mediaTransfer = MediaTransfer(
-            supplierId = supplierId,
-            supplierRef = supplierRef,
-            oid = oid,
-            filename = it.filename,
-            md5 = mediaDTO.md5,
-            sourceUri = mediaDTO.sourceUri,
-            uri = mediaDTO.uri,
-            transferStatus = TransferStatus.DONE,
-            filesize = it.size
-        )
-        val saved = mediaTransferRepository.save(mediaTransfer)
-        return saved.toTransferResponse()
+        mediaTransferRepository.findBySupplierIdAndFilenameAndFilesizeAndTransferStatus(supplierId,it.filename, it.size, TransferStatus.DONE)?.let {
+            LOG.info("Found already identical file in database, returning")
+            return it.toTransferResponse()
+        } ?: run {
+            val mediaDTO = mediaUploadService.uploadMedia(it, oid)
+            val mediaTransfer = MediaTransfer(
+                supplierId = supplierId,
+                supplierRef = supplierRef,
+                oid = oid,
+                filename = it.filename,
+                md5 = mediaDTO.md5,
+                sourceUri = mediaDTO.sourceUri,
+                uri = mediaDTO.uri,
+                transferStatus = TransferStatus.DONE,
+                filesize = it.size
+            )
+            val saved = mediaTransferRepository.save(mediaTransfer)
+            return saved.toTransferResponse()
+        }
     }
 
 }

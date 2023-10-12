@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS media_transfer_v1 (
     message TEXT,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(supplier_id, md5)
+    UNIQUE(supplier_id, md5),
+    UNIQUE(supplier_id, filename, filesize)
 );
 
