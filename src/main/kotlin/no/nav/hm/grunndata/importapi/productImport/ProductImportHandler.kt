@@ -143,11 +143,13 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
             uri = media.uri,
             priority = media.priority,
             source = media.sourceType,
+            text = media.text,
             type = when (media.type) {
                 TransferMediaType.PNG, TransferMediaType.JPG -> MediaType.IMAGE
                 TransferMediaType.VIDEO -> MediaType.VIDEO
                 TransferMediaType.PDF -> MediaType.PDF
-            }
+            },
+
         )
     }
 }
