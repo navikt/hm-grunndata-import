@@ -4,6 +4,7 @@ import io.micronaut.cache.annotation.CacheConfig
 import io.micronaut.cache.annotation.CacheInvalidate
 import io.micronaut.cache.annotation.Cacheable
 import jakarta.inject.Singleton
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
 
@@ -12,13 +13,13 @@ import java.util.*
 open class SupplierService(private val supplierRepository: SupplierRepository) {
 
     @Cacheable
-    open suspend fun findById(id: UUID): Supplier? = supplierRepository.findById(id)
+    open fun findById(id: UUID): Supplier? = runBlocking { supplierRepository.findById(id) }
 
     @CacheInvalidate(parameters = ["id"])
-    open suspend fun update(supplier: Supplier, id: UUID = supplier.id) = supplierRepository.update(supplier)
+    open fun update(supplier: Supplier, id: UUID = supplier.id) = runBlocking { supplierRepository.update(supplier) }
 
 
     @CacheInvalidate(parameters = ["id"])
-    open suspend fun save(supplier: Supplier, id: UUID = supplier.id) = supplierRepository.save(supplier)
+    open  fun save(supplier: Supplier, id: UUID = supplier.id) = runBlocking{ supplierRepository.save(supplier) }
 
 }
