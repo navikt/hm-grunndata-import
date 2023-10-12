@@ -21,7 +21,7 @@ class ProductTransferRepositoryTest(private val productTransferRepository: Produ
     @Test
     fun crudRepositoryTest() {
         val supplier = Supplier(id= supplierId, name = "Medema AS", identifier = "medema_as", jwtid = UUID.randomUUID().toString())
-        val product = ProductTransferDTO(title = "Mini Crosser X1 4W",  isoCategory = "12230301" , hmsArtNr = "250464",
+        val product = ProductTransferDTO(isoCategory = "12230301" , hmsArtNr = "250464",
             articleName = "mini-crosser-x1-x2-4w",
             supplierRef = "mini-crosser-x1-x2-4w",
             seriesId = UUID.randomUUID(),
@@ -53,7 +53,6 @@ class ProductTransferRepositoryTest(private val productTransferRepository: Produ
             val db = productTransferRepository.findById(saved.transferId)
             db.shouldNotBeNull()
             db.json_payload.shouldNotBeNull()
-            db.json_payload.title shouldBe "Mini Crosser X1 4W"
             db.transferStatus shouldBe TransferStatus.RECEIVED
 
             productTransferRepository.update(db.copy(transferStatus = TransferStatus.DONE))

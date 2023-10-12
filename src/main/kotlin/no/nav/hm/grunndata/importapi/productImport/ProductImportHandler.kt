@@ -37,8 +37,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
         val supplierId = transfer.supplierId
         val supplierRef = transfer.supplierRef
         val transferId = transfer.transferId
-        val seriesStateDTO = if (seriesId != null) seriesImportService.findByIdCacheable(seriesId)
-            else null
+        val seriesStateDTO = seriesImportService.findByIdCacheable(seriesId)!!
         val productImport = productImportRepository.findBySupplierIdAndSupplierRef(supplierId, supplierRef)?.let { inDb ->
             LOG.info("Product from supplier $supplierId and ref $supplierRef found in import database ${inDb.id}")
             val productDTO = transfer.json_payload.toProductRapidDTO(inDb.id, supplierId, seriesStateDTO)
@@ -87,20 +86,19 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
         return productImport
     }
 
-    private suspend fun ProductTransferDTO.toProductRapidDTO(productId: UUID, supplierId: UUID, seriesImportDTO: SeriesImportDTO?): ProductRapidDTO {
+    private suspend fun ProductTransferDTO.toProductRapidDTO(productId: UUID, supplierId: UUID, seriesImportDTO: SeriesImportDTO): ProductRapidDTO {
         val nPublished = published ?: LocalDateTime.now().minusMinutes(1)
         val nExpired = expired ?: LocalDateTime.now().plusYears(10)
         return ProductRapidDTO (
             id = productId,
             supplier = supplierService.findById(supplierId)!!.toDTO(),
-            title = title,
+            title = seriesImportDTO.name,
             articleName = articleName,
             supplierRef = supplierRef,
             attributes = Attributes (
-                series = seriesImportDTO?.name,
                 shortdescription = shortDescription,
                 text = text,
-                compatibleWidth = if (this.compatibleWith!=null) CompatibleWith(ids = compatibleWith.ids,
+                compatibleWidth = if (this.compatibleWith!=null) CompatibleWith(
                     seriesIds = compatibleWith.seriesIds) else null
             ),
             hmsArtNr = hmsArtNr,
@@ -108,7 +106,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
             isoCategory = isoCategory,
             accessory = accessory,
             sparePart = sparePart,
-            seriesId = mapSeries(seriesImportDTO,productId,supplierId, title).toString(),
+            seriesId =  seriesImportDTO.seriesId.toString(),
             techData = transferTechData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
             media = media.map { mapMedia(it)},
             published = nPublished,
@@ -120,14 +118,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
             updatedBy = IMPORT,
         )
     }
-    private fun mapSeries(seriesImportDTO: SeriesImportDTO?, productId: UUID, supplierId: UUID, seriesName: String): UUID {
-        return seriesImportDTO?.seriesId ?: (seriesImportService.findByIdCacheable(productId)?.let {
-                it.seriesId
-            } ?: seriesImportService.save(
-                SeriesImportDTO (seriesId = productId, supplierId = supplierId, name = seriesName, // use productId as seriesId, for empty seriesId
-                    transferId = UUID.randomUUID(), expired = LocalDateTime.now().plusYears(15))
-            ).seriesId)
-    }
+
 
     private fun mapProductAgreement(agree: ProductAgreement): AgreementInfo {
         val byRef = agreementService.getAgreementByReference(agree.reference)

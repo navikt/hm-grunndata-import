@@ -7,7 +7,6 @@ import java.util.*
 
 
 data class ProductTransferDTO (
-    val title: String,
     val articleName: String,
     val shortDescription: String,
     val text: String,
@@ -19,7 +18,7 @@ data class ProductTransferDTO (
     val accessory: Boolean = false,
     val sparePart: Boolean = false,
     val compatibleWith: CompatibleWith?=null,
-    val seriesId: UUID?=null,
+    val seriesId: UUID,
     val transferTechData: List<TransferTechData> = emptyList(),
     val media: List<TransferMediaDTO> = emptyList(),
     val published: LocalDateTime?=null,
@@ -27,7 +26,6 @@ data class ProductTransferDTO (
     val agreements: List<ProductAgreement> = emptyList()
 ) {
     init {
-        require(title.isNotBlank() && title.length<512) {"title is blank or title size > 512"}
         require(articleName.isNotBlank() && articleName.length<512) {"articleName is blank or articleName size > 512"}
         require(shortDescription.isNotBlank()) {"shortDescription is blank"}
         require(supplierRef.isNotBlank()) {"supplierRef is blank"}
@@ -67,6 +65,5 @@ enum class TransferMediaType {
 }
 
 data class CompatibleWith (
-    val ids: List<UUID> = emptyList(),
     val seriesIds: List<String> = emptyList(),
 )

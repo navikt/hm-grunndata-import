@@ -107,7 +107,7 @@ flyway:
     default:
       locations: classpath:db
       clean-on-validation-error: false
-      clean-schema: true
+      clean-schema: false
       enabled: true
 
 rapidsandrivers:
