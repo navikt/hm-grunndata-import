@@ -7,7 +7,6 @@ import no.nav.hm.grunndata.importapi.agreement.AgreementService
 import no.nav.hm.grunndata.importapi.error.ErrorType
 import no.nav.hm.grunndata.importapi.error.ImportApiError
 import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
-import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportDTO
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportService
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.supplier.toDTO
@@ -37,10 +36,15 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
         val supplierId = transfer.supplierId
         val supplierRef = transfer.supplierRef
         val transferId = transfer.transferId
-        val seriesStateDTO = seriesImportService.findByIdCacheable(seriesId) ?: throw ImportApiError("Series with id $seriesId not found", ErrorType.NOT_FOUND)
+        val series = seriesImportService.findByIdCacheable(seriesId)?.let {
+            Series(it.seriesId, it.name)
+        } ?: run {
+            gdbApiClient.getSeriesById(seriesId)?.let { Series(it.id, it.name)} ?:
+            throw ImportApiError("Series with id $seriesId not found", ErrorType.NOT_FOUND)
+        }
         val productImport = productImportRepository.findBySupplierIdAndSupplierRef(supplierId, supplierRef)?.let { inDb ->
             LOG.info("Product from supplier $supplierId and ref $supplierRef found in import database ${inDb.id}")
-            val productDTO = transfer.json_payload.toProductRapidDTO(inDb.id, supplierId, seriesStateDTO)
+            val productDTO = transfer.json_payload.toProductRapidDTO(inDb.id, supplierId, series)
             productImportRepository.update(
                 inDb.copy(
                     transferId = transferId,
@@ -53,7 +57,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
         } ?: run {
             gdbApiClient.getProductBySupplierIdAndSupplierRef(supplierId, supplierRef)?.let { dto ->
                 LOG.info("Product from supplier $supplierId and ref $supplierRef found in GDB ${dto.id} ")
-                val productDTO = transfer.json_payload.toProductRapidDTO(dto.id, supplierId, seriesStateDTO)
+                val productDTO = transfer.json_payload.toProductRapidDTO(dto.id, supplierId, series)
                 productImportRepository.save(
                     ProductImport(
                         id = dto.id,
@@ -70,7 +74,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
         } ?: run {
             val productId = UUID.randomUUID()
             LOG.info("New product for $supplierId and ref $supplierRef with new id $productId")
-            val productDTO = transfer.json_payload.toProductRapidDTO(productId, transfer.supplierId, seriesStateDTO)
+            val productDTO = transfer.json_payload.toProductRapidDTO(productId, transfer.supplierId, series)
             productImportRepository.save(
                 ProductImport(
                     id = productId, transferId = transfer.transferId, supplierId = transfer.supplierId,
@@ -86,13 +90,13 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
         return productImport
     }
 
-    private suspend fun ProductTransferDTO.toProductRapidDTO(productId: UUID, supplierId: UUID, seriesImportDTO: SeriesImportDTO): ProductRapidDTO {
+    private suspend fun ProductTransferDTO.toProductRapidDTO(productId: UUID, supplierId: UUID, series: Series): ProductRapidDTO {
         val nPublished = published ?: LocalDateTime.now().minusMinutes(1)
         val nExpired = expired ?: LocalDateTime.now().plusYears(10)
         return ProductRapidDTO (
             id = productId,
             supplier = supplierService.findById(supplierId)!!.toDTO(),
-            title = seriesImportDTO.name,
+            title = series.name,
             articleName = articleName,
             supplierRef = supplierRef,
             attributes = Attributes (
@@ -106,7 +110,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
             isoCategory = isoCategory,
             accessory = accessory,
             sparePart = sparePart,
-            seriesId =  seriesImportDTO.seriesId.toString(),
+            seriesId =  series.seriesId.toString(),
             techData = transferTechData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
             media = media.map { mapMedia(it)},
             published = nPublished,
@@ -152,4 +156,6 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
 
         )
     }
+
+    data class Series(val seriesId: UUID, val name: String)
 }
