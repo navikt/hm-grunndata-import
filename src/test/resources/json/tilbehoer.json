@@ -13,7 +13,7 @@
     "seriesIds": ["603474bc-a8e8-471c-87ef-09bdc57bea59"]
   },
   "seriesId" : "603474bc-a8e8-471c-87ef-09bdc57bea59",
-  "transferTechData" : [ {
+  "techData" : [ {
     "key" : "Farge",
     "value" : "RAL 9001",
     "unit" : ""
@@ -31,7 +31,7 @@
   "media" : [ {
     "uri" : "https://d38vpb7vfo5r61.cloudfront.net/wp-content/uploads/2021/12/25150237/Lofteboyle-art.nr_.-622002.png",
     "priority" : 1,
-    "type" : "PNG"
+    "type" : "IMAGE"
   } ],
   "published" : "2023-08-22T13:39:51.884163",
   "expired" : "2033-08-22T13:39:51.884163",

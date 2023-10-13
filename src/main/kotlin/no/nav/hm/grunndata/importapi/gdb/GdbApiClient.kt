@@ -32,7 +32,7 @@ interface GdbApiClient {
     @Get(uri="/api/v1/series/{id}", consumes = [APPLICATION_JSON])
     fun getSeriesById(id: UUID): SeriesDTO?
 
-    @Get(uri="/api/v1/series/supplier/supplierId", consumes = [APPLICATION_JSON])
+    @Get(uri="/api/v1/series/supplier/{supplierId}", consumes = [APPLICATION_JSON])
     fun getSeriesBySupplierId(supplierId: UUID): List<SeriesDTO>
 
     @Get(uri="/api/v1/suppliers/{supplierId}", consumes = [APPLICATION_JSON])

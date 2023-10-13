@@ -13,6 +13,7 @@ import no.nav.hm.grunndata.importapi.supplier.toDTO
 import no.nav.hm.grunndata.importapi.transfer.product.*
 import no.nav.hm.grunndata.rapid.dto.*
 import no.nav.hm.grunndata.rapid.dto.CompatibleWith
+import no.nav.hm.grunndata.rapid.dto.TechData
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.UUID
@@ -102,6 +103,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
             attributes = Attributes (
                 shortdescription = shortDescription,
                 text = text,
+                url = url,
                 compatibleWidth = if (this.compatibleWith!=null) CompatibleWith(
                     seriesIds = compatibleWith.seriesIds) else null
             ),
@@ -111,7 +113,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
             accessory = accessory,
             sparePart = sparePart,
             seriesId =  series.seriesId.toString(),
-            techData = transferTechData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
+            techData = techData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
             media = media.map { mapMedia(it)},
             published = nPublished,
             expired = nExpired,
@@ -141,21 +143,15 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
     }
 
 
-    private fun mapMedia(media: TransferMediaDTO): MediaInfo {
+    private fun mapMedia(media: MediaDTO): MediaInfo {
         return MediaInfo(
             sourceUri = media.uri,
             uri = media.uri,
             priority = media.priority,
             source = media.sourceType,
             text = media.text,
-            type = when (media.type) {
-                TransferMediaType.PNG, TransferMediaType.JPG -> MediaType.IMAGE
-                TransferMediaType.VIDEO -> MediaType.VIDEO
-                TransferMediaType.PDF -> MediaType.PDF
-            },
-
+            type = media.type,
         )
     }
-
     data class Series(val seriesId: UUID, val name: String)
 }

@@ -2,6 +2,7 @@ package no.nav.hm.grunndata.importapi.transfer.product
 
 
 import no.nav.hm.grunndata.rapid.dto.MediaSourceType
+import no.nav.hm.grunndata.rapid.dto.MediaType
 import java.time.LocalDateTime
 import java.util.*
 
@@ -19,8 +20,8 @@ data class ProductTransferDTO (
     val sparePart: Boolean = false,
     val compatibleWith: CompatibleWith?=null,
     val seriesId: UUID,
-    val transferTechData: List<TransferTechData> = emptyList(),
-    val media: List<TransferMediaDTO> = emptyList(),
+    val techData: List<TechData> = emptyList(),
+    val media: List<MediaDTO> = emptyList(),
     val published: LocalDateTime?=null,
     val expired: LocalDateTime?=null,
     val agreements: List<ProductAgreement> = emptyList()
@@ -33,10 +34,10 @@ data class ProductTransferDTO (
     }
 }
 
-data class TransferMediaDTO (
+data class MediaDTO (
     val uri: String,
     val priority: Int = 1,
-    val type: TransferMediaType = TransferMediaType.PNG,
+    val type: MediaType = MediaType.IMAGE,
     val text:   String?=null,
     val sourceType: MediaSourceType = MediaSourceType.IMPORT
 )
@@ -45,7 +46,7 @@ enum class TransferProductStatus {
     ACTIVE, INACTIVE
 }
 
-data class TransferTechData (
+data class TechData (
     val key:    String,
     val value:  String,
     val unit:   String
@@ -57,12 +58,7 @@ data class ProductAgreement (
     val reference: String
 )
 
-enum class TransferMediaType {
-    PDF,
-    JPG,
-    PNG,
-    VIDEO
-}
+
 
 data class CompatibleWith (
     val seriesIds: Set<UUID> = emptySet(),

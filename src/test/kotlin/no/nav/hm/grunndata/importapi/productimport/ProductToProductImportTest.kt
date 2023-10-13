@@ -63,12 +63,12 @@ class ProductToProductImportTest(private val productTransferToProductImport: Pro
                     Hjul , fjæring og styre Mini Crosser har behagelig fjæring på alle 4 hjul, inklusive justerbare støtdempere på alle hjul. Vi har stort utvalg av ulike hjul, inklusive pigghjul. Det multijusterbare styret sikrer optimal komfort. Det er utstyrt med et kardan-ledd og kan heves, senkes og vinkles. Krever kun liten armstyrke ved kjøring. Kurv blir stående stille når man svinger. Markedets minste svingradius!
                     Luksussete er standard. For å gi den ideelle sittestilling kan Mini Crosser Ergo-sete justeres i høyde, dybde og ryggvinkel og leveres i størrelser fra 35 til 70cm og med ulike rygghøyder. Armlenene er både høyde- og dybdejusterbare, samt oppfellbare og kan utstyres med ulike armlenspolstre. Setet er videre utstyrt med glideskinne og kan dreies 90 grader til begge sider. Det store sortimentet av seter, sete- og ryggputer og el funksjoner muliggjør nærmest enhver ønsket setetilpasning – muligheter man ellers kun finner på de mest avanserte el-rullestoler!"""
             ,
-            transferTechData = listOf(
-                TransferTechData("Setebredde min", "45", "cm"),
-                TransferTechData("Kjørelengde maks", "45", "km")
+            techData = listOf(
+                TechData("Setebredde min", "45", "cm"),
+                TechData("Kjørelengde maks", "45", "km")
             ),
             media = listOf(
-                TransferMediaDTO(uri="12345/12356.png")
+                MediaDTO(uri="12345/12356.png")
             ))
         val json = objectMapper.writeValueAsString(product)
         println(json)

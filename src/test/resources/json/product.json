@@ -9,7 +9,7 @@
   "accessory" : false,
   "sparePart" : false,
   "seriesId" : "603474bc-a8e8-471c-87ef-09bdc57bea59",
-  "transferTechData" : [ {
+  "techData" : [ {
     "key" : "Setebredde min",
     "value" : "45",
     "unit" : "cm"
@@ -21,7 +21,7 @@
   "media" : [ {
     "uri" : "12345/1223456.jpg",
     "priority" : 1,
-    "type" : "JPG",
+    "type" : "IMAGE",
     "sourceType": "IMPORT"
     },
     {

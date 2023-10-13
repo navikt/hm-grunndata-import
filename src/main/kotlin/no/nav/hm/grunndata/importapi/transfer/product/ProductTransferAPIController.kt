@@ -62,8 +62,8 @@ class ProductTransferAPIController(private val productTransferRepository: Produc
         }.asPublisher()
 
     private fun validate(transfer: ProductTransferDTO) {
-        if (transfer.transferTechData.isNotEmpty()) {
-            transfer.transferTechData.forEach {
+        if (transfer.techData.isNotEmpty()) {
+            transfer.techData.forEach {
                 val label = techDataLabelService.fetchTechDataLabelByKeyName(it.key)
                 if (label == null ||  label.unit != it.unit)
                     throw ImportApiError("Wrong techlabel key ${it.key} and unit: ${it.unit}", ErrorType.INVALID_VALUE)
