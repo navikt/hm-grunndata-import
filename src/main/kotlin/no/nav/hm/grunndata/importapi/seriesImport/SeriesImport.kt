@@ -14,7 +14,7 @@ data class SeriesImport (
     val seriesId: UUID,
     val supplierId: UUID,
     val transferId: UUID,
-    val name: String,
+    val title: String,
     val status: SeriesStatus,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now(),
@@ -28,7 +28,7 @@ data class SeriesImportDTO (
     val seriesId: UUID,
     val supplierId: UUID,
     val transferId: UUID,
-    val name: String,
+    val title: String,
     val status: SeriesStatus = SeriesStatus.ACTIVE,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now(),
@@ -37,18 +37,18 @@ data class SeriesImportDTO (
 )
 
 fun SeriesImport.toDTO(): SeriesImportDTO = SeriesImportDTO(
-    seriesId = seriesId, supplierId = supplierId, name = name, status = status,
+    seriesId = seriesId, supplierId = supplierId, title = title, status = status,
     version = version!!, created = created, updated = updated, transferId = transferId, expired = expired
 )
 
 
 fun SeriesImportDTO.toEntity(): SeriesImport = SeriesImport (
-    seriesId = seriesId, supplierId = supplierId,  name = name, status = status,
+    seriesId = seriesId, supplierId = supplierId,  title = title, status = status,
     version = version, created = created, updated = updated, transferId = transferId, expired = expired
 )
 
 fun SeriesImportDTO.toRapidDTO(): SeriesImportRapidDTO = SeriesImportRapidDTO (
-    id = seriesId, seriesDTO = SeriesRapidDTO(id = seriesId, status = status, name = name, createdBy = IMPORT, supplierId = supplierId,
+    id = seriesId, seriesDTO = SeriesRapidDTO(id = seriesId, status = status, name = title, createdBy = IMPORT, supplierId = supplierId,
         identifier = seriesId.toString(), updatedBy = IMPORT, created = created, updated = updated, expired = expired),
     version = version!!
 )

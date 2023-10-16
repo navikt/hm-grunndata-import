@@ -4,7 +4,6 @@ import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.TypeDef
 import io.micronaut.data.model.DataType
 import jakarta.persistence.Id
-import no.nav.hm.grunndata.importapi.seriesImport.SeriesImport
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
 import no.nav.hm.grunndata.rapid.dto.SeriesStatus
 import java.time.LocalDateTime
@@ -27,11 +26,11 @@ data class SeriesTransfer(
 
 data class SeriesTransferDTO(
     val seriesId: UUID = UUID.randomUUID(),
-    val name: String,
+    val title: String,
     val status: SeriesStatus = SeriesStatus.ACTIVE
 ){
     init {
-        require(name.isNotBlank() && name.length < 256) { "name is blank or name size > 255" }
+        require(title.isNotBlank() && title.length < 256) { "name is blank or name size > 255" }
     }
 }
 

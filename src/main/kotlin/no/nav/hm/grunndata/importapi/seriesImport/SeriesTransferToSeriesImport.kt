@@ -2,7 +2,6 @@ package no.nav.hm.grunndata.importapi.seriesImport
 
 import io.micronaut.transaction.annotation.Transactional
 import jakarta.inject.Singleton
-import no.nav.hm.grunndata.importapi.IMPORT
 import no.nav.hm.grunndata.importapi.ImportRapidPushService
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
 import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransfer
@@ -11,7 +10,6 @@ import no.nav.hm.grunndata.rapid.dto.SeriesStatus
 import no.nav.hm.grunndata.rapid.event.EventName
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
-import java.util.*
 
 @Singleton
 open class SeriesTransferToSeriesImport(private val seriesTransferRepository: SeriesTransferRepository,
@@ -44,7 +42,7 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
                 seriesImportService.update(
                     inDb.copy(
                         transferId = transfer.transferId,
-                        name = transfer.json_payload.name,
+                        title = transfer.json_payload.title,
                         status = transfer.json_payload.status,
                         updated = LocalDateTime.now(),
                         expired = setExpiredIfNotActive(transfer.json_payload.status)
@@ -55,7 +53,7 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
                 SeriesImportDTO(
                     seriesId = transfer.seriesId,
                     transferId = transfer.transferId,
-                    name = transfer.json_payload.name,
+                    title = transfer.json_payload.title,
                     supplierId = transfer.supplierId,
                     status = transfer.json_payload.status,
                     expired = setExpiredIfNotActive(transfer.json_payload.status)

@@ -49,7 +49,7 @@ class ProductToProductImportTest(private val productTransferToProductImport: Pro
     @Test
     fun testProductTransferToProductImport() {
         val supplier = Supplier(id= supplierId, name = "Medema AS", identifier = "medema_as", jwtid = UUID.randomUUID().toString())
-        val seriesDTO = SeriesImportDTO(seriesId = seriesId, supplierId=supplierId, transferId = UUID.randomUUID(), expired = LocalDateTime.now(), name = "Mini Crosser")
+        val seriesDTO = SeriesImportDTO(seriesId = seriesId, supplierId=supplierId, transferId = UUID.randomUUID(), expired = LocalDateTime.now(), title = "Mini Crosser")
         val product = ProductTransferDTO(isoCategory = "12230301" ,
             hmsArtNr = "250464",
             seriesId = seriesId,

@@ -4,7 +4,6 @@ import io.kotest.common.runBlocking
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import no.nav.hm.grunndata.rapid.dto.AdminStatus
 import no.nav.hm.grunndata.rapid.dto.SeriesStatus
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
@@ -17,7 +16,7 @@ class SeriesImportRepositoryTest(private val repository: SeriesImportRepository)
     fun crudTest() {
         val id = UUID.randomUUID()
         val state = SeriesImport(seriesId = id, supplierId = UUID.randomUUID(), transferId = UUID.randomUUID(),
-            name= "Unik navn på serien +${UUID.randomUUID()}", status = SeriesStatus.ACTIVE)
+            title= "Unik navn på serien +${UUID.randomUUID()}", status = SeriesStatus.ACTIVE)
         runBlocking {
             val saved = repository.save(state)
             val found = repository.findById(saved.seriesId)

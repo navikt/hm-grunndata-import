@@ -12,8 +12,6 @@ import kotlinx.coroutines.reactive.asPublisher
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
 import no.nav.hm.grunndata.importapi.toMD5Hex
-import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferResponse
-import no.nav.hm.grunndata.importapi.transfer.product.toResponseDTO
 import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransferAPIController.Companion.API_V1_SERIES_TRANSFERS
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
@@ -45,9 +43,9 @@ class SeriesTransferAPIController(private val seriesTransferRepository: SeriesTr
     suspend fun productStream(@PathVariable supplierId: UUID, @Body series: Publisher<SeriesTransferDTO>): Publisher<SeriesTransferResponse> =
         series.asFlow().map { s ->
             val md5 = objectMapper.writeValueAsString(s).toMD5Hex()
-            LOG.info("Got product stream from $supplierId with name ${s.name}")
+            LOG.info("Got product stream from $supplierId with name ${s.title}")
             seriesTransferRepository.findBySupplierIdAndMd5(supplierId, md5)?.let { identical ->
-                LOG.info("Identical series ${identical.md5} with previous transfer ${identical.transferId} and name: ${s.name}")
+                LOG.info("Identical series ${identical.md5} with previous transfer ${identical.transferId} and name: ${s.title}")
                 identical.toResponse()
             } ?: run {
                 createTransferState(supplierId, s, md5)

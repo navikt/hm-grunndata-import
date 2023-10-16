@@ -38,7 +38,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
         val supplierRef = transfer.supplierRef
         val transferId = transfer.transferId
         val series = seriesImportService.findByIdCacheable(seriesId)?.let {
-            Series(it.seriesId, it.name)
+            Series(it.seriesId, it.title)
         } ?: run {
             gdbApiClient.getSeriesById(seriesId)?.let { Series(it.id, it.name)} ?:
             throw ImportApiError("Series with id $seriesId not found", ErrorType.NOT_FOUND)
