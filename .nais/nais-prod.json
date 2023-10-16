@@ -2,11 +2,11 @@
   "disk_tier": "db-custom-1-3840",
   "disk_size": 20,
   "kafka_cluster": "nav-prod",
-  "rapidsandrivers_enabled": true,
+  "rapidsandrivers_enabled": false,
   "min_replicas": 2,
   "max_replicas": 2,
-  "java_opts": "-Xms256m -Xmx512m -XX:+UseG1GC",
-  "schedulers_enabled": true,
+  "java_opts": "-Xms256m -Xmx1024m -XX:+UseG1GC",
+  "schedulers_enabled": false,
   "media_storage_cdnurl": "https://cdn.nav.no/teamdigihot/grunndata/media/v1",
   "ingress": ["https://finnhjelpemidler-api.nav.no/import"]
 }
