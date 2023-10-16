@@ -97,7 +97,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
         return ProductRapidDTO (
             id = productId,
             supplier = supplierService.findById(supplierId)!!.toDTO(),
-            title = series.name,
+            title = series.title,
             articleName = articleName,
             supplierRef = supplierRef,
             attributes = Attributes (
@@ -153,5 +153,5 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
             type = media.type,
         )
     }
-    data class Series(val seriesId: UUID, val name: String)
+    data class Series(val seriesId: UUID, val title: String)
 }
