@@ -8,6 +8,7 @@ import java.util.*
 
 
 data class ProductTransferDTO (
+    val title: String,
     val articleName: String,
     val shortDescription: String,
     val text: String,
@@ -19,7 +20,7 @@ data class ProductTransferDTO (
     val accessory: Boolean = false,
     val sparePart: Boolean = false,
     val compatibleWith: CompatibleWith?=null,
-    val seriesId: UUID,
+    val seriesId: UUID?=null,
     val techData: List<TechData> = emptyList(),
     val media: List<MediaDTO> = emptyList(),
     val published: LocalDateTime?=null,

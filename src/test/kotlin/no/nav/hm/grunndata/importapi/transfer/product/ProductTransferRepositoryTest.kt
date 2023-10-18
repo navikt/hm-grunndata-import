@@ -22,6 +22,7 @@ class ProductTransferRepositoryTest(private val productTransferRepository: Produ
     fun crudRepositoryTest() {
         val supplier = Supplier(id= supplierId, name = "Medema AS", identifier = "medema_as", jwtid = UUID.randomUUID().toString())
         val product = ProductTransferDTO(isoCategory = "12230301" , hmsArtNr = "250464",
+            title = "Mini Crosser",
             articleName = "mini-crosser-x1-x2-4w",
             supplierRef = "mini-crosser-x1-x2-4w",
             seriesId = UUID.randomUUID(),

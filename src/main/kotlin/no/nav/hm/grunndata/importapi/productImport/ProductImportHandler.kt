@@ -33,19 +33,12 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
 
     @Transactional
     open suspend fun mapSaveTransferToProductImport(transfer: ProductTransfer): ProductImport {
-        val seriesId = transfer.json_payload.seriesId
         val supplierId = transfer.supplierId
         val supplierRef = transfer.supplierRef
         val transferId = transfer.transferId
-        val series = seriesImportService.findByIdCacheable(seriesId)?.let {
-            Series(it.seriesId, it.title)
-        } ?: run {
-            gdbApiClient.getSeriesById(seriesId)?.let { Series(it.id, it.name)} ?:
-            throw ImportApiError("Series with id $seriesId not found", ErrorType.NOT_FOUND)
-        }
         val productImport = productImportRepository.findBySupplierIdAndSupplierRef(supplierId, supplierRef)?.let { inDb ->
             LOG.info("Product from supplier $supplierId and ref $supplierRef found in import database ${inDb.id}")
-            val productDTO = transfer.json_payload.toProductRapidDTO(inDb.id, supplierId, series)
+            val productDTO = createProductDTO(inDb.id,transfer)
             productImportRepository.update(
                 inDb.copy(
                     transferId = transferId,
@@ -58,7 +51,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
         } ?: run {
             gdbApiClient.getProductBySupplierIdAndSupplierRef(supplierId, supplierRef)?.let { dto ->
                 LOG.info("Product from supplier $supplierId and ref $supplierRef found in GDB ${dto.id} ")
-                val productDTO = transfer.json_payload.toProductRapidDTO(dto.id, supplierId, series)
+                val productDTO = createProductDTO(dto.id, transfer)
                 productImportRepository.save(
                     ProductImport(
                         id = dto.id,
@@ -75,7 +68,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
         } ?: run {
             val productId = UUID.randomUUID()
             LOG.info("New product for $supplierId and ref $supplierRef with new id $productId")
-            val productDTO = transfer.json_payload.toProductRapidDTO(productId, transfer.supplierId, series)
+            val productDTO = createProductDTO(productId, transfer)
             productImportRepository.save(
                 ProductImport(
                     id = productId, transferId = transfer.transferId, supplierId = transfer.supplierId,
@@ -91,13 +84,28 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
         return productImport
     }
 
-    private suspend fun ProductTransferDTO.toProductRapidDTO(productId: UUID, supplierId: UUID, series: Series): ProductRapidDTO {
+    private fun createProductDTO(productId: UUID, transfer: ProductTransfer): ProductRapidDTO {
+        val seriesId = transfer.json_payload.seriesId
+        val series = seriesId?.let {
+            seriesImportService.findByIdCacheable(seriesId)?.let {
+                Series(it.seriesId, it.title)
+            } ?: run {
+                gdbApiClient.getSeriesById(seriesId)?.let { Series(it.id, it.title)} ?:
+                throw ImportApiError("Series with id $seriesId not found", ErrorType.NOT_FOUND)
+            }
+        } ?: Series(productId, transfer.json_payload.title) // use productId as seriesId
+        return transfer.json_payload.toProductRapidDTO(productId, transfer.supplierId, series)
+    }
+
+
+
+    private fun ProductTransferDTO.toProductRapidDTO(productId: UUID, supplierId: UUID, series: Series): ProductRapidDTO {
         val nPublished = published ?: LocalDateTime.now().minusMinutes(1)
         val nExpired = expired ?: LocalDateTime.now().plusYears(10)
         return ProductRapidDTO (
             id = productId,
             supplier = supplierService.findById(supplierId)!!.toDTO(),
-            title = series.title,
+            title = series.title, // use series title as product title, if products are connected in a series, they have to use the same title.
             articleName = articleName,
             supplierRef = supplierRef,
             attributes = Attributes (
