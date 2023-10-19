@@ -69,6 +69,7 @@ spec:
     outbound:
       rules:
         - application: hm-grunndata-db
+        - application: hm-grunndata-media
     inbound:
       rules:
         - application: hm-grunndata-register
