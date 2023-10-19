@@ -48,7 +48,13 @@ fun SeriesImportDTO.toEntity(): SeriesImport = SeriesImport (
 )
 
 fun SeriesImportDTO.toRapidDTO(): SeriesImportRapidDTO = SeriesImportRapidDTO (
-    id = seriesId, seriesDTO = SeriesRapidDTO(id = seriesId, status = status, title = title, createdBy = IMPORT, supplierId = supplierId,
-        identifier = seriesId.toString(), updatedBy = IMPORT, created = created, updated = updated, expired = expired),
+    id = seriesId,
+    supplierId = supplierId,
+    transferId = transferId,
+    title = title,
+    status = status,
+    created = created,
+    updated = updated,
+    expired = expired,
     version = version!!
 )
