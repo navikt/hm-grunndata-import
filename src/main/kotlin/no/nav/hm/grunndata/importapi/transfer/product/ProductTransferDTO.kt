@@ -27,7 +27,8 @@ data class ProductTransferDTO (
     val agreements: List<ProductAgreement> = emptyList()
 ) {
     init {
-        require(articleName.isNotBlank() && articleName.length<512) {"articleName is blank or articleName size > 512"}
+        require(title.isNotBlank() && title.length<255) {"title is blank or title size > 255" }
+        require(articleName.isNotBlank() && articleName.length<255) {"articleName is blank or articleName size > 255"}
         require(shortDescription.isNotBlank()) {"shortDescription is blank"}
         require(supplierRef.isNotBlank()) {"supplierRef is blank"}
         require(isoCategory.isNotBlank()) {"isoCategory is blank"}

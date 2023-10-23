@@ -145,3 +145,22 @@ We support following media types:
 ### External media (video)
 It is possible to link to external media, for example a video on youtube.
 The media file will not be uploaded to NAV's servers, but will be linked to the product and displayed externally.   
+
+# JSON Structure
+
+The data format is JSON, below is a diagram of the json structure:
+<img src="./json-example-01.svg">
+You can also download kotlin code for the DTOs
+[here](https://github.com/navikt/hm-grunndata-import/blob/master/src/main/kotlin/no/nav/hm/grunndata/importapi/transfer/)
+
+## Json properties
+The main properties are required
+
+| Name             | Type         | Required | Norwegian translation         | Description                                                                                                      | Example            |
+|:-----------------|:-------------|:---------|:------------------------------|:-----------------------------------------------------------------------------------------------------------------|:-------------------|
+| Title            | String (255) | Yes      | Tittel                        | Title or name of the product, product variants that are connected in a series will have this as the series title | Mini crosser X1    |
+| articleName      | String (255) | Yes      | Artikkel Navn                 | The name or title of the article                                                                                 | Mini crosser x1 4w |
+| shortDescription | TEXT         | Yes      | Kort beskrivelse              | A short summary text                                                                                             |                    |
+| text             | TEXT         | Yes      | Produkt beskrivelse           | A describing text, html must be welformed. We only support basic html tags                                       |                    |
+| manufacturer     | String (255) | No       | Produsent                     | The name of the company who made this product                                                                    | Medema             |
+| supplierRef      | String (255) | Yes      | Leverandør artikkel referanse | A unique reference to identify the product                                                                       |                    |
