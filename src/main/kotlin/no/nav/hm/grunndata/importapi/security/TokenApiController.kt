@@ -17,6 +17,7 @@ import java.util.UUID
 @Controller(TokenApiController.TOKEN_ENDPOINT)
 @Secured(Roles.ROLE_ADMIN)
 @SecurityRequirement(name = "bearer-auth")
+@Hidden
 class TokenApiController(private val tokenService: TokenService,
                          private val supplierService: SupplierService,
                          private val gdbApiClient: GdbApiClient) {
