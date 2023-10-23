@@ -59,6 +59,7 @@ class AdminStatusSyncRiver(river: RiverHead,
                             productStatus = dto.productDTO.status,
                             adminStatus = dto.adminStatus,
                             adminMessage = dto.message,
+                            hmsArtNr = dto.productDTO.hmsArtNr,
                             updated = LocalDateTime.now()
                         )
                     )

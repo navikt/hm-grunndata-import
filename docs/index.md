@@ -3,9 +3,8 @@
 ## Introduction
 Vendors can use this API to upload and publish assistive devices to 
 [finnhjelpemidler.nav.no](https://finnhjelpemidler.nav.no).
-Finnhjelpemidler is a public site about assistive technology provided by NAV, a place where you can search 
+Finnhjelpemidler is a public site about assistive technology and provided by NAV, a place where you can search 
 for, find information, and apply for assistive devices.
-
 
 ## Registration
 Before you begin, you must register yourself as a vendor/supplier. Please email us
@@ -40,85 +39,109 @@ This API is designed as a lightweight REST API supporting HTTP requests with JSO
 Open api specification is available [here in test](https://finnhjelpemidler-api.ekstern.dev.nav.no/import/swagger-ui/), and in
 [prod](https://finnhjelpemidler-api.nav.no/import/swagger-ui/).
 
-## Posting an assistive device
-To upload, use HTTP POST as follows
+## Definitions:
+
+### NAV's Assistive Devices Center (Hjelpemiddelsenter)
+NAV's Assistive Devices Center is a national service that provides information and guidance on assistive devices.
+
+### Framework agreement (Rammeavtale)
+Framework agreements provide an overview of the national assortment that NAV (Norwegian Labour and Welfare Administration) 
+has in the field of assistive devices. When applying for an assistive device from NAV's Assistive Devices Center, 
+you should always first consider whether one of the assistive devices found in a framework agreement can be used 
+to meet your needs.
+More info about Rammeavtale is availble here: https://finnhjelpemidler.nav.no/rammeavtale
+
+### HMS Article number
+Products that are in a framework agreements, will get an unique HMS article number. This number will
+be used in communication with NAV's Assistive Devices Center.
+
+### Posting using stream
+Post products in stream by using Content-Type: application/x-json-stream. products are separated by a newline "\n" for
+example:
 
 ```
-POST https://finnhjelpemidler-api.nav.no/import/api/v1/products/transfers/{providerId}
+POST https://finnhjelpemidler-api.nav.no/import/api/v1/products/transfers/{supplierId}
 Accept: application/x-json-stream
 Cache-Control: no-cache
 Content-Type: application/x-json-stream
 Authorization: Bearer <your secret key>
-
 {
-  "reference": "140095810",
-  "positions": 1,
-  "contactList": [
-    {
-      "name": "Ola Norman",
-      "title": "Regionleder",
-      "email": "ola.normann@test.com",
-      "phone": "+47 001 00 002"
+  "title": "Mini Crosser X1/X2 4W",
+  "articleName" : "mini-crosser-x1-x2-4w",
+  "shortDescription" : "4-hjuls scooter med manuell regulering av seteløft, ryggvinkel og seterotasjon. Leveres som standard med Ergo2 sitteenhet.",
+  "text" : "Mini Crosser modell X1/ X2\n Er uten sammenligning markedets sterkeste og mest komfortable el scooter: Her får man både stor motorkraft, mulighet for ekstra stor kjørelengde og unik regulerbar fjæring pakket inn i et usedvanlig lekkert design. Nordens mest solgte scooter er spesielt konstruert for nordisk klima og geografi, hvilket betyr at den er velegnet for bruk året rundt, på dårlige veier, snøføre, og ellers hvor man ønsker ekstra stabilitet. Det er virkelig fokusert på sikkerheten, og uten at det går på kompromiss med bruksegenskaper og design. Leveres også med kabin.\n                    Hjul , fjæring og styre Mini Crosser har behagelig fjæring på alle 4 hjul, inklusive justerbare støtdempere på alle hjul. Vi har stort utvalg av ulike hjul, inklusive pigghjul. Det multijusterbare styret sikrer optimal komfort. Det er utstyrt med et kardan-ledd og kan heves, senkes og vinkles. Krever kun liten armstyrke ved kjøring. Kurv blir stående stille når man svinger. Markedets minste svingradius!\n                    Luksussete er standard. For å gi den ideelle sittestilling kan Mini Crosser Ergo-sete justeres i høyde, dybde og ryggvinkel og leveres i størrelser fra 35 til 70cm og med ulike rygghøyder. Armlenene er både høyde- og dybdejusterbare, samt oppfellbare og kan utstyres med ulike armlenspolstre. Setet er videre utstyrt med glideskinne og kan dreies 90 grader til begge sider. Det store sortimentet av seter, sete- og ryggputer og el funksjoner muliggjør nærmest enhver ønsket setetilpasning – muligheter man ellers kun finner på de mest avanserte el-rullestoler!",
+  "manufacturer" : "Medema AS",
+  "supplierRef" : "1500-1530",
+  "isoCategory" : "12230301",
+  "accessory" : false,
+  "sparePart" : false,
+  "seriesId" : "603474bc-a8e8-471c-87ef-09bdc57bea59",
+  "techData" : [ {
+    "key" : "Setebredde min",
+    "value" : "45",
+    "unit" : "cm"
+  }, {
+    "key" : "Kjørelengde maks",
+    "value" : "45",
+    "unit" : "km"
+  } ],
+  "media" : [ {
+    "uri" : "12345/1223456.jpg",
+    "priority" : 1,
+    "type" : "IMAGE",
+    "sourceType": "IMPORT"
     },
     {
-      "name": "Kari Normann",
-      "title": "Prosjektleder",
-      "email": "kari.normann@test.com",
-      "phone": "+47 003 00 004"
+      "uri": "https://host.to/123.mp4",
+      "priority": 2,
+      "type": "VIDEO",
+      "sourceType": "EXTERNALURL"
     }
   ],
-  "locationList": [
-    {
-      "address": "Magnus Sørlis veg",
-      "postalCode": "1920",
-      "country": "NORGE",
-      "county": "VIKEN",
-      "municipal": "LILLESTRØM",
-      "city": "SØRUMSAND"
-    }
-  ],
-  "properties": {
-    "extent": "Heltid",
-    "employerhomepage": "http://www.sorumsand.norlandiabarnehagene.no",
-    "applicationdue": "24.02.2019",
-    "keywords": "Barnehage,daglig,leder,styrer",
-    "engagementtype": "Fast",
-    "employerdescription": "<p>I Norlandia barnehagene vil vi være med å skape livslang lyst til lek og læring. Hos oss er barnets beste alltid i sentrum. Våre medarbeidere er Norlandias viktigste innsatsfaktor, og lederskap vårt viktigste suksesskriterium. Våre ledere er sterke og selvstendige med ansvar for å utvikle lederteam i barnehagene, og for å bidra aktivt inn i Ledergruppen i Regionen. Norlandia Sørumsand vil være tilknyttet Region Øst.</p>\n",
-    "starttime": "01.05.2019",
-    "applicationemail": "ola.normann@test.com",
-    "applicationurl": "https://url.to.applicationform/recruitment/hire/input.action?adId=140095810",
-    "sector": "Privat",
-    "applicationlabel": "Søknad Sørumsand"
-  },
-  "title": "Ønsker du å lede en moderne og veletablert barnehage?",
-  "adText": "<p>Nå har du en unik mulighet til å lede en godt faglig og veletablert barnehage. Norlandia Sørumsand barnehage ble etablert i 2006 og har moderne og fleksible oppholdsarealer. Barnehagens satsningsområder er Mat med Smak og Null mobbing i barnehagen.</p>\n<p><strong>Hovedansvarsområder:</strong></p>\n<ul><li>Drifte og utvikle egen barnehage i tråd med gjeldende forskrifter, bestemmelser og Norlandias overordnete strategi</li><li>Personalansvar</li><li>Overordnet faglig ansvar i egen barnehage</li><li>Bidra og medvirke i regionens endrings -og strategiprosesser</li><li>Kvalitet i barnehagen i henhold til konsernets kvalitets- og miljøpolicy</li></ul>\n<p><strong>Ønskede kvalifikasjoner:</strong></p>\n<ul><li>Barnehagelærerutdanning</li><li>Gode lederegenskaper</li><li>Engasjement for mat og miljø</li><li>Økonomiforståelse</li><li>Beslutningsdyktig, proaktiv og løsningsorientert</li><li>Effektiv og evnen til å håndtere flere oppgaver samtidig</li><li>Være motivator og støttespiller for medarbeiderne</li><li>Ha gode strategiske evner</li></ul>\n<p><strong>Vi tilbyr:</strong></p>\n<ul><li>Jobb i et sterkt fagmiljø i stadig utvikling, med et stort handlingsrom innenfor fastsatte rammer</li><li>Korte beslutningsveier og muligheter for personlig og faglig utvikling</li><li>Gode personalfasiliteter</li><li>Konkurransedyktig lønn og gode pensjonsbetingelser</li><li>Gyldig politiattest (ikke eldre enn 3 måneder ved tiltredelse) må fremvises før ansettelse</li></ul>\n<p><em><strong>Dette er en unik mulighet til å få lede en moderne veletablert barnehage.</strong></em></p>\n",
-  "privacy": "SHOW_ALL",
-  "published": "2019-02-13T12:59:26",
-  "expires": "2019-02-24T00:00:00",
-  "employer": {
-    "reference": "232151232",
-    "businessName": "Sørumsand barnehage",
-    "orgnr": "989012088",
-    "location": {
-      "address": "Sannergata 2",
-      "postalCode": "0566",
-      "country": "Norge",
-      "county": "Oslo",
-      "municipal": "Oslo",
-      "city": "Oslo"
-    }
-  },
-  "categoryList": [
-    {
-      "code": "266998",
-      "categoryType": "JANZZ",
-      "name": "Barnehagelærer"
-    },    
-    {
-      "code": "266998",
-      "categoryType": "JANZZ",
-      "name": "Pedagogisk leder (barnehage/førskole)"
-    }
-  ]
+  "published" : "2023-08-22T13:39:51.884163",
+  "expired" : "2033-08-22T13:39:51.884163"
+}
+. 
+.
+.
+```
+
+You will continuously get receipt for each ad like this:
+
+```
+HTTP/1.1 200 OK
+transfer-encoding: chunked
+Date: Fri, 3 Apr 2020 10:37:07 GMT
+transfer-encoding: chunked
+content-type: application/x-json-stream
+
+{
+  "versionId" : 1,
+  "status" : "RECEIVED",
+  "md5" : "3D5A0C23BC12D58D5865CF3CFC086F11",
+  "items" : 1,
+  "created" : "2020-04-03T12:37:07.83019",
+  "updated" : "2020-04-03T12:37:07.830203"
+}{
+  "versionId" : 2,
+  "status" : "RECEIVED",
+  "md5" : "CA41CC694F62E14F72FDE43B66C9821B",
+  "items" : 1,
+  "created" : "2020-04-03T12:37:07.861917",
+  "updated" : "2020-04-03T12:37:07.861923"
 }
 ```
+
+It is important to check the status for each receipt, if it is not "ERROR".
+When using stream, the http status code will always return 200 OK. 
+
+## Media upload (Image, PDF)
+Media files are uploaded using multipart/form-data. 
+The media files are first uploaded before they can be used in a product. 
+We support following media types:
+* Image (jpg, png)
+* PDF (for example user manual)
+
+### External media (video)
+It is possible to link to external media, for example a video on youtube.
+The media file will not be uploaded to NAV's servers, but will be linked to the product and displayed externally.   
