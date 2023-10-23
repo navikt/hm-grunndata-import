@@ -115,7 +115,6 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
                 compatibleWidth = if (this.compatibleWith!=null) CompatibleWith(
                     seriesIds = compatibleWith.seriesIds) else null
             ),
-            hmsArtNr = hmsArtNr,
             identifier = productId.toString(),
             isoCategory = isoCategory,
             accessory = accessory,

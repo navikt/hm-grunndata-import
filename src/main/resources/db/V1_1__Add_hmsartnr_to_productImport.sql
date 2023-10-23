@@ -1,0 +1,1 @@
+ALTER TABLE product_import_v1 ADD COLUMN hms_artnr VARCHAR(255);

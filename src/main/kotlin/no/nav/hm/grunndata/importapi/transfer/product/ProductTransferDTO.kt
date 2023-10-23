@@ -14,7 +14,6 @@ data class ProductTransferDTO (
     val text: String,
     val url: String?=null,
     val manufacturer: String?=null,
-    val hmsArtNr: String?=null,
     val supplierRef: String,
     val isoCategory: String,
     val accessory: Boolean = false,

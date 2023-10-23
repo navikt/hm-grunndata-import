@@ -5,6 +5,7 @@ import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.TypeDef
 import io.micronaut.data.annotation.Version
 import io.micronaut.data.model.DataType
+import jakarta.persistence.Column
 import no.nav.hm.grunndata.rapid.dto.*
 import java.time.LocalDateTime
 import java.util.*
@@ -17,6 +18,8 @@ data class ProductImport(
     val supplierId: UUID,
     val supplierRef: String,
     val seriesId: UUID,
+    @field:Column(name="hms_artnr")
+    val hmsArtNr: String?=null,
     val productStatus: ProductStatus,
     val adminStatus: AdminStatus = AdminStatus.PENDING,
     val adminMessage: String ?= null,
@@ -34,6 +37,7 @@ data class ProductImportDTO(
     val supplierId: UUID,
     val supplierRef: String,
     val seriesId: UUID,
+    val hmsArtNr: String?,
     val productStatus: ProductStatus,
     val adminStatus: AdminStatus = AdminStatus.PENDING,
     val adminMessage: String ?= null,
@@ -49,6 +53,7 @@ fun ProductImport.toDTO(): ProductImportDTO  = ProductImportDTO (
     supplierId = supplierId,
     supplierRef = supplierRef,
     seriesId = seriesId,
+    hmsArtNr = hmsArtNr,
     productStatus = productStatus,
     adminStatus = adminStatus,
     adminMessage = adminMessage,
