@@ -82,6 +82,7 @@ The main properties are required
 | expired          | Date         | No       | Utløpsdato                    | The date when the product should be expired                                                                      | 2033-08-22T13:39:51.884163           |
 
 ### Techdata
+
 | Name  | Type         | Required | Norwegian translation | Description | Example |
 |:------|:-------------|:---------|:----------------------|:------------|:--------|
 | key   | String (255) | Yes      | Nøkkel                | The name of the technical data | Setebredde min |
@@ -91,6 +92,7 @@ The main properties are required
 Valid techdata keys and units is listed here: https://finnhjelpemidler.nav.no/techdata
 
 ### Media
+
 | Name       | Type         | Required | Norwegian translation | Description                                                       | Example                                         |
 |:-----------|:-------------|:---------|:----------------------|:------------------------------------------------------------------|:------------------------------------------------|
 | uri        | String (255) | Yes      | URI                   | The uri to the media file                                         | imort/12345/1223456.jpg                         |
@@ -98,6 +100,7 @@ Valid techdata keys and units is listed here: https://finnhjelpemidler.nav.no/te
 | type       | String (255) | Yes      | Type                  | The type of the media file                                        | IMAGE, PDF, VIDEO                               |
 | text       | TEXT         | No       | Tekst                 | A describing text for the media file                              | Main picture showing the standard configuration |
 | sourceType | String (255) | Yes      | Kilde                 | The source of the media file                                      | IMPORT, EXTERNALURL                             |
+
 
 More info about Media below.
 
