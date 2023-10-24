@@ -62,7 +62,6 @@ You can also download kotlin code for the DTOs
 [here](https://github.com/navikt/hm-grunndata-import/blob/master/src/main/kotlin/no/nav/hm/grunndata/importapi/transfer/)
 
 ## Json properties
-The main properties are required
 
 | Name             | Type         | Required | Norwegian translation         | Description                                                                                                      | Example                              |
 |:-----------------|:-------------|:---------|:------------------------------|:-----------------------------------------------------------------------------------------------------------------|:-------------------------------------|
@@ -98,14 +97,15 @@ Valid techdata keys and units is listed here: https://finnhjelpemidler.nav.no/te
 | uri        | String (255) | Yes      | URI                   | The uri to the media file                                         | imort/12345/1223456.jpg                         |
 | priority   | Integer      | Yes      | Prioritet             | The priority of the media file, 1 will always be the main picture | 1                                               |
 | type       | String (255) | Yes      | Type                  | The type of the media file                                        | IMAGE, PDF, VIDEO                               |
-| text       | TEXT         | No       | Tekst                 | A describing text for the media file                              | Main picture showing the standard configuration |
+| text       | TEXT         | Yes      | Tekst                 | A describing text for the media file                              | Main picture showing the standard configuration |
 | sourceType | String (255) | Yes      | Kilde                 | The source of the media file                                      | IMPORT, EXTERNALURL                             |
 
 
 More info about Media below.
 
 # Taxonomy/Category
-
+Finnhjelpemidler.nav.no use the Iso standard Category for assistive devices, 
+list of all categories can be found [here](https://finnhjelpemidler.nav.no/categories)) 
 
 ### Posting using stream
 Post products in stream by using Content-Type: application/x-json-stream. products are separated by a newline "\n" for
@@ -250,3 +250,37 @@ Then linking the uri to the product json within the media array:
 * Maximum file size is 10MB
 * Only jpg, png and pdf files are supported
 * You can not link more than 10 media files per product
+
+# Series of products
+A series of products is a group of products that are similar, but have different variants. 
+To group the variants to a series, you have to create a series first.
+Then you can upload the variants and link them to the series by using the seriesId.
+
+## Posting a series
+```
+POST https://finnhjelpemidler-api.nav.no/import/api/v1/product/series/{supplierId}
+Accept: application/json
+Content-Type: application/json
+Cache-Control: no-cache
+Authorization: Bearer <your secret key>
+{
+  "seriesId": "603474bc-a8e8-471c-87ef-09bdc57bea59",
+  "title": "Mini Crosser",
+  "status": "ACTIVE"
+}
+```
+
+| Name    | Type         | Required | Norwegian translation | Description                                                                                                     | Example                              |
+|:--------|:-------------|:---------|:----------------------|:----------------------------------------------------------------------------------------------------------------|:-------------------------------------|
+| seriesId| UUID         | No       | Serie ID              | A unique id for a series of products, this id linked the products into a series                                 | 603474bc-a8e8-471c-87ef-09bdc57bea59 |
+| title   | String (255) | Yes      | Serie tittel          | Title or name of the series, product variants that are connected in a series will have this as the series title | Mini crosser X1                      |
+| status  | String (255) | Yes      | Status                | The status of the series, ACTIVE or INACTIVE                                                                    | ACTIVE, INACTIVE                     |
+
+## Posting a product variant of a series
+Posting a variant is exactly the same as product, and use seriesId to tell which series the variant belongs to.
+
+
+
+## Accessory and spare part
+To upload a product that is an accessory or spare part, you must first upload the main product in the series.
+Then you can upload the accessory or spare part, and link it to the main product by using the seriesId.
