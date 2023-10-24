@@ -18,6 +18,14 @@ header {
   -webkit-font-smoothing: antialiased;
   min-height: 76px;
 }
+body {
+  font: 14px/22px 'Quattrocento Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #2b2b2b;
+  font-weight: 300;
+  margin: 0px;
+  padding: 0px 0 20px 0px;
+  background: #c1d9ea;
+}
 
 section {
   width:700px;
