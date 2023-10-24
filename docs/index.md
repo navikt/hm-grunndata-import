@@ -47,7 +47,6 @@ More info about Rammeavtale is availble here: https://finnhjelpemidler.nav.no/ra
 Products that are in a framework agreements, will get an unique HMS article number. This number will
 be used in communication with NAV's Assistive Devices Center.
 
-
 # REST API
 This API is designed as a lightweight REST API supporting HTTP requests with JSON as payload.
 
@@ -55,6 +54,24 @@ This API is designed as a lightweight REST API supporting HTTP requests with JSO
 Open api specification is available [here in test](https://finnhjelpemidler-api.ekstern.dev.nav.no/import/swagger-ui/), and in
 [prod](https://finnhjelpemidler-api.nav.no/import/swagger-ui/).
 
+# JSON Structure
+
+The data format is JSON, below is a diagram of the json structure:
+<img src="./json-example-01.svg">
+You can also download kotlin code for the DTOs
+[here](https://github.com/navikt/hm-grunndata-import/blob/master/src/main/kotlin/no/nav/hm/grunndata/importapi/transfer/)
+
+## Json properties
+The main properties are required
+
+| Name             | Type         | Required | Norwegian translation         | Description                                                                                                      | Example            |
+|:-----------------|:-------------|:---------|:------------------------------|:-----------------------------------------------------------------------------------------------------------------|:-------------------|
+| Title            | String (255) | Yes      | Tittel                        | Title or name of the product, product variants that are connected in a series will have this as the series title | Mini crosser X1    |
+| articleName      | String (255) | Yes      | Artikkel Navn                 | The name or title of the article                                                                                 | Mini crosser x1 4w |
+| shortDescription | TEXT         | Yes      | Kort beskrivelse              | A short summary text                                                                                             |                    |
+| text             | TEXT         | Yes      | Produkt beskrivelse           | A describing text, html must be welformed. We only support basic html tags                                       |                    |
+| manufacturer     | String (255) | No       | Produsent                     | The name of the company who made this product                                                                    | Medema             |
+| supplierRef      | String (255) | Yes      | Leverandør artikkel referanse | A unique reference to identify the product                                                                       |                    |
 
 ### Posting using stream
 Post products in stream by using Content-Type: application/x-json-stream. products are separated by a newline "\n" for
@@ -138,10 +155,8 @@ When using stream, the http status code will always return 200 OK.
 
 ## Media upload (Image, PDF)
 Media files are uploaded using multipart/form-data. 
-The media files are first uploaded before they can be used in a product.
-We support following media types:
-* Image (jpg, png)
-* PDF (for example user manual)
+The media files are first uploaded before they can be used in a product. 
+There is support for uploading multiple files in one request. But the maximum size is 10MB for each upload.
 
 ### External media (video)
 It is possible to link to external media, for example a video on youtube.
@@ -197,27 +212,7 @@ Then linking the uri to the product json within the media array:
 
 ```
 
-### Limitations
+### Media limitations
 * Maximum file size is 10MB
 * Only jpg, png and pdf files are supported
-* You can not upload more than 5 media files per product
-
-
-# JSON Structure
-
-The data format is JSON, below is a diagram of the json structure:
-<img src="./json-example-01.svg">
-You can also download kotlin code for the DTOs
-[here](https://github.com/navikt/hm-grunndata-import/blob/master/src/main/kotlin/no/nav/hm/grunndata/importapi/transfer/)
-
-## Json properties
-The main properties are required
-
-| Name             | Type         | Required | Norwegian translation         | Description                                                                                                      | Example            |
-|:-----------------|:-------------|:---------|:------------------------------|:-----------------------------------------------------------------------------------------------------------------|:-------------------|
-| Title            | String (255) | Yes      | Tittel                        | Title or name of the product, product variants that are connected in a series will have this as the series title | Mini crosser X1    |
-| articleName      | String (255) | Yes      | Artikkel Navn                 | The name or title of the article                                                                                 | Mini crosser x1 4w |
-| shortDescription | TEXT         | Yes      | Kort beskrivelse              | A short summary text                                                                                             |                    |
-| text             | TEXT         | Yes      | Produkt beskrivelse           | A describing text, html must be welformed. We only support basic html tags                                       |                    |
-| manufacturer     | String (255) | No       | Produsent                     | The name of the company who made this product                                                                    | Medema             |
-| supplierRef      | String (255) | Yes      | Leverandør artikkel referanse | A unique reference to identify the product                                                                       |                    |
+* You can not link more than 10 media files per product
