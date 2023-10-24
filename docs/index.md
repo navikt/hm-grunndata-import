@@ -3,7 +3,7 @@
 ## Introduction
 Vendors can use this API to upload and publish assistive devices to 
 [finnhjelpemidler.nav.no](https://finnhjelpemidler.nav.no).
-Finnhjelpemidler is a public site about assistive technology and provided by NAV, a place where you can search 
+Finnhjelpemidler is a public site provided by NAV, a place where you can search 
 for, find information, and apply for assistive devices.
 
 ## Registration
@@ -31,29 +31,30 @@ Authorization: Bearer <your secret key>
 ## Test environment
 To test the integration, you can use https://finnhjelpemidler-api.ekstern.dev.nav.no/import.
 
+# Definitions:
+
+## NAV's Assistive Devices Center (Hjelpemiddelsenter)
+NAV's Assistive Devices Center is a national service that provides information and guidance on assistive devices.
+
+## Framework agreement (Rammeavtale)
+Framework agreements provide an overview of the national assortment that NAV (Norwegian Labour and Welfare Administration)
+has in the field of assistive devices. When applying for an assistive device from NAV's Assistive Devices Center,
+you should always first consider whether one of the assistive devices found in a framework agreement can be used
+to meet your needs.
+More info about Rammeavtale is availble here: https://finnhjelpemidler.nav.no/rammeavtale
+
+## HMS Article number
+Products that are in a framework agreements, will get an unique HMS article number. This number will
+be used in communication with NAV's Assistive Devices Center.
+
 
 # REST API
-This API is designed as a lightweight REST API supporting HTTP requests with JSON.
+This API is designed as a lightweight REST API supporting HTTP requests with JSON as payload.
 
 ## Open API
 Open api specification is available [here in test](https://finnhjelpemidler-api.ekstern.dev.nav.no/import/swagger-ui/), and in
 [prod](https://finnhjelpemidler-api.nav.no/import/swagger-ui/).
 
-## Definitions:
-
-### NAV's Assistive Devices Center (Hjelpemiddelsenter)
-NAV's Assistive Devices Center is a national service that provides information and guidance on assistive devices.
-
-### Framework agreement (Rammeavtale)
-Framework agreements provide an overview of the national assortment that NAV (Norwegian Labour and Welfare Administration) 
-has in the field of assistive devices. When applying for an assistive device from NAV's Assistive Devices Center, 
-you should always first consider whether one of the assistive devices found in a framework agreement can be used 
-to meet your needs.
-More info about Rammeavtale is availble here: https://finnhjelpemidler.nav.no/rammeavtale
-
-### HMS Article number
-Products that are in a framework agreements, will get an unique HMS article number. This number will
-be used in communication with NAV's Assistive Devices Center.
 
 ### Posting using stream
 Post products in stream by using Content-Type: application/x-json-stream. products are separated by a newline "\n" for
@@ -106,7 +107,7 @@ Authorization: Bearer <your secret key>
 .
 ```
 
-You will continuously get receipt for each ad like this:
+You will continuously get receipt for each product like this:
 
 ```
 HTTP/1.1 200 OK
@@ -137,14 +138,30 @@ When using stream, the http status code will always return 200 OK.
 
 ## Media upload (Image, PDF)
 Media files are uploaded using multipart/form-data. 
-The media files are first uploaded before they can be used in a product. 
+The media files are first uploaded before they can be used in a product.
 We support following media types:
 * Image (jpg, png)
 * PDF (for example user manual)
 
 ### External media (video)
 It is possible to link to external media, for example a video on youtube.
-The media file will not be uploaded to NAV's servers, but will be linked to the product and displayed externally.   
+The media file will not be uploaded to NAV's servers, but will be linked to the product and displayed externally.
+
+### Linking media files to product
+When uploading media files, you will get a receipt for each file. The receipt contains a unique uri that can be used 
+on the product json. 
+
+### Upload image
+```
+POST https://finnhjelpemidler-api.nav.no/import/api/v1/media/transfers/{supplierId}/{supplierRef}
+
+
+
+### Limitations
+* Maximum file size is 10MB
+* Only jpg, png and pdf files are supported
+* You can not upload more than 5 media files per product
+
 
 # JSON Structure
 
