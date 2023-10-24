@@ -29,7 +29,7 @@ Content-Type: application/x-json-stream
 Authorization: Bearer <your secret key>
 ```
 ## Test environment
-To test the integration, you can use https://finnhjelpemidler-api.ekstern.dev.nav.no/import.
+To test the integration, use https://finnhjelpemidler-api.ekstern.dev.nav.no/import.
 
 # Definitions:
 
@@ -153,9 +153,49 @@ on the product json.
 
 ### Upload image
 ```
-POST https://finnhjelpemidler-api.nav.no/import/api/v1/media/transfers/{supplierId}/{supplierRef}
+POST https://finnhjelpemidler-api.nav.no/import/api/v1/media/transfers/files/{supplierId}/{supplierRef}
+Accept: application/json
+Content-Type: multipart/form-data
+Authorization: Bearer <your secret key>
+Files=@filename.jpg;type=image/jpeg
+```
+You will get a receipt like this:
+```
+[  
+  {
+    "transferId": "e5fa2fd0-1e9a-4095-9b33-35431901dc8f",
+    "supplierRef": "99521146",
+    "supplierId": "f639825c-2fc6-49cd-82ae-31b8ffa449a6",
+    "md5": "f20912b65f5e2b4460652e53b89af091",
+    "filesize": 1057306,
+    "filename": "filename.jpg",
+    "sourceUri": "http://localhost:8081/local/import/9c68e99a-a730-4048-ad2c-2ba8ff466b8f/6db81c58-7d3b-4c42-9c58-fd01497d75d8.jpg",
+    "uri": "import/9c68e99a-a730-4048-ad2c-2ba8ff466b8f/6db81c58-7d3b-4c42-9c58-fd01497d75d8.jpg",
+    "transferStatus": "DONE",
+    "created": "2023-10-24T10:08:17.35855",
+    "updated": "2023-10-24T10:08:17.358555"
+  }
+]
+```
+Then linking the uri to the product json within the media array:
+```
+  "media" : [ {
+    "uri" : "import/9c68e99a-a730-4048-ad2c-2ba8ff466b8f/6db81c58-7d3b-4c42-9c58-fd01497d75d8.jpg",
+    "priority" : 1,
+    "type" : "IMAGE",
+    "text" : "Main picture showing the standard configuration"
+    "sourceType": "IMPORT"
+    },
+    {
+      "uri": "https://youtube.com/123.mp4",
+      "priority": 2,
+      "type": "VIDEO",
+      "text": "Video showing the product"
+      "sourceType": "EXTERNALURL"
+    }
+  ],
 
-
+```
 
 ### Limitations
 * Maximum file size is 10MB
