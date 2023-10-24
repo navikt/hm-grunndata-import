@@ -64,14 +64,45 @@ You can also download kotlin code for the DTOs
 ## Json properties
 The main properties are required
 
-| Name             | Type         | Required | Norwegian translation         | Description                                                                                                      | Example            |
-|:-----------------|:-------------|:---------|:------------------------------|:-----------------------------------------------------------------------------------------------------------------|:-------------------|
-| Title            | String (255) | Yes      | Tittel                        | Title or name of the product, product variants that are connected in a series will have this as the series title | Mini crosser X1    |
-| articleName      | String (255) | Yes      | Artikkel Navn                 | The name or title of the article                                                                                 | Mini crosser x1 4w |
-| shortDescription | TEXT         | Yes      | Kort beskrivelse              | A short summary text                                                                                             |                    |
-| text             | TEXT         | Yes      | Produkt beskrivelse           | A describing text, html must be welformed. We only support basic html tags                                       |                    |
-| manufacturer     | String (255) | No       | Produsent                     | The name of the company who made this product                                                                    | Medema             |
-| supplierRef      | String (255) | Yes      | Leverandør artikkel referanse | A unique reference to identify the product                                                                       |                    |
+| Name             | Type         | Required | Norwegian translation         | Description                                                                                                      | Example                              |
+|:-----------------|:-------------|:---------|:------------------------------|:-----------------------------------------------------------------------------------------------------------------|:-------------------------------------|
+| Title            | String (255) | Yes      | Tittel                        | Title or name of the product, product variants that are connected in a series will have this as the series title | Mini crosser X1                      |
+| articleName      | String (255) | Yes      | Artikkel Navn                 | The name or title of the article                                                                                 | Mini crosser x1 4w                   |
+| shortDescription | TEXT         | Yes      | Kort beskrivelse              | A short summary text                                                                                             | A short summary text                 |
+| text             | TEXT         | Yes      | Produkt beskrivelse           | A describing text, html must be welformed. We only support basic html tags                                       | A describing text                    |
+| manufacturer     | String (255) | No       | Produsent                     | The name of the company who made this product                                                                    | Medema                               |
+| supplierRef      | String (255) | Yes      | Leverandør artikkel referanse | A unique reference to identify the product                                                                       | alphanumber eg: A4231F-132           |
+ | isoCategory      | String (255) | Yes      | ISO Kategori                  | The ISO category for the product                                                                                 | 12230301                             |
+| accessory        | Boolean      | Yes      | Tilbehør                      | Is this product an accessory?                                                                                    | true                                 |
+| sparePart        | Boolean      | Yes      | Reservedel                    | Is this product a spare part?                                                                                    | false                                |
+| seriesId         | UUID         | No       | Serie ID                      | A unique id for a series of products, this id linked the products into a series                                  | 603474bc-a8e8-471c-87ef-09bdc57bea59 |
+| techData         | List         | No       | Tekniske data                 | A list of technical data for the product                                                                         | techdata table below                 |
+| media            | List         | No       | Media                         | A list of media files for the product                                                                            | media table below                    |
+| published        | Date         | No       | Publisert                     | The date when the product should be published                                                                    | 2023-08-22T13:39:51.884163           |
+| expired          | Date         | No       | Utløpsdato                    | The date when the product should be expired                                                                      | 2033-08-22T13:39:51.884163           |
+
+### Techdata
+| Name  | Type         | Required | Norwegian translation | Description | Example |
+|:------|:-------------|:---------|:----------------------|:------------|:--------|
+| key   | String (255) | Yes      | Nøkkel                | The name of the technical data | Setebredde min |
+| value | String (255) | Yes      | Verdi                 | The value of the technical data | 45 |
+| unit  | String (255) | No       | Enhet                 | The unit of the technical data | cm |
+
+Valid techdata keys and units is listed here: https://finnhjelpemidler.nav.no/techdata
+
+### Media
+| Name       | Type         | Required | Norwegian translation | Description                                                       | Example                                         |
+|:-----------|:-------------|:---------|:----------------------|:------------------------------------------------------------------|:------------------------------------------------|
+| uri        | String (255) | Yes      | URI                   | The uri to the media file                                         | imort/12345/1223456.jpg                         |
+| priority   | Integer      | Yes      | Prioritet             | The priority of the media file, 1 will always be the main picture | 1                                               |
+| type       | String (255) | Yes      | Type                  | The type of the media file                                        | IMAGE, PDF, VIDEO                               |
+| text       | TEXT         | No       | Tekst                 | A describing text for the media file                              | Main picture showing the standard configuration |
+| sourceType | String (255) | Yes      | Kilde                 | The source of the media file                                      | IMPORT, EXTERNALURL                             |
+
+More info about Media below.
+
+# Taxonomy/Category
+
 
 ### Posting using stream
 Post products in stream by using Content-Type: application/x-json-stream. products are separated by a newline "\n" for
