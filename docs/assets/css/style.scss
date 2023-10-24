@@ -3,6 +3,22 @@
 
 @import "{{ site.theme }}";
 
+header {
+  padding: 25px 20px 40px 20px;
+  margin: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  text-align: center;
+  background: #540C06;
+  box-shadow: 1px 0px 2px rgba(0,0,0,0.75);
+  z-index: 99;
+  -webkit-font-smoothing: antialiased;
+  min-height: 76px;
+}
+
 section {
   width:700px;
   padding: 30px 30px 50px 30px;
@@ -23,7 +39,7 @@ section {
   margin-right:-382px;
   position: fixed;
   top: 115px;
-  background: #ffcc00;
+  background: #F9D7A1;
   border: 1px solid #f0b500;
   box-shadow: 0px 1px 3px rgba(0,0,0,.25);
   border-radius: 0px 2px 2px 0px;
