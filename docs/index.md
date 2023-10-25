@@ -103,7 +103,7 @@ Valid techdata keys and units is listed here: https://finnhjelpemidler.nav.no/te
 
 More info about Media below.
 
-# Taxonomy/Category
+### Taxonomy/Category
 Finnhjelpemidler.nav.no use the Iso standard Category for assistive devices, 
 list of all categories can be found [here](https://finnhjelpemidler.nav.no/categories)) 
 
@@ -354,4 +354,33 @@ accessory and a spare part. Use the property compatibleWith to link the accessor
   "published" : "2023-08-22T13:39:51.884163",
   "expired" : "2033-08-22T13:39:51.884163"
 }
+```
+
+## Getting the state of the product
+All products are manually checked, if it does not follow NAVs guidelines it will be rejected. 
+You can check state of the product transfer if it is approved or rejected using this:
+```
+GET https://finnhjelpemidler-api.nav.no/import/api/v1/products/import/{supplierId}/{supplierRef}
+Accept: application/json
+Content-Type: application/json
+Cache-Control: no-cache
+Authorization: Bearer <your secret key>
+
+```
+
+Response:
+```
+
+```
+
+## Deactivate product
+To deactivate a product, use the product supplierRef to deactivate it.
+For example:
+
+```
+DELETE https://finnhjelpemidler-api.nav.no/import/api/v1/products/transfer/{supplierId}/{supplierRef}
+Accept: application/json
+Content-Type: application/json
+Cache-Control: no-cache
+Authorization: Bearer <your secret key>
 ```
