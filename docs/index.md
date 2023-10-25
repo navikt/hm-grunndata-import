@@ -127,7 +127,6 @@ Authorization: Bearer <your secret key>
   "isoCategory" : "12230301",
   "accessory" : false,
   "sparePart" : false,
-  "seriesId" : "603474bc-a8e8-471c-87ef-09bdc57bea59",
   "techData" : [ {
     "key" : "Setebredde min",
     "value" : "45",
@@ -279,8 +278,80 @@ Authorization: Bearer <your secret key>
 ## Posting a product variant of a series
 Posting a variant is exactly the same as product, and use seriesId to tell which series the variant belongs to.
 
-
+```
+POST https://finnhjelpemidler-api.nav.no/import/api/v1/products/transfers/{supplierId}
+Accept: application/x-json-stream
+Cache-Control: no-cache
+Content-Type: application/x-json-stream
+Authorization: Bearer <your secret key>
+{
+  "title": "Mini Crosser X1/X2 4W",
+  "articleName" : "mini-crosser-x1-x2-4w",
+  "shortDescription" : "4-hjuls scooter med manuell regulering av seteløft, ryggvinkel og seterotasjon. Leveres som standard med Ergo2 sitteenhet.",
+  "text" : "Mini Crosser modell X1/ X2\n Er uten sammenligning markedets sterkeste og mest komfortable el scooter: Her får man både stor motorkraft, mulighet for ekstra stor kjørelengde og unik regulerbar fjæring pakket inn i et usedvanlig lekkert design. Nordens mest solgte scooter er spesielt konstruert for nordisk klima og geografi, hvilket betyr at den er velegnet for bruk året rundt, på dårlige veier, snøføre, og ellers hvor man ønsker ekstra stabilitet. Det er virkelig fokusert på sikkerheten, og uten at det går på kompromiss med bruksegenskaper og design. Leveres også med kabin.\n                    Hjul , fjæring og styre Mini Crosser har behagelig fjæring på alle 4 hjul, inklusive justerbare støtdempere på alle hjul. Vi har stort utvalg av ulike hjul, inklusive pigghjul. Det multijusterbare styret sikrer optimal komfort. Det er utstyrt med et kardan-ledd og kan heves, senkes og vinkles. Krever kun liten armstyrke ved kjøring. Kurv blir stående stille når man svinger. Markedets minste svingradius!\n                    Luksussete er standard. For å gi den ideelle sittestilling kan Mini Crosser Ergo-sete justeres i høyde, dybde og ryggvinkel og leveres i størrelser fra 35 til 70cm og med ulike rygghøyder. Armlenene er både høyde- og dybdejusterbare, samt oppfellbare og kan utstyres med ulike armlenspolstre. Setet er videre utstyrt med glideskinne og kan dreies 90 grader til begge sider. Det store sortimentet av seter, sete- og ryggputer og el funksjoner muliggjør nærmest enhver ønsket setetilpasning – muligheter man ellers kun finner på de mest avanserte el-rullestoler!",
+  "manufacturer" : "Medema AS",
+  "supplierRef" : "1500-1530",
+  "isoCategory" : "12230301",
+  "accessory" : false,
+  "sparePart" : false,
+  "seriesId": "603474bc-a8e8-471c-87ef-09bdc57bea59", <--- This is the seriesId, that was created in the previous step
+  "techData" : [ {
+    "key" : "Setebredde min",
+    "value" : "45",
+    "unit" : "cm"
+  }, {
+    "key" : "Kjørelengde maks",
+    "value" : "45",
+    "unit" : "km"
+  } ],
+  "media" : [ {
+    "uri" : "12345/1223456.jpg",
+    "priority" : 1,
+    "type" : "IMAGE",
+    "sourceType": "IMPORT"
+    },
+    {
+      "uri": "https://host.to/123.mp4",
+      "priority": 2,
+      "type": "VIDEO",
+      "sourceType": "EXTERNALURL"
+    }
+  ],
+  "published" : "2023-08-22T13:39:51.884163",
+  "expired" : "2033-08-22T13:39:51.884163"
+}
+. 
+.
+.
+```
 
 ## Accessory and spare part
-To upload a product that is an accessory or spare part, you must first upload the main product in the series.
+To upload a product that is an accessory or spare part, you must first upload the main product and connect it to a series.
 Then you can upload the accessory or spare part, and link it to the main product by using the seriesId.
+Set the flag accessory or sparePart to true, both parameters can be true at the same time if the product is both an 
+accessory and a spare part. Use the property compatibleWith to link the accessory or spare part to the main product.
+
+```
+{
+  "title" : "Lader 24 V 8 Amp, X-1400",
+  "articleName" : "Lader 24 V 8 Amp, X-1400",
+  "shortDescription" : "Lader for Blimo",
+  "text" : "Smart vedlikeholdslader som slår seg av når batteriene er fulladet. Hvis spenningen i batteriene synker, går laderen inn og vedlikeholder automatisk vedlikeholdskostnadene. MERK! Kun beregnet på bruk med blybatterier (AGM). Å ha en ekstra lader kan være bra hvis du bruker scooteren din forskjellige steder. Kanskje det kan være praktisk å ha en på landsbygda og en i byen eller en hjemme og en på jobb, hvis du tar med deg din scooter mellom disse stedene. Når du bestiller dette produktet sammen med en promenadescooter, kommer ingen ekstra fraktkostnader til. Passer: Blimo X-1400 Blimo Kabinscooter Blimo Gatsby",
+  "supplierRef" : "52970102",
+  "isoCategory" : "12230301",
+  "accessory" : false,
+  "sparePart" : true,
+  "compatibleWith": {
+    "seriesIds": ["603474bc-a8e8-471c-87ef-09bdc57bea59"] <--- link it to the main product by using the seriesId
+  },
+  "techData" : [],
+  "media" : [ {
+    "uri" : "import/d22094a7-25b2-45b0-aeb8-82eec928531e/80247d3b-19ac-4ab0-909f-6ab4086fcc90.jpg",
+    "priority" : 1,
+    "type" : "IMAGE",
+    "text": "Lader 24 V 8 Amp, X-1400"
+  } ],
+  "published" : "2023-08-22T13:39:51.884163",
+  "expired" : "2033-08-22T13:39:51.884163"
+}
+```
