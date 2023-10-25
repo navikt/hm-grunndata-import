@@ -31,28 +31,16 @@ Authorization: Bearer <your secret key>
 ## Test environment
 To test the integration, use https://finnhjelpemidler-api.ekstern.dev.nav.no/import.
 
-# Definitions:
-
-## NAV's Assistive Devices Center (Hjelpemiddelsenter)
-NAV's Assistive Devices Center is a national service that provides information and guidance on assistive devices.
-
-## Framework agreement (Rammeavtale)
-Framework agreements provide an overview of the national assortment that NAV (Norwegian Labour and Welfare Administration)
-has in the field of assistive devices. When applying for an assistive device from NAV's Assistive Devices Center,
-you should always first consider whether one of the assistive devices found in a framework agreement can be used
-to meet your needs.
-More info about Rammeavtale is availble here: https://finnhjelpemidler.nav.no/rammeavtale
-
-## HMS Article number
-Products that are in a framework agreements, will get an unique HMS article number. This number will
-be used in communication with NAV's Assistive Devices Center.
-
 # REST API
 This API is designed as a lightweight REST API supporting HTTP requests with JSON as payload.
 
 ## Open API
 Open api specification is available [here in test](https://finnhjelpemidler-api.ekstern.dev.nav.no/import/swagger-ui/), and in
 [prod](https://finnhjelpemidler-api.nav.no/import/swagger-ui/).
+
+## Taxonomy/Category
+Finnhjelpemidler.nav.no use the Iso standard Category for assistive devices,
+list of all categories can be found [here](https://finnhjelpemidler-api.nav.no/import/api/v1/categories)
 
 # JSON Structure
 
@@ -75,8 +63,8 @@ You can also download kotlin code for the DTOs
 | accessory        | Boolean      | Yes      | Tilbehør                      | Is this product an accessory?                                                                                    | true                                 |
 | sparePart        | Boolean      | Yes      | Reservedel                    | Is this product a spare part?                                                                                    | false                                |
 | seriesId         | UUID         | No       | Serie ID                      | A unique id for a series of products, this id linked the products into a series                                  | 603474bc-a8e8-471c-87ef-09bdc57bea59 |
-| techData         | List         | No       | Tekniske data                 | A list of technical data for the product                                                                         | techdata table below                 |
-| media            | List         | No       | Media                         | A list of media files for the product                                                                            | media table below                    |
+| techData         | List         | No       | Tekniske data                 | A list of technical data for the product                                                                         | see techdata table below             |
+| media            | List         | No       | Media                         | A list of media files for the product                                                                            | see media table below                |
 | published        | Date         | No       | Publisert                     | The date when the product should be published                                                                    | 2023-08-22T13:39:51.884163           |
 | expired          | Date         | No       | Utløpsdato                    | The date when the product should be expired                                                                      | 2033-08-22T13:39:51.884163           |
 
@@ -88,7 +76,7 @@ You can also download kotlin code for the DTOs
 | value | String (255) | Yes      | Verdi                 | The value of the technical data | 45 |
 | unit  | String (255) | No       | Enhet                 | The unit of the technical data | cm |
 
-Valid techdata keys and units is listed here: https://finnhjelpemidler.nav.no/techdata
+Valid techdata labels with keys and units is listed [here](https://finnhjelpemidler-api.nav.no/import/api/v1/techlabels)
 
 ### Media
 
@@ -101,11 +89,7 @@ Valid techdata keys and units is listed here: https://finnhjelpemidler.nav.no/te
 | sourceType | String (255) | Yes      | Kilde                 | The source of the media file                                      | IMPORT, EXTERNALURL                             |
 
 
-More info about Media below.
-
-### Taxonomy/Category
-Finnhjelpemidler.nav.no use the Iso standard Category for assistive devices, 
-list of all categories can be found [here](https://finnhjelpemidler.nav.no/categories)) 
+More info about Media and how to upload media files below.
 
 ### Posting using stream
 Post products in stream by using Content-Type: application/x-json-stream. products are separated by a newline "\n" for
@@ -384,3 +368,19 @@ Content-Type: application/json
 Cache-Control: no-cache
 Authorization: Bearer <your secret key>
 ```
+
+# Definitions:
+
+## NAV's Assistive Devices Center (Hjelpemiddelsenter)
+NAV's Assistive Devices Center is a national service that provides information and guidance on assistive devices.
+
+## Framework agreement (Rammeavtale)
+Framework agreements provide an overview of the national assortment that NAV (Norwegian Labour and Welfare Administration)
+has in the field of assistive devices. When applying for an assistive device from NAV's Assistive Devices Center,
+you should always first consider whether one of the assistive devices found in a framework agreement can be used
+to meet your needs.
+More info about Rammeavtale is availble here: https://finnhjelpemidler.nav.no/rammeavtale
+
+## HMS Article number
+Products that are in a framework agreements, will get an unique HMS article number. This number will
+be used in communication with NAV's Assistive Devices Center.
