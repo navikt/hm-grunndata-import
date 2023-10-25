@@ -1,6 +1,7 @@
 package no.nav.hm.grunndata.importapi.transfer.media
 
 import io.micronaut.data.model.Page
+import io.micronaut.data.model.Pageable
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
@@ -41,8 +42,8 @@ class MediaTransferAPIController(private val mediaUploadService: MediaUploadServ
     }
 
     @Get("/{supplierId}/{supplierRef}")
-    suspend fun getMediaList(supplierId: UUID, supplierRef: String): Page<MediaTransferResponse> =
-        mediaTransferRepository.findBySupplierIdAndSupplierRef(supplierId, supplierRef).map {
+    suspend fun getMediaList(supplierId: UUID, supplierRef: String, pageable: Pageable): Page<MediaTransferResponse> =
+        mediaTransferRepository.findBySupplierIdAndSupplierRef(supplierId, supplierRef, pageable).map {
             it.toTransferResponse()
         }
 

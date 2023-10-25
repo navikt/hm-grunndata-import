@@ -81,7 +81,9 @@ micronaut:
       swagger-ui:
         paths: classpath:META-INF/swagger/views/swagger-ui
         mapping: /swagger-ui/**
-
+  openapi:
+    schema:
+      io.micronaut.data.model.Pageable: no.nav.hm.grunndata.importapi.openapi.OpenApiPageable
 endpoints:
   metrics:
     enabled: true

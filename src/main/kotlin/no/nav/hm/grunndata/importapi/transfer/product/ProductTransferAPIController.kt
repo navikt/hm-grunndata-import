@@ -2,6 +2,7 @@ package no.nav.hm.grunndata.importapi.transfer.product
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.data.model.Page
+import io.micronaut.data.model.Pageable
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
@@ -38,8 +39,8 @@ class ProductTransferAPIController(private val productTransferRepository: Produc
     }
 
     @Get(value="/{supplierId}/{supplierRef}")
-    suspend fun getTransfersBySupplierIdSupplierRef(supplierId: UUID, supplierRef: String): Page<ProductTransferResponse> =
-        productTransferRepository.findBySupplierIdAndSupplierRef(supplierId, supplierRef).map {
+    suspend fun getTransfersBySupplierIdSupplierRef(supplierId: UUID, supplierRef: String, pageable: Pageable): Page<ProductTransferResponse> =
+        productTransferRepository.findBySupplierIdAndSupplierRef(supplierId, supplierRef,pageable).map {
             it.toResponseDTO()
         }
 
