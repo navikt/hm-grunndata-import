@@ -3,8 +3,18 @@
 ## Introduction
 Vendors can use this API to upload and publish assistive devices to 
 [finnhjelpemidler.nav.no](https://finnhjelpemidler.nav.no).
-Finnhjelpemidler is a public site provided by NAV, a place where you can search 
-for, find information, and apply for assistive devices.
+Finnhjelpemidler is a public site provided by NAV (Norwegian Labour and Welfare Administration), 
+a place where you can search for, find information, and apply for assistive devices.
+
+### Features of the API:
+* Create new, change and deactivate products, accessories and spare parts
+* Connect product variants to series
+* Linking accessories and spare parts to main products
+* Upload media or documents (images, pdf, video)
+* Know the state of each product
+* Get Hms number of the product
+* Information about framework agreements (rammeavtale)
+* Download Iso categories and tech labels
 
 ## Registration
 Before you begin, you must register yourself as a vendor/supplier. Please email us
@@ -369,11 +379,11 @@ Authorization: Bearer <your secret key>
 NAV's Assistive Devices Center is a national service that provides information and guidance on assistive devices.
 
 ## Framework agreement (Rammeavtale)
-Framework agreements provide an overview of the national assortment that NAV (Norwegian Labour and Welfare Administration)
+Framework agreements provide an overview of the national assortment that NAV 
 has in the field of assistive devices. When applying for an assistive device from NAV's Assistive Devices Center,
 you should always first consider whether one of the assistive devices found in a framework agreement can be used
 to meet your needs.
-More info about Rammeavtale is availble here: https://finnhjelpemidler.nav.no/rammeavtale
+More info about Rammeavtale is availble [here](https://finnhjelpemidler.nav.no/rammeavtale)
 
 ## HMS Article number
 Products that are in a framework agreements, will get an unique HMS article number. This number will
