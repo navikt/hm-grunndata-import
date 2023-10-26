@@ -13,8 +13,8 @@ a place where you can search for, find information, and apply for assistive devi
 * Upload media or documents (images, pdf, video)
 * Know the state of each product
 * Get Hms number of the product
-* Information about framework agreements (rammeavtale)
-* Download Iso categories and tech labels
+* Information about [framework agreements](https://finnhelpemidler-api.nav.no/import/api/v1/agreements) (rammeavtale)
+* Download [Iso categories](https://finnhjelpemidler-api.nav.no/import/api/v1/isocategories) and [techdata labels](https://finnhjelpemidler-api.nav.no/import/api/v1/techlabels)
 
 ## Registration
 Before you begin, you must register yourself as a vendor/supplier. Please email us
@@ -38,36 +38,36 @@ Cache-Control: no-cache
 Content-Type: application/x-json-stream
 Authorization: Bearer <your secret key>
 ```
-## Open API for Test and production environment
-To test the integration, you can use the Open api specification, 
+## OpenAPI
+To test the integration, you can use the OpenAPI specification, 
 it is available [here in test](https://finnhjelpemidler-api.ekstern.dev.nav.no/import/swagger-ui/), and in
 [prod](https://finnhjelpemidler-api.nav.no/import/swagger-ui/).
 
-# JSON Structure
+# Rest API
 
-The data format is JSON, below is a diagram of the json structure:
+The data exchange format is JSON, below is a diagram of the product json structure:
 <img src="./json-example-01.svg">
 You can also download kotlin code for the DTOs
 [here](https://github.com/navikt/hm-grunndata-import/blob/master/src/main/kotlin/no/nav/hm/grunndata/importapi/transfer/)
 
 ## Json properties
 
-| Name             | Type         | Required | Norwegian translation         | Description                                                                                                                   | Example                              |
-|:-----------------|:-------------|:---------|:------------------------------|:------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------|
-| Title            | String (255) | Yes      | Tittel                        | Title or name of the product, product variants that are connected in a series will have this as the series title              | Mini crosser X1                      |
-| articleName      | String (255) | Yes      | Artikkel Navn                 | The name or title of the article                                                                                              | Mini crosser x1 4w                   |
-| shortDescription | TEXT         | Yes      | Kort beskrivelse              | A short summary text                                                                                                          | A short summary text                 |
-| text             | TEXT         | Yes      | Produkt beskrivelse           | A describing text, html must be welformed. We only support basic html tags                                                    | A describing text                    |
-| manufacturer     | String (255) | No       | Produsent                     | The name of the company who made this product                                                                                 | Medema                               |
-| supplierRef      | String (255) | Yes      | Leverandør artikkel referanse | A unique reference to identify the product                                                                                    | alphanumber eg: A4231F-132           |
- | isoCategory      | String (255) | Yes      | ISO Kategori                  | The ISO category for the product, categories can be found [here](https://finnhjelpemidler-api.nav.no/import/api/v1/categories)| 12230301                             |
-| accessory        | Boolean      | Yes      | Tilbehør                      | Is this product an accessory?                                                                                                 | true                                 |
-| sparePart        | Boolean      | Yes      | Reservedel                    | Is this product a spare part?                                                                                                 | false                                |
-| seriesId         | UUID         | No       | Serie ID                      | A unique id for a series of products, this id linked the products into a series                                               | 603474bc-a8e8-471c-87ef-09bdc57bea59 |
-| techData         | List         | No       | Tekniske data                 | A list of technical data for the product                                                                                      | see techdata table below             |
-| media            | List         | No       | Media                         | A list of media files for the product                                                                                         | see media table below                |
-| published        | Date         | No       | Publisert                     | The date when the product should be published                                                                                 | 2023-08-22T13:39:51.884163           |
-| expired          | Date         | No       | Utløpsdato                    | The date when the product should be expired                                                                                   | 2033-08-22T13:39:51.884163           |
+| Name             | Type         | Required | Norwegian translation         | Description                                                                                                                    | Example                              |
+|:-----------------|:-------------|:---------|:------------------------------|:-------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------|
+| Title            | String (255) | Yes      | Tittel                        | Title or name of the product, product variants that are connected in a series will have this as the series title               | Mini crosser X1                      |
+| articleName      | String (255) | Yes      | Artikkel Navn                 | The name or title of the article                                                                                               | Mini crosser x1 4w                   |
+| shortDescription | TEXT         | Yes      | Kort beskrivelse              | A short summary text                                                                                                           | A short summary text                 |
+| text             | TEXT         | Yes      | Produkt beskrivelse           | A describing text, html must be welformed. We only support basic html tags                                                     | A describing text                    |
+| manufacturer     | String (255) | No       | Produsent                     | The name of the company who made this product                                                                                  | Medema                               |
+| supplierRef      | String (255) | Yes      | Leverandør artikkel referanse | A unique reference to identify the product                                                                                     | alphanumber eg: A4231F-132           |
+ | isoCategory      | String (255) | Yes      | ISO Kategori                  | The ISO category for the product, categories can be found [here](https://finnhjelpemidler-api.nav.no/import/api/v1/categories) | 12230301                             |
+| accessory        | Boolean      | Yes      | Tilbehør                      | Is this product an accessory?                                                                                                  | true                                 |
+| sparePart        | Boolean      | Yes      | Reservedel                    | Is this product a spare part?                                                                                                  | false                                |
+| seriesId         | UUID         | No       | Serie ID                      | A unique id for a series of products, this id linked the products into a series                                                | 603474bc-a8e8-471c-87ef-09bdc57bea59 |
+| techData         | List         | No       | Tekniske data                 | A list of technical data for the product                                                                                       | see techdata table below             |
+| media            | List         | No       | Media                         | A list of media files for the product                                                                                          | see media table below                |
+| published        | Date         | No       | Publisert                     | The date when the product should be published                                                                                  | 2023-08-22T13:39:51.884163           |
+| expired          | Date         | No       | Utløpsdato                    | The date when the product should expire                                                                                        | 2033-08-22T13:39:51.884163           |
 
 ### Techdata
 
@@ -92,10 +92,9 @@ Valid techdata labels with keys and units is listed [here](https://finnhjelpemid
 
 More info about Media and how to upload media files below.
 
-# REST API
-This API is designed as a lightweight REST API supporting HTTP requests with JSON as payload.
+The API is designed as a lightweight REST API supporting HTTP requests with JSON as payload.
 
-### Posting using stream
+### Posting a Product using stream
 Post products in stream by using Content-Type: application/x-json-stream. products are separated by a newline "\n" for
 example:
 

@@ -124,7 +124,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
             media = media.map { mapMedia(it)},
             published = nPublished,
             expired = nExpired,
-            status = mapStatus(nPublished, nExpired),
+            status = mapStatus(nPublished, nExpired, this),
             agreements = agreements.map { mapProductAgreement(it) },
             hasAgreement = false,
             createdBy = IMPORT,
@@ -143,10 +143,10 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
         )
     }
 
-    private fun mapStatus(published: LocalDateTime, expired: LocalDateTime): ProductStatus {
-        return if (published.isBefore(LocalDateTime.now()) && expired.isAfter(LocalDateTime.now())) {
-            ProductStatus.ACTIVE
-        } else ProductStatus.INACTIVE
+    private fun mapStatus(published: LocalDateTime, expired: LocalDateTime, prodctTransferDTO: ProductTransferDTO): ProductStatus {
+        return if (prodctTransferDTO.status == ProductStatus.DELETED) ProductStatus.DELETED // DELETED means it is deleted, don't care about published and expired
+            else if (published.isBefore(LocalDateTime.now()) && expired.isAfter(LocalDateTime.now()))  ProductStatus.ACTIVE
+            else ProductStatus.INACTIVE
     }
 
 

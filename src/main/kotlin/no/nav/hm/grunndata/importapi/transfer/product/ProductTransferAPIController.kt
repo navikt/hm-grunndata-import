@@ -18,6 +18,7 @@ import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
 import no.nav.hm.grunndata.importapi.techdata.TechDataLabelService
 import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferAPIController.Companion.API_V1_PRODUCT_TRANSFERS
+import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
@@ -80,14 +81,15 @@ class ProductTransferAPIController(private val productTransferRepository: Produc
     }
 
     @Delete("/{supplierId}/{supplierRef}")
-    suspend fun delete(supplierId: UUID, supplierRef: String): HttpResponse<ProductTransferResponse>  {
+    suspend fun delete(supplierId: UUID, supplierRef: String, @QueryValue(defaultValue = "false") delete: Boolean): HttpResponse<ProductTransferResponse>  {
         LOG.info("delete has been called for $supplierId and $supplierRef")
         return productTransferRepository.findOneBySupplierIdAndSupplierRefOrderByCreatedDesc(supplierId, supplierRef)?.let {
-            val expiredPayload = it.json_payload.copy(expired = LocalDateTime.now().minusMinutes(1))
+            val expiredPayload = it.json_payload.copy(expired = LocalDateTime.now().minusMinutes(1), status = ProductStatus.DELETED)
             val md5 = objectMapper.writeValueAsString(expiredPayload).toMD5Hex()
+            val action = if (delete) "Deleted" else "Deactivated"
             val expiredState = it.copy(
                 transferId = UUID.randomUUID(), json_payload = expiredPayload,
-                message = "deleted by supplier", md5 = md5
+                message = "${action} by supplier", md5 = md5
             )
             HttpResponse.created(productTransferRepository.save(expiredState).toResponseDTO())
         } ?: HttpResponse.notFound()

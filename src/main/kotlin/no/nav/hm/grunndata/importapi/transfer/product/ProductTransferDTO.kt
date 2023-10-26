@@ -3,6 +3,7 @@ package no.nav.hm.grunndata.importapi.transfer.product
 
 import no.nav.hm.grunndata.rapid.dto.MediaSourceType
 import no.nav.hm.grunndata.rapid.dto.MediaType
+import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import java.time.LocalDateTime
 import java.util.*
 
@@ -11,6 +12,7 @@ data class ProductTransferDTO (
     val title: String,
     val articleName: String,
     val shortDescription: String,
+    val status: ProductStatus = ProductStatus.ACTIVE,
     val text: String,
     val url: String?=null,
     val manufacturer: String?=null,
