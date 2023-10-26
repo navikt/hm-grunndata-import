@@ -39,7 +39,7 @@ Content-Type: application/x-json-stream
 Authorization: Bearer <your secret key>
 ```
 
-## Rest API
+# Rest API
 
 ### OpenAPI
 To test the integration, you can use the OpenAPI specification,
@@ -378,7 +378,7 @@ not available for search, you can add "?delete=true" as query parameter i the re
 DELETE https://finnhjelpemidler-api.nav.no/import/api/v1/products/transfer/{supplierId}/{supplierRef}?delete=true
 ```
 
-## Definitions:
+# Definitions:
 
 ### NAV's Assistive Devices Center (Hjelpemiddelsenter)
 NAV's Assistive Devices Center is a national service that provides information and guidance on assistive devices.
@@ -391,5 +391,8 @@ to meet your needs.
 More info about Rammeavtale is availble [here](https://finnhjelpemidler.nav.no/rammeavtale)
 
 ### HMS Article number
-Products that are in a framework agreements, will get an unique HMS article number. This number will
-be used in communication with NAV's Assistive Devices Center.
+Products that are in a framework agreements and can be apply through NAV, will always get an unique HMS article number. 
+HMSArtNr is a stock identification number and will be used in communication with NAV's Assistive Devices Center.
+
+# Questions and suggestions
+If you have any questions or suggestions please feel free to report it as github [issues](https://github.com/navikt/hm-grunndata-import/issues)
