@@ -16,7 +16,7 @@ a place where you can search for, find information, and apply for assistive devi
 * Information about [framework agreements](https://finnhelpemidler-api.nav.no/import/api/v1/agreements) (rammeavtale)
 * Download [Iso categories](https://finnhjelpemidler-api.nav.no/import/api/v1/isocategories) and [techdata labels](https://finnhjelpemidler-api.nav.no/import/api/v1/techlabels)
 
-## Registration
+### Registration
 Before you begin, you must register yourself as a vendor/supplier. Please email us
 with the following information:
 
@@ -26,7 +26,7 @@ with the following information:
 
 We will send you your supplier identity including a secret key that gives you access to our API
 
-## Authentication/Authorization
+### Authentication/Authorization
 The API is not publicly open, all requests need to be authenticated using
 the HTTP bearer authorization header.
 
@@ -38,19 +38,20 @@ Cache-Control: no-cache
 Content-Type: application/x-json-stream
 Authorization: Bearer <your secret key>
 ```
-## OpenAPI
-To test the integration, you can use the OpenAPI specification, 
+
+## Rest API
+
+### OpenAPI
+To test the integration, you can use the OpenAPI specification,
 it is available [here in test](https://finnhjelpemidler-api.ekstern.dev.nav.no/import/swagger-ui/), and in
 [prod](https://finnhjelpemidler-api.nav.no/import/swagger-ui/).
-
-# Rest API
 
 The data exchange format is JSON, below is a diagram of the product json structure:
 <img src="./json-example-01.svg">
 You can also download kotlin code for the DTOs
 [here](https://github.com/navikt/hm-grunndata-import/blob/master/src/main/kotlin/no/nav/hm/grunndata/importapi/transfer/)
 
-## Json properties
+### Json properties
 
 | Name             | Type         | Required | Norwegian translation         | Description                                                                                                                    | Example                              |
 |:-----------------|:-------------|:---------|:------------------------------|:-------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------|
@@ -237,12 +238,12 @@ Then linking the uri to the product json within the media array:
 * Only jpg, png and pdf files are supported
 * You can not link more than 10 media files per product
 
-# Series of products
+## Series of products
 A series of products is a group of products that are similar, but have different variants. 
 To group the variants to a series, you have to create a series first.
 Then you can upload the variants and link them to the series by using the seriesId.
 
-## Posting a series
+### Posting a series
 ```
 POST https://finnhjelpemidler-api.nav.no/import/api/v1/product/series/{supplierId}
 Accept: application/json
@@ -262,7 +263,7 @@ Authorization: Bearer <your secret key>
 | title   | String (255) | Yes      | Serie tittel          | Title or name of the series, product variants that are connected in a series will have this as the series title | Mini crosser X1                      |
 | status  | String (255) | Yes      | Status                | The status of the series, ACTIVE or INACTIVE                                                                    | ACTIVE, INACTIVE                     |
 
-## Posting a product variant of a series
+### Posting a product variant of a series
 Posting a variant is exactly the same as product, and use seriesId to tell which series the variant belongs to.
 
 ```
@@ -377,18 +378,18 @@ not available for search, you can add "?delete=true" as query parameter i the re
 DELETE https://finnhjelpemidler-api.nav.no/import/api/v1/products/transfer/{supplierId}/{supplierRef}?delete=true
 ```
 
-# Definitions:
+## Definitions:
 
-## NAV's Assistive Devices Center (Hjelpemiddelsenter)
+### NAV's Assistive Devices Center (Hjelpemiddelsenter)
 NAV's Assistive Devices Center is a national service that provides information and guidance on assistive devices.
 
-## Framework agreement (Rammeavtale)
+### Framework agreement (Rammeavtale)
 Framework agreements provide an overview of the national assortment that NAV 
 has in the field of assistive devices. When applying for an assistive device from NAV's Assistive Devices Center,
 you should always first consider whether one of the assistive devices found in a framework agreement can be used
 to meet your needs.
 More info about Rammeavtale is availble [here](https://finnhjelpemidler.nav.no/rammeavtale)
 
-## HMS Article number
+### HMS Article number
 Products that are in a framework agreements, will get an unique HMS article number. This number will
 be used in communication with NAV's Assistive Devices Center.
