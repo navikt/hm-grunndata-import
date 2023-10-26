@@ -371,6 +371,11 @@ Content-Type: application/json
 Cache-Control: no-cache
 Authorization: Bearer <your secret key>
 ```
+Deactivate meaning the product is expired but still searchable, if you want to remove the product completely and 
+not available for search, you can add "?delete=true" as query parameter i the request.
+```
+DELETE https://finnhjelpemidler-api.nav.no/import/api/v1/products/transfer/{supplierId}/{supplierRef}?delete=true
+```
 
 # Definitions:
 
