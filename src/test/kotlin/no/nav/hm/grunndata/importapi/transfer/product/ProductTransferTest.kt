@@ -106,8 +106,10 @@ class ProductTransferTest(private val client: ProductTransferClient,
             }.collect()
 
             // test "delete" product
-            val delete = client.deleteProduct(authorization = token, supplierId = supplier!!.id, supplierRef = "1500-1530")
-            delete.body().message shouldBe "Deactivated by supplier"
+            val deactivate = client.deleteProduct(authorization = token, supplierId = supplier!!.id, supplierRef = "1500-1530")
+            deactivate.body().message shouldBe "Deactivated by supplier"
+            val delete = client.deleteProduct(authorization = token, supplierId = supplier!!.id, supplierRef = "1500-1530", delete = true)
+            delete.body().message shouldBe "Deleted by supplier"
         }
 
     }
