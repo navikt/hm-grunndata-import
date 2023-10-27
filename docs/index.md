@@ -402,8 +402,23 @@ Authorization: Bearer <your secret key>
 
 Response:
 ```
-
+{
+  "id": "9c68e99a-a730-4048-ad2c-2ba8ff466b8f",
+  "transferId": "9de89dfe-26d1-45be-97c5-980e4afc389b",
+  "supplierId": "f639825c-2fc6-49cd-82ae-31b8ffa449a6",
+  "supplierRef": "99521146",
+  "hmsArtNr": "124152",
+  "seriesId": "9c68e99a-a730-4048-ad2c-2ba8ff466b8f",
+  "productStatus": "ACTIVE",
+  "adminStatus": "APPROVED",
+  "message": null,
+  "created": "2023-10-19T10:46:36.684414",
+  "updated": "2023-10-19T12:21:37.457247",
+  "version": 1
+}
 ```
+If the product is rejected by admin, it will have adminStatus=REJECTED and with a message telling you why it was rejected.
+You can also get the Hms Number of the product if it is part of an framework agreement, by using the hmsArtNr property.
 
 ## Deactivate product
 To deactivate a product, use the product supplierRef to deactivate it.
@@ -417,7 +432,7 @@ Cache-Control: no-cache
 Authorization: Bearer <your secret key>
 ```
 Deactivate meaning the product is expired but still searchable, if you want to remove the product completely and 
-not available for search, you can add "?delete=true" as query parameter i the request.
+not available for search, you can add "?delete=true" as query parameter in the request.
 ```
 DELETE https://finnhjelpemidler-api.nav.no/import/api/v1/products/transfer/{supplierId}/{supplierRef}?delete=true
 ```
