@@ -47,6 +47,23 @@ data class ProductImportDTO(
     val version: Long?=0L
 )
 
+data class ProductImportResponse(
+    val id: UUID,
+    val transferId: UUID,
+    val supplierId: UUID,
+    val supplierRef: String,
+    val seriesId: UUID,
+    val hmsArtNr: String?,
+    val productStatus: ProductStatus,
+    val adminStatus: AdminStatus = AdminStatus.PENDING,
+    val adminMessage: String ?= null,
+    val created: LocalDateTime = LocalDateTime.now(),
+    val updated: LocalDateTime = LocalDateTime.now(),
+    val version: Long?=0L
+)
+
+
+
 fun ProductImport.toDTO(): ProductImportDTO  = ProductImportDTO (
     id = id,
     transferId = transferId,

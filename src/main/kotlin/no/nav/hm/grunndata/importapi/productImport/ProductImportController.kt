@@ -28,6 +28,22 @@ class ProductImportController(private val importService: ProductImportService) {
     @Get("/{supplierId}/series/{seriesId}")
     suspend fun getProductImportBySupplierIdAndSeriesId(supplierId: UUID, seriesId: UUID, pageable: Pageable =
             Pageable.from(0, 100, Sort.of(Sort.Order("updated"))))
-        = importService.getProductImportBySupplierIdAndSeriesId(supplierId,seriesId,pageable)
+        = importService.getProductImportBySupplierIdAndSeriesId(supplierId,seriesId,pageable).map { it.toProductImportResponse() }
 
 }
+
+
+private fun ProductImportDTO.toProductImportResponse() = ProductImportResponse (
+    id = id,
+    transferId = transferId,
+    supplierId = supplierId,
+    supplierRef = supplierRef,
+    seriesId = seriesId,
+    hmsArtNr = hmsArtNr,
+    productStatus = productStatus,
+    adminStatus = adminStatus,
+    adminMessage = adminMessage,
+    created = created,
+    updated = updated,
+    version = version
+)
