@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.asPublisher
-import kotlinx.coroutines.reactive.collect
 import no.nav.hm.grunndata.importapi.error.ErrorType
 import no.nav.hm.grunndata.importapi.error.ImportApiError
 import no.nav.hm.grunndata.importapi.iso.IsoCategoryService
@@ -52,20 +51,17 @@ class ProductTransferAPIController(private val productTransferRepository: Produc
 
     @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])
     suspend fun productStream(@PathVariable supplierId: UUID, @Body transfers: Publisher<ProductTransferDTO>): Publisher<ProductTransferResponse> =
-        transfers.asFlow().map {
-            runCatching {
-                val md5 = objectMapper.writeValueAsString(it).toMD5Hex()
-                LOG.info("Got product stream from $supplierId with supplierRef: ${it.supplierRef}")
-                productTransferRepository.findBySupplierIdAndMd5(supplierId, md5)?.let { identical ->
-                    LOG.info("Identical product ${identical.md5} with previous transfer ${identical.transferId}")
-                    identical.toResponseDTO()
-                } ?: run {
-                    validate(it)
-                    createTransferState(supplierId, transfer, md5)
-                }
+        transfers.asFlow().map { transfer ->
+            val md5 = objectMapper.writeValueAsString(transfer).toMD5Hex()
+            LOG.info("Got product stream from $supplierId with supplierRef: ${transfer.supplierRef}")
+            productTransferRepository.findBySupplierIdAndMd5(supplierId, md5)?.let { identical ->
+                LOG.info("Identical product ${identical.md5} with previous transfer ${identical.transferId}")
+                identical.toResponseDTO()
+            } ?: run {
+                validate(transfer)
+                createTransferState(supplierId, transfer, md5)
             }
-        }.asPublisher().collect {  }
-
+        }.asPublisher()
 
     private fun validate(transfer: ProductTransferDTO) {
         if (transfer.techData.isNotEmpty()) {
