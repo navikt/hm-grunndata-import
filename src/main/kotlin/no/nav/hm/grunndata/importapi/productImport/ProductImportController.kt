@@ -23,7 +23,7 @@ class ProductImportController(private val importService: ProductImportService) {
 
     @Get("/{supplierId}/{supplierRef}")
     suspend fun getProductImportBySupplierIdAndSupplierRef(supplierId: UUID, supplierRef: String) =
-        importService.getProductImportBySupplierIdAndSupplierRef(supplierId,supplierRef)
+        importService.getProductImportBySupplierIdAndSupplierRef(supplierId,supplierRef)?.toProductImportResponse()
 
     @Get("/{supplierId}/series/{seriesId}")
     suspend fun getProductImportBySupplierIdAndSeriesId(supplierId: UUID, seriesId: UUID, pageable: Pageable =
