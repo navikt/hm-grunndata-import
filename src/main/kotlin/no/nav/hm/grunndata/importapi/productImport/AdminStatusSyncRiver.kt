@@ -45,10 +45,11 @@ class AdminStatusSyncRiver(river: RiverHead,
         val dtoVersion = packet["dtoVersion"].asLong()
         val version = packet["version"].asLong()
         val transferId = UUID.fromString(packet["transferId"].textValue())
+        LOG.info("got adminstatus sync for transferId $transferId with version: $version")
         if (dtoVersion > rapidDTOVersion)
             LOG.warn("this event dto version $dtoVersion is newer than our version: $rapidDTOVersion")
         val dto = objectMapper.treeToValue(packet["payload"], ProductRegistrationRapidDTO::class.java)
-        if (DraftStatus.DONE == dto.draftStatus && IMPORT == dto.productDTO.createdBy) {
+        if (DraftStatus.DONE == dto.draftStatus) {
             runBlocking {
                 LOG.info("adminstatus sync for ${dto.id} with adminstatus ${dto.adminStatus} " +
                         "with transferId $transferId and version: $version ")
