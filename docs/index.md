@@ -92,13 +92,13 @@ Also some products in framework agreements requires techdata to be added, if dat
 
 ### Media
 
-| Name       | Type         | Required | Norwegian translation | Description                                                       | Example                                                |
-|:-----------|:-------------|:---------|:----------------------|:------------------------------------------------------------------|:-------------------------------------------------------|
-| uri        | String (255) | Yes      | URI                   | The uri to the media file                                         | imort/12345/1223456.jpg or https://youtube.com/myvideo |
-| priority   | Integer      | Yes      | Prioritet             | The priority of the media file, 1 will always be the main picture | 1                                                      |
-| type       | String (255) | Yes      | Type                  | The type of the media file                                        | IMAGE, PDF, VIDEO                                      |
-| text       | TEXT         | Yes      | Tekst                 | A describing text for the media file                              | Main picture showing the standard configuration        |
-| sourceType | String (255) | Yes      | Kilde                 | The source of the media file                                      | IMPORT, EXTERNALURL                                    |
+| Name       | Type         | Required | Norwegian translation | Description                                                                                               | Example                                                |
+|:-----------|:-------------|:---------|:----------------------|:----------------------------------------------------------------------------------------------------------|:-------------------------------------------------------|
+| uri        | String (255) | Yes      | URI                   | The uri to the media file                                                                                 | imort/12345/1223456.jpg or https://youtube.com/myvideo |
+| priority   | Integer      | Yes      | Prioritet             | The priority of the media file, 1 will always be the main picture                                         | 1                                                      |
+| type       | String (255) | Yes      | Type                  | The type of the media file                                                                                | IMAGE, PDF, VIDEO                                      |
+| text       | TEXT         | Yes      | Tekst                 | A describing text for the media file                                                                      | Main picture showing the standard configuration        |
+| sourceType | String (255) | Yes      | Kilde                 | The source of the media file, "IMPORT" for the ones uploaded, "EXTERNALURL" should be used only for video | IMPORT, EXTERNALURL                                    |
 
 
 More info about Media and how to upload media files below.
@@ -199,20 +199,16 @@ transfer-encoding: chunked
 content-type: application/x-json-stream
 
 {
-  "versionId" : 1,
-  "status" : "RECEIVED",
-  "md5" : "3D5A0C23BC12D58D5865CF3CFC086F11",
-  "items" : 1,
-  "created" : "2020-04-03T12:37:07.83019",
-  "updated" : "2020-04-03T12:37:07.830203"
-}{
-  "versionId" : 2,
-  "status" : "RECEIVED",
-  "md5" : "CA41CC694F62E14F72FDE43B66C9821B",
-  "items" : 1,
-  "created" : "2020-04-03T12:37:07.861917",
-  "updated" : "2020-04-03T12:37:07.861923"
+  "transferId": "379040d7-8b52-429e-b6fd-6c63d95a40e6",
+  "supplierId": "f639825c-2fc6-49cd-82ae-31b8ffa449a6",
+  "supplierRef": "99521146",
+  "md5": "735948868931D5D1640180C0ADA52931",
+  "transferStatus": "RECEIVED",
+  "created": "2023-10-31T09:33:22.617676738"
 }
+.
+.
+.
 ```
 
 It is important to check the status for each receipt, if it is not "ERROR".
