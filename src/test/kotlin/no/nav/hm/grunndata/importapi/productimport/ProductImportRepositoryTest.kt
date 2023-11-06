@@ -37,7 +37,7 @@ class ProductImportRepositoryTest(private val productImportRepository: ProductIm
             sparePart = false,
             seriesId = productId.toString(),
             techData = listOf(TechData(key = "maksvekt", unit = "kg", value = "120")),
-            media = listOf(
+            media = setOf(
                 MediaInfo(uri="123.mp4", text = "video av produktet", source = MediaSourceType.EXTERNALURL,
                 sourceUri = "https://ekstern.url/123.mp4")
             ),

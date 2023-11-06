@@ -121,7 +121,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
             sparePart = sparePart,
             seriesId =  series.seriesId.toString(),
             techData = techData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
-            media = media.map { mapMedia(it)},
+            media = media.map { mapMedia(it)}.toSet(),
             published = nPublished,
             expired = nExpired,
             status = mapStatus(nPublished, nExpired, this),
