@@ -9,12 +9,14 @@ import no.nav.hm.grunndata.importapi.error.ImportApiError
 import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportDTO
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportService
+import no.nav.hm.grunndata.importapi.seriesImport.toRapidDTO
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.supplier.toDTO
 import no.nav.hm.grunndata.importapi.transfer.product.*
 import no.nav.hm.grunndata.rapid.dto.*
 import no.nav.hm.grunndata.rapid.dto.CompatibleWith
 import no.nav.hm.grunndata.rapid.dto.TechData
+import no.nav.hm.grunndata.rapid.event.EventName
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.UUID
@@ -25,7 +27,8 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
                                 private val supplierService: SupplierService,
                                 private val seriesImportService: SeriesImportService,
                                 private val agreementService: AgreementService,
-                                private val gdbApiClient: GdbApiClient
+                                private val gdbApiClient: GdbApiClient,
+                                private val importRapidPushService: ImportRapidPushService
 ) {
 
     companion object {
@@ -106,8 +109,9 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
                     if (!transfer.json_payload.accessory && !transfer.json_payload.sparePart) {
                         LOG.info("SeriesId $seriesId not found in GDB, creating new series cause it is a main product")
                         seriesImportService.save(dto)
+                        importRapidPushService.pushDTOToKafka(dto.toRapidDTO(), EventName.importedSeriesV1)
                     }
-                    else dto
+                    dto
                 }
         }
         return transfer.json_payload.toProductRapidDTO(productId, transfer.supplierId, series)
