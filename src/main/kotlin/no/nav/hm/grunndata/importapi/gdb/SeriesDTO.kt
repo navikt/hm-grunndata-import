@@ -10,6 +10,7 @@ data class SeriesDTO(
     val status: SeriesStatus = SeriesStatus.ACTIVE,
     val title: String,
     val text: String,
+    val isoCategory: String,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now(),
     val expired: LocalDateTime = LocalDateTime.now()

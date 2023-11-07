@@ -7,6 +7,7 @@ import no.nav.hm.grunndata.importapi.agreement.AgreementService
 import no.nav.hm.grunndata.importapi.error.ErrorType
 import no.nav.hm.grunndata.importapi.error.ImportApiError
 import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
+import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportDTO
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportService
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.supplier.toDTO
@@ -85,38 +86,50 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
     }
 
     private fun createProductDTO(productId: UUID, transfer: ProductTransfer): ProductRapidDTO {
-        val seriesId = transfer.json_payload.seriesId
-        val series = seriesId?.let {
-            seriesImportService.findByIdCacheable(seriesId)?.let {
-                Series(it.seriesId, it.title, it.text)
-            } ?: run {
-                gdbApiClient.getSeriesById(seriesId)?.let { Series(it.id, it.title, it.text)} ?:
-                throw ImportApiError("Series with id $seriesId not found", ErrorType.NOT_FOUND)
-            }
-        } ?: Series(productId, transfer.json_payload.title, transfer.json_payload.text) // use productId as seriesId
+        val seriesId = transfer.json_payload.seriesId ?: productId // if seriesId not given, use productId as seriesId
+        val series = seriesImportService.findByIdCacheable(seriesId) ?: run {
+                LOG.info("Series $seriesId not found in cache, fetching from GDB")
+                gdbApiClient.getSeriesById(seriesId)?.let { SeriesImportDTO(seriesId = it.id,
+                    title = it.title, text = it.text, expired = it.expired,
+                    isoCategory = it.isoCategory, supplierId = it.supplierId, transferId = UUID.randomUUID())
+                } ?: run {
+                    val dto =   SeriesImportDTO(
+                        seriesId = seriesId,
+                        title = transfer.json_payload.title,
+                        text = transfer.json_payload.text,
+                        isoCategory = transfer.json_payload.isoCategory,
+                        supplierId = transfer.supplierId,
+                        transferId = UUID.randomUUID(),
+                        expired = LocalDateTime.now().plusYears(15)
+                    )
+                    LOG.info("SeriesId $seriesId not found in GDB, creating new series cause it is a main product")
+                    if (!transfer.json_payload.accessory && !transfer.json_payload.sparePart) seriesImportService.save(dto)
+                    else dto
+                }
+        }
         return transfer.json_payload.toProductRapidDTO(productId, transfer.supplierId, series)
     }
 
 
 
-    private fun ProductTransferDTO.toProductRapidDTO(productId: UUID, supplierId: UUID, series: Series): ProductRapidDTO {
+    private fun ProductTransferDTO.toProductRapidDTO(productId: UUID, supplierId: UUID, series: SeriesImportDTO): ProductRapidDTO {
         val nPublished = published ?: LocalDateTime.now().minusMinutes(1)
         val nExpired = expired ?: LocalDateTime.now().plusYears(10)
         return ProductRapidDTO (
             id = productId,
             supplier = supplierService.findById(supplierId)!!.toDTO(),
-            title = series.title, // use series title as product title, if products are connected in a series, they have to use the same title.
+            title = series.title, // use series title, text and iso, if products are connected in a series, they have to be the same.
             articleName = articleName,
             supplierRef = supplierRef,
             attributes = Attributes (
                 shortdescription = shortDescription,
-                text = series.text,
+                text = series.text, //
                 url = url,
                 compatibleWidth = if (this.compatibleWith!=null) CompatibleWith(
                     seriesIds = compatibleWith.seriesIds) else null
             ),
             identifier = productId.toString(),
-            isoCategory = isoCategory,
+            isoCategory = series.isoCategory,
             accessory = accessory,
             sparePart = sparePart,
             seriesId =  series.seriesId.toString(),
