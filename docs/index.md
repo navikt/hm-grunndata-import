@@ -66,7 +66,7 @@ You can also download kotlin code for the DTOs
 | text             | TEXT         | Yes      | Produkt beskrivelse           | A describing text, html must be welformed. We only support basic html tags                                                        | A describing text                    |
 | manufacturer     | String (255) | No       | Produsent                     | The name of the company who made this product                                                                                     | Medema                               |
 | supplierRef      | String (255) | Yes      | Leverandør artikkel referanse | A unique reference to identify the product                                                                                        | alphanumber eg: A4231F-132           |
- | isoCategory      | String (255) | Yes      | ISO Kategori                  | The ISO category for the product, categories can be found [here](https://finnhjelpemidler-api.nav.no/import/api/v1/isocategories) | 12230301                             |
+ | isoCategory      | String (8)   | Yes      | ISO Kategori                  | The ISO category for the product, categories can be found [here](https://finnhjelpemidler-api.nav.no/import/api/v1/isocategories) | 12230301                             |
 | accessory        | Boolean      | Yes      | Tilbehør                      | Is this product an accessory?                                                                                                     | true                                 |
 | sparePart        | Boolean      | Yes      | Reservedel                    | Is this product a spare part?                                                                                                     | false                                |
 | seriesId         | UUID         | No       | Serie ID                      | A unique id for a series of products, this id linked the products into a series                                                   | 603474bc-a8e8-471c-87ef-09bdc57bea59 |
@@ -281,10 +281,37 @@ Then linking the uri to the product json within the media array:
 
 ## Series of products
 A series of products is a group of products that are similar, but have different variants. 
-To group the variants to a series, you have to create a series first.
-Then you can upload the variants and link them to the series by using the seriesId.
+Product variants in a series share the same title, iso category and text. They will be grouped together in the search result.
+To group the variants to a series, you can either create a new series, or use the seriesId of an existing series.
+All products will have a seriesId, you can see the seriesId by using of the product using the product state endpoint:
+```
+GET https://finnhjelpemidler-api.nav.no/import/api/v1/products/import/{supplierId}/{supplierRef}
+Accept: application/json
+Content-Type: application/json
+Cache-Control: no-cache
+Authorization: Bearer <your secret key>
 
-### Posting a series
+```
+
+Response:
+```
+{
+  "id": "9c68e99a-a730-4048-ad2c-2ba8ff466b8f",
+  "transferId": "9de89dfe-26d1-45be-97c5-980e4afc389b",
+  "supplierId": "f639825c-2fc6-49cd-82ae-31b8ffa449a6",
+  "supplierRef": "99521146",
+  "hmsArtNr": "124152",
+  "seriesId": "9c68e99a-a730-4048-ad2c-2ba8ff466b8f",
+  "productStatus": "ACTIVE",
+  "adminStatus": "APPROVED",
+  "message": null,
+  "created": "2023-10-19T10:46:36.684414",
+  "updated": "2023-10-19T12:21:37.457247",
+  "version": 1
+}
+```
+
+### Creating a new series
 ```
 POST https://finnhjelpemidler-api.nav.no/import/api/v1/product/series/{supplierId}
 Accept: application/json
@@ -294,6 +321,8 @@ Authorization: Bearer <your secret key>
 {
   "seriesId": "603474bc-a8e8-471c-87ef-09bdc57bea59",
   "title": "Mini Crosser",
+  "text": "En felles beskrivelse av serien",
+  "isoCategory": "12230301",
   "status": "ACTIVE"
 }
 ```
@@ -303,6 +332,8 @@ Authorization: Bearer <your secret key>
 | seriesId| UUID         | No       | Serie ID              | A unique id for a series of products, this id linked the products into a series                                 | 603474bc-a8e8-471c-87ef-09bdc57bea59 |
 | title   | String (255) | Yes      | Serie tittel          | Title or name of the series, product variants that are connected in a series will have this as the series title | Mini crosser X1                      |
 | status  | String (255) | Yes      | Status                | The status of the series, ACTIVE or INACTIVE                                                                    | ACTIVE, INACTIVE                     |
+| text    | TEXT         | Yes      | Serie beskrivelse     | A describing text, html must be welformed. We only support basic html tags                                      | A describing text                    |
+| isoCategory | String (8)   | Yes      | ISO Kategori          | The ISO category for the series, categories can be found [here](https://finnhjelpemidler-api.nav.no/import/api/v1/isocategories) | 12230301                             |
 
 ### Posting a product variant of a series
 Posting a variant is exactly the same as product, and use seriesId to tell which series the variant belongs to.

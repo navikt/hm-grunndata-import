@@ -102,8 +102,11 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
                         transferId = UUID.randomUUID(),
                         expired = LocalDateTime.now().plusYears(15)
                     )
-                    LOG.info("SeriesId $seriesId not found in GDB, creating new series cause it is a main product")
-                    if (!transfer.json_payload.accessory && !transfer.json_payload.sparePart) seriesImportService.save(dto)
+
+                    if (!transfer.json_payload.accessory && !transfer.json_payload.sparePart) {
+                        LOG.info("SeriesId $seriesId not found in GDB, creating new series cause it is a main product")
+                        seriesImportService.save(dto)
+                    }
                     else dto
                 }
         }
@@ -173,5 +176,4 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
             type = media.type,
         )
     }
-    data class Series(val seriesId: UUID, val title: String, val text: String)
 }
