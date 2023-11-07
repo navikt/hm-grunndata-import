@@ -9,6 +9,7 @@ data class SeriesDTO(
     val supplierId: UUID,
     val status: SeriesStatus = SeriesStatus.ACTIVE,
     val title: String,
+    val text: String,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now(),
     val expired: LocalDateTime = LocalDateTime.now()

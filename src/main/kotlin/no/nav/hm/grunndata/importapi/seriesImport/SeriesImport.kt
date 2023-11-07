@@ -14,7 +14,9 @@ data class SeriesImport (
     val seriesId: UUID,
     val supplierId: UUID,
     val transferId: UUID,
+    val isoCategory: String,
     val title: String,
+    val text: String,
     val status: SeriesStatus,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now(),
@@ -28,7 +30,9 @@ data class SeriesImportDTO (
     val seriesId: UUID,
     val supplierId: UUID,
     val transferId: UUID,
+    val isoCategory: String,
     val title: String,
+    val text: String,
     val status: SeriesStatus = SeriesStatus.ACTIVE,
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now(),
@@ -37,13 +41,13 @@ data class SeriesImportDTO (
 )
 
 fun SeriesImport.toDTO(): SeriesImportDTO = SeriesImportDTO(
-    seriesId = seriesId, supplierId = supplierId, title = title, status = status,
+    seriesId = seriesId, supplierId = supplierId, title = title, text = text, isoCategory = isoCategory, status = status,
     version = version!!, created = created, updated = updated, transferId = transferId, expired = expired
 )
 
 
 fun SeriesImportDTO.toEntity(): SeriesImport = SeriesImport (
-    seriesId = seriesId, supplierId = supplierId,  title = title, status = status,
+    seriesId = seriesId, supplierId = supplierId,  title = title, status = status, text = text, isoCategory = isoCategory,
     version = version, created = created, updated = updated, transferId = transferId, expired = expired
 )
 
@@ -52,6 +56,8 @@ fun SeriesImportDTO.toRapidDTO(): SeriesImportRapidDTO = SeriesImportRapidDTO (
     supplierId = supplierId,
     transferId = transferId,
     title = title,
+    text = text,
+    isoCategory = isoCategory,
     status = status,
     created = created,
     updated = updated,

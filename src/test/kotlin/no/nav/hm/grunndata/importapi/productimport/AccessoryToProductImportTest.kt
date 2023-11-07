@@ -57,9 +57,11 @@ class AccessoryToProductImportTest(private val productTransferToProductImport: P
             supplierRef = accessory.supplierRef)
 
         runBlocking {
-            val series = seriesImportService.save(SeriesImportDTO(seriesId = UUID.fromString("603474bc-a8e8-471c-87ef-09bdc57bea59"),
+            val series = seriesImportService.save(SeriesImportDTO(
+                seriesId = UUID.fromString("603474bc-a8e8-471c-87ef-09bdc57bea59"),
                 supplierId=supplierId, transferId = UUID.randomUUID(),
-                expired = LocalDateTime.now().plusYears(15), title = "Mini Crosser"))
+                expired = LocalDateTime.now().plusYears(15),
+                title = "Mini Crosser", text = "Mini Crosser", isoCategory = "12324567"))
             val savedSupplier = supplierRepository.save(supplier)
             val savedTransfer = productTransferRepository.save(transfer)
             productTransferToProductImport.receivedTransfersToProductImport()

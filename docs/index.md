@@ -10,9 +10,10 @@ a place where you can search for, find information, and apply for assistive devi
 * Create new, change and deactivate products, accessories and spare parts
 * Connect product variants to series
 * Linking accessories and spare parts to main products
-* Upload media or documents (images, pdf, video)
+* Upload media or documents (images, pdf)
+* Using external media in products (video)
 * Know the state of each product
-* Get Hms number of the product
+* Get stock number (Hms number) for products in framework agreements
 * Information about [framework agreements](https://finnhelpemidler-api.nav.no/import/api/v1/agreements) (rammeavtale)
 * Download [Iso categories](https://finnhjelpemidler-api.nav.no/import/api/v1/isocategories) and [techdata labels](https://finnhjelpemidler-api.nav.no/import/api/v1/techlabels)
 

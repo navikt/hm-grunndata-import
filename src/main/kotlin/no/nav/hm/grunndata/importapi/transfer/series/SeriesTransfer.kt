@@ -27,6 +27,8 @@ data class SeriesTransfer(
 data class SeriesTransferDTO(
     val seriesId: UUID = UUID.randomUUID(),
     val title: String,
+    val text: String = "",
+    val isoCategory: String = "",
     val status: SeriesStatus = SeriesStatus.ACTIVE
 ){
     init {

@@ -15,7 +15,7 @@ class SeriesImportRepositoryTest(private val repository: SeriesImportRepository)
     @Test
     fun crudTest() {
         val id = UUID.randomUUID()
-        val state = SeriesImport(seriesId = id, supplierId = UUID.randomUUID(), transferId = UUID.randomUUID(),
+        val state = SeriesImport(seriesId = id, text= "series text", isoCategory = "12324567", supplierId = UUID.randomUUID(), transferId = UUID.randomUUID(),
             title= "Unik navn på serien +${UUID.randomUUID()}", status = SeriesStatus.ACTIVE)
         runBlocking {
             val saved = repository.save(state)
@@ -25,6 +25,8 @@ class SeriesImportRepositoryTest(private val repository: SeriesImportRepository)
             val updated = repository.update(found.copy(status = SeriesStatus.INACTIVE, updated = LocalDateTime.now()))
             updated.shouldNotBeNull()
             updated.status shouldBe SeriesStatus.INACTIVE
+            updated.text shouldBe "series text"
+            updated.isoCategory shouldBe "12324567"
         }
     }
 }

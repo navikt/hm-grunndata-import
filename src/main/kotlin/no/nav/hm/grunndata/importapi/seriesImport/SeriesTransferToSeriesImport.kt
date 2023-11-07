@@ -44,6 +44,8 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
                         transferId = transfer.transferId,
                         title = transfer.json_payload.title,
                         status = transfer.json_payload.status,
+                        text = transfer.json_payload.text,
+                        isoCategory = transfer.json_payload.isoCategory,
                         updated = LocalDateTime.now(),
                         expired = setExpiredIfNotActive(transfer.json_payload.status)
                     )
@@ -54,6 +56,8 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
                     seriesId = transfer.seriesId,
                     transferId = transfer.transferId,
                     title = transfer.json_payload.title,
+                    text = transfer.json_payload.text,
+                    isoCategory = transfer.json_payload.isoCategory,
                     supplierId = transfer.supplierId,
                     status = transfer.json_payload.status,
                     expired = setExpiredIfNotActive(transfer.json_payload.status)

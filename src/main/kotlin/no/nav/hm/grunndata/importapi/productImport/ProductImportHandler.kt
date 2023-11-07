@@ -88,12 +88,12 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
         val seriesId = transfer.json_payload.seriesId
         val series = seriesId?.let {
             seriesImportService.findByIdCacheable(seriesId)?.let {
-                Series(it.seriesId, it.title)
+                Series(it.seriesId, it.title, it.text)
             } ?: run {
-                gdbApiClient.getSeriesById(seriesId)?.let { Series(it.id, it.title)} ?:
+                gdbApiClient.getSeriesById(seriesId)?.let { Series(it.id, it.title, it.text)} ?:
                 throw ImportApiError("Series with id $seriesId not found", ErrorType.NOT_FOUND)
             }
-        } ?: Series(productId, transfer.json_payload.title) // use productId as seriesId
+        } ?: Series(productId, transfer.json_payload.title, transfer.json_payload.text) // use productId as seriesId
         return transfer.json_payload.toProductRapidDTO(productId, transfer.supplierId, series)
     }
 
@@ -110,7 +110,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
             supplierRef = supplierRef,
             attributes = Attributes (
                 shortdescription = shortDescription,
-                text = text,
+                text = series.text,
                 url = url,
                 compatibleWidth = if (this.compatibleWith!=null) CompatibleWith(
                     seriesIds = compatibleWith.seriesIds) else null
@@ -160,5 +160,5 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
             type = media.type,
         )
     }
-    data class Series(val seriesId: UUID, val title: String)
+    data class Series(val seriesId: UUID, val title: String, val text: String)
 }
