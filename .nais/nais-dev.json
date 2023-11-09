@@ -8,5 +8,5 @@
   "java_opts": "-Xms128m -Xmx512m -XX:+UseG1GC",
   "schedulers_enabled": true,
   "media_storage_cdnurl": "https://cdn.dev.nav.no/teamdigihot/grunndata/media/v1",
-  "ingress": ["https://finnhjelpemidler-api.ekstern.dev.nav.no/import"]
+  "ingress": ["https://finnhjelpemidler-api.ekstern.dev.nav.no/import", "https://finnhjelpemidler-api.intern.dev.nav.no/import"]
 }
