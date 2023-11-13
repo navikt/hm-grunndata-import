@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory
 @Singleton
 class TechDataLabelService(private val gdbApiClient: GdbApiClient) {
 
-    private val techLabelsByName: Map<String, TechDataLabelDTO> = gdbApiClient.fetchAllTechLabels().associateBy { it.label.lowercase() }
+    private val techLabelsByName: Map<String, TechDataLabelDTO> = gdbApiClient.fetchAllTechLabels().associateBy { it.label.lowercase().trim() }
     private val techLabelsByIso: Map<String, List<TechDataLabelDTO>> = techLabelsByName.values.groupBy { it.isocode }
 
 
@@ -23,7 +23,7 @@ class TechDataLabelService(private val gdbApiClient: GdbApiClient) {
 
     fun fetchAllTechDataLabels(): Map<String, List<TechDataLabelDTO>> = techLabelsByIso
 
-    fun fetchTechDataLabelByKeyName(keyName: String): TechDataLabelDTO? = techLabelsByName[keyName]
+    fun fetchTechDataLabelByKeyName(keyName: String): TechDataLabelDTO? = techLabelsByName[keyName.lowercase().trim()]
 
 
 }
