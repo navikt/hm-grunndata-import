@@ -14,9 +14,9 @@ class TransferToProductImportScheduler(private val productTransferToProductImpor
     companion object {
         private val LOG = LoggerFactory.getLogger(TransferToProductImportScheduler::class.java)
     }
-    @Scheduled(fixedDelay = "1m")
+    @Scheduled(fixedDelay = "15s")
     fun transferToProductStateTask() {
-        LOG.info("Running receivedTransfers to ProductState scheduler")
+        LOG.info("Running receivedTransfers to Product Import scheduler")
         runBlocking {
             productTransferToProductImport.receivedTransfersToProductImport()
         }
