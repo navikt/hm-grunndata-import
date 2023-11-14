@@ -2,8 +2,8 @@
 
 ## Introduction
 Vendors can use this API to upload and publish assistive devices to 
-[finnhjelpemidler.nav.no](https://finnhjelpemidler.nav.no).
-Finnhjelpemidler is a public site provided by NAV (Norwegian Labour and Welfare Administration), 
+[finnhjelpemiddel.nav.no](https://finnhjelpemiddel.nav.no).
+finnhjelpemiddel is a public site provided by NAV (Norwegian Labour and Welfare Administration), 
 a place where you can search for, find information, and apply for assistive devices.
 
 ### Features of the API:
@@ -15,7 +15,7 @@ a place where you can search for, find information, and apply for assistive devi
 * Know the state of each product
 * Get stock number (Hms number) for products in framework agreements
 * Information about [framework agreements](https://finnhelpemidler-api.nav.no/import/api/v1/agreements) (rammeavtale)
-* Download [Iso categories](https://finnhjelpemidler-api.nav.no/import/api/v1/isocategories) and [techdata labels](https://finnhjelpemidler-api.nav.no/import/api/v1/techlabels)
+* Download [Iso categories](https://finnhjelpemiddel-api.nav.no/import/api/v1/isocategories) and [techdata labels](https://finnhjelpemiddel-api.nav.no/import/api/v1/techlabels)
 
 ### Registration
 Before you begin, you must register yourself as a vendor/supplier. Please email us
@@ -33,7 +33,7 @@ the HTTP bearer authorization header.
 
 Example:
 ```
-POST https://finnhjelpemidler-api.nav.no/import/api/v1/products/transfers/{supplierId}
+POST https://finnhjelpemiddel-api.nav.no/import/api/v1/products/transfers/{supplierId}
 Accept: application/x-json-stream
 Cache-Control: no-cache
 Content-Type: application/x-json-stream
@@ -48,8 +48,8 @@ If ERROR was detected, the body will contain the error message.
 
 ### OpenAPI
 To test the integration, you can use the OpenAPI specification,
-it is available [here in test](https://finnhjelpemidler-api.ekstern.dev.nav.no/import/swagger-ui/), and in
-[prod](https://finnhjelpemidler-api.nav.no/import/swagger-ui/).
+it is available [here in test](https://finnhjelpemiddel-api.ekstern.dev.nav.no/import/swagger-ui/), and in
+[prod](https://finnhjelpemiddel-api.nav.no/import/swagger-ui/).
 
 The data exchange format is JSON, below is a diagram of the product json structure:
 <img src="./json-example-01.svg">
@@ -66,7 +66,7 @@ You can also download kotlin code for the DTOs
 | text             | TEXT         | Yes      | Produkt beskrivelse           | A describing text, html must be welformed. We only support basic html tags                                                        | A describing text                    |
 | manufacturer     | String (255) | No       | Produsent                     | The name of the company who made this product                                                                                     | Medema                               |
 | supplierRef      | String (255) | Yes      | Leverandør artikkel referanse | A unique reference to identify the product                                                                                        | alphanumber eg: A4231F-132           |
- | isoCategory      | String (8)   | Yes      | ISO Kategori                  | The ISO category for the product, categories can be found [here](https://finnhjelpemidler-api.nav.no/import/api/v1/isocategories) | 12230301                             |
+ | isoCategory      | String (8)   | Yes      | ISO Kategori                  | The ISO category for the product, categories can be found [here](https://finnhjelpemiddel-api.nav.no/import/api/v1/isocategories) | 12230301                             |
 | accessory        | Boolean      | Yes      | Tilbehør                      | Is this product an accessory?                                                                                                     | true                                 |
 | sparePart        | Boolean      | Yes      | Reservedel                    | Is this product a spare part?                                                                                                     | false                                |
 | seriesId         | UUID         | No       | Serie ID                      | A unique id for a series of products, this id linked the products into a series                                                   | 603474bc-a8e8-471c-87ef-09bdc57bea59 |
@@ -79,7 +79,7 @@ You can also download kotlin code for the DTOs
 | url              | String (255) | No       | URL                           | A link to the product on the vendors website                                                                                      | https://www.blimo.no/elekriske-kjoretoy/elscootere/blimo-gatsby-x              |
 
 ### Techdata
-Valid techdata labels with keys and units is listed [here](https://finnhjelpemidler-api.nav.no/import/api/v1/techlabels)
+Valid techdata labels with keys and units is listed [here](https://finnhjelpemiddel-api.nav.no/import/api/v1/techlabels)
 Even thought it is optional to add techdata, it is recommended to add as much as possible to make it easier for the user to compare products.
 Also some products in framework agreements requires techdata to be added, if data is missing or wrong the product will be rejected.
 
@@ -109,7 +109,7 @@ Post products in stream by using Content-Type: application/x-json-stream. produc
 example:
 
 ```
-POST https://finnhjelpemidler-api.nav.no/import/api/v1/products/transfers/{supplierId}
+POST https://finnhjelpemiddel-api.nav.no/import/api/v1/products/transfers/{supplierId}
 Accept: application/x-json-stream
 Cache-Control: no-cache
 Content-Type: application/x-json-stream
@@ -230,7 +230,7 @@ on the product json.
 
 ### Upload image
 ```
-POST https://finnhjelpemidler-api.nav.no/import/api/v1/media/transfers/files/{supplierId}/{supplierRef}
+POST https://finnhjelpemiddel-api.nav.no/import/api/v1/media/transfers/files/{supplierId}/{supplierRef}
 Accept: application/json
 Content-Type: multipart/form-data
 Authorization: Bearer <your secret key>
@@ -285,7 +285,7 @@ Product variants in a series share the same title, iso category and text. They w
 To group the variants to a series, you can either create a new series, or use the seriesId of an existing series.
 All products will have a seriesId, you can see the seriesId by using of the product using the product state endpoint:
 ```
-GET https://finnhjelpemidler-api.nav.no/import/api/v1/products/import/{supplierId}/{supplierRef}
+GET https://finnhjelpemiddel-api.nav.no/import/api/v1/products/import/{supplierId}/{supplierRef}
 Accept: application/json
 Content-Type: application/json
 Cache-Control: no-cache
@@ -313,7 +313,7 @@ Response:
 
 ### Creating a new series
 ```
-POST https://finnhjelpemidler-api.nav.no/import/api/v1/product/series/{supplierId}
+POST https://finnhjelpemiddel-api.nav.no/import/api/v1/product/series/{supplierId}
 Accept: application/json
 Content-Type: application/json
 Cache-Control: no-cache
@@ -333,13 +333,13 @@ Authorization: Bearer <your secret key>
 | title   | String (255) | Yes      | Serie tittel          | Title or name of the series, product variants that are connected in a series will have this as the series title | Mini crosser X1                      |
 | status  | String (255) | Yes      | Status                | The status of the series, ACTIVE or INACTIVE                                                                    | ACTIVE, INACTIVE                     |
 | text    | TEXT         | Yes      | Serie beskrivelse     | A describing text, html must be welformed. We only support basic html tags                                      | A describing text                    |
-| isoCategory | String (8)   | Yes      | ISO Kategori          | The ISO category for the series, categories can be found [here](https://finnhjelpemidler-api.nav.no/import/api/v1/isocategories) | 12230301                             |
+| isoCategory | String (8)   | Yes      | ISO Kategori          | The ISO category for the series, categories can be found [here](https://finnhjelpemiddel-api.nav.no/import/api/v1/isocategories) | 12230301                             |
 
 ### Posting a product variant of a series
 Posting a variant is exactly the same as product, and use seriesId to tell which series the variant belongs to.
 
 ```
-POST https://finnhjelpemidler-api.nav.no/import/api/v1/products/transfers/{supplierId}
+POST https://finnhjelpemiddel-api.nav.no/import/api/v1/products/transfers/{supplierId}
 Accept: application/x-json-stream
 Cache-Control: no-cache
 Content-Type: application/x-json-stream
@@ -420,7 +420,7 @@ accessory and a spare part. Use the property compatibleWith to link the accessor
 All products are manually checked, if it does not follow NAVs guidelines it will be rejected. 
 You can check state of the product transfer if it is approved or rejected using this:
 ```
-GET https://finnhjelpemidler-api.nav.no/import/api/v1/products/import/{supplierId}/{supplierRef}
+GET https://finnhjelpemiddel-api.nav.no/import/api/v1/products/import/{supplierId}/{supplierRef}
 Accept: application/json
 Content-Type: application/json
 Cache-Control: no-cache
@@ -453,7 +453,7 @@ To deactivate a product, use the product supplierRef to deactivate it.
 For example:
 
 ```
-DELETE https://finnhjelpemidler-api.nav.no/import/api/v1/products/transfer/{supplierId}/{supplierRef}
+DELETE https://finnhjelpemiddel-api.nav.no/import/api/v1/products/transfer/{supplierId}/{supplierRef}
 Accept: application/json
 Content-Type: application/json
 Cache-Control: no-cache
@@ -462,7 +462,7 @@ Authorization: Bearer <your secret key>
 Deactivate meaning the product is expired but still searchable, if you want to remove the product completely and 
 not available for search, you can add "?delete=true" as query parameter in the request.
 ```
-DELETE https://finnhjelpemidler-api.nav.no/import/api/v1/products/transfer/{supplierId}/{supplierRef}?delete=true
+DELETE https://finnhjelpemiddel-api.nav.no/import/api/v1/products/transfer/{supplierId}/{supplierRef}?delete=true
 ```
 
 # Definitions:
@@ -475,7 +475,7 @@ Framework agreements provide an overview of the national assortment that NAV
 has in the field of assistive devices. When applying for an assistive device from NAV's Assistive Devices Center,
 you should always first consider whether one of the assistive devices found in a framework agreement can be used
 to meet your needs.
-More info about Rammeavtale is availble [here](https://finnhjelpemidler.nav.no/rammeavtale)
+More info about Rammeavtale is availble [here](https://finnhjelpemiddel.nav.no/rammeavtale)
 
 ### HMS Article number
 Products that are in a framework agreements and can be apply through NAV, will always get an unique HMS article number. 

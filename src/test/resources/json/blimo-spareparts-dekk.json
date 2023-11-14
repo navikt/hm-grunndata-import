@@ -1,0 +1,22 @@
+{
+  "title" : "Lader 24 V 8 Amp, X-1400",
+  "articleName" : "Lader 24 V 8 Amp, X-1400",
+  "shortDescription" : "Lader for Blimo",
+  "text" : "Smart vedlikeholdslader som slår seg av når batteriene er fulladet. Hvis spenningen i batteriene synker, går laderen inn og vedlikeholder automatisk vedlikeholdskostnadene. MERK! Kun beregnet på bruk med blybatterier (AGM). Å ha en ekstra lader kan være bra hvis du bruker scooteren din forskjellige steder. Kanskje det kan være praktisk å ha en på landsbygda og en i byen eller en hjemme og en på jobb, hvis du tar med deg din scooter mellom disse stedene. Når du bestiller dette produktet sammen med en promenadescooter, kommer ingen ekstra fraktkostnader til. Passer: Blimo X-1400 Blimo Kabinscooter Blimo Gatsby",
+  "supplierRef" : "52970102",
+  "isoCategory" : "12230301",
+  "accessory" : false,
+  "sparePart" : true,
+  "compatibleWith": {
+    "seriesIds": ["a1e3bf21-b982-4512-be8d-040170c8618d"]
+  },
+  "techData" : [],
+  "media" : [ {
+    "uri" : "import/63a80e3a-05ba-481a-9c48-a1884b868918/bc54804c-5e5f-481b-8c23-ac11e7ca091d.jpg",
+    "priority" : 1,
+    "type" : "IMAGE",
+    "text": "Lader 24 V 8 Amp, X-1400"
+  } ],
+  "published" : "2023-08-22T13:39:51.884163",
+  "expired" : "2033-08-22T13:39:51.884163"
+}
