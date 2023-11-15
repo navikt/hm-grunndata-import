@@ -8,11 +8,11 @@
   "accessory" : false,
   "sparePart" : true,
   "compatibleWith": {
-    "seriesIds": ["9c68e99a-a730-4048-ad2c-2ba8ff466b8f"]
+    "seriesIds": ["a1e3bf21-b982-4512-be8d-040170c8618d"]
   },
   "techData" : [],
   "media" : [ {
-    "uri" : "import/d22094a7-25b2-45b0-aeb8-82eec928531e/80247d3b-19ac-4ab0-909f-6ab4086fcc90.jpg",
+    "uri" : "import/63a80e3a-05ba-481a-9c48-a1884b868918/bc54804c-5e5f-481b-8c23-ac11e7ca091d.jpg",
     "priority" : 1,
     "type" : "IMAGE",
     "text": "Lader 24 V 8 Amp, X-1400"

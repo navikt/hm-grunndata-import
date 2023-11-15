@@ -106,7 +106,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
                         expired = LocalDateTime.now().plusYears(15)
                     )
 
-                    if (!transfer.json_payload.accessory && !transfer.json_payload.sparePart) {
+                    if (seriesId != productId) {
                         LOG.info("SeriesId $seriesId not found in GDB, creating new series cause it is a main product")
                         seriesImportService.save(dto)
                         importRapidPushService.pushDTOToKafka(dto.toRapidDTO(), EventName.importedSeriesV1)
