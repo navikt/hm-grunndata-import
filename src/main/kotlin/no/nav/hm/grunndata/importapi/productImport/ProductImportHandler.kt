@@ -49,7 +49,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
                     productDTO = productDTO,
                     updated = LocalDateTime.now(),
                     productStatus = productDTO.status,
-                    seriesId = UUID.fromString(productDTO.seriesId)
+                    seriesId = productDTO.seriesUUID ?: UUID.fromString(productDTO.seriesId)
                 )
             )
         } ?: run {
@@ -65,7 +65,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
                         productDTO = productDTO,
                         productStatus = productDTO.status,
                         adminStatus = AdminStatus.PENDING,
-                        seriesId = UUID.fromString(productDTO.seriesId)
+                        seriesId = productDTO.seriesUUID ?: UUID.fromString(productDTO.seriesId)
                     )
                 )
             }
@@ -78,7 +78,8 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
                     id = productId, transferId = transfer.transferId, supplierId = transfer.supplierId,
                     supplierRef = transfer.supplierRef,
                     productDTO = productDTO,
-                    productStatus = productDTO.status, adminStatus = AdminStatus.PENDING, seriesId = UUID.fromString(productDTO.seriesId)
+                    productStatus = productDTO.status, adminStatus = AdminStatus.PENDING,
+                    seriesId = productDTO.seriesUUID ?: UUID.fromString(productDTO.seriesId)
                 )
             )
         }
@@ -139,6 +140,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
             isoCategory = series.isoCategory,
             accessory = accessory,
             sparePart = sparePart,
+            seriesUUID = series.seriesId,
             seriesId =  series.seriesId.toString(),
             techData = techData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
             media = media.map { mapMedia(it)}.toSet(),
