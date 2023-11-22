@@ -33,7 +33,7 @@ the HTTP bearer authorization header.
 
 Example:
 ```
-POST https://finnhjelpemiddel-api.nav.no/import/api/v1/products/transfers/{supplierId}
+POST https://finnhjelpemiddel-api.nav.no/import/api/v1/products/transfers/{identifier}
 Accept: application/x-json-stream
 Cache-Control: no-cache
 Content-Type: application/x-json-stream
@@ -109,7 +109,7 @@ Post products in stream by using Content-Type: application/x-json-stream. produc
 example:
 
 ```
-POST https://finnhjelpemiddel-api.nav.no/import/api/v1/products/transfers/{supplierId}
+POST https://finnhjelpemiddel-api.nav.no/import/api/v1/products/transfers/{identifier}
 Accept: application/x-json-stream
 Cache-Control: no-cache
 Content-Type: application/x-json-stream
@@ -230,7 +230,7 @@ on the product json.
 
 ### Upload image
 ```
-POST https://finnhjelpemiddel-api.nav.no/import/api/v1/media/transfers/files/{supplierId}/{supplierRef}
+POST https://finnhjelpemiddel-api.nav.no/import/api/v1/media/transfers/files/{identifier}/{supplierRef}
 Accept: application/json
 Content-Type: multipart/form-data
 Authorization: Bearer <your secret key>
@@ -287,7 +287,7 @@ especially if the product is in a framework agreement.
 To group the variants to a series, you first get the product seriesId generated from previous transfers.
 All products transferred have a seriesId, you can see the seriesId of the product using the product endpoint:
 ```
-GET https://finnhjelpemiddel-api.nav.no/import/api/v1/products/import/{supplierId}/{supplierRef}
+GET https://finnhjelpemiddel-api.nav.no/import/api/v1/products/import/{identifier}/{supplierRef}
 Accept: application/json
 Content-Type: application/json
 Cache-Control: no-cache
@@ -317,7 +317,7 @@ Response:
 Posting a variant is exactly the same as product, and use seriesId to tell which series the variant belongs to.
 
 ```
-POST https://finnhjelpemiddel-api.nav.no/import/api/v1/products/transfers/{supplierId}
+POST https://finnhjelpemiddel-api.nav.no/import/api/v1/products/transfers/{identifier}
 Accept: application/x-json-stream
 Cache-Control: no-cache
 Content-Type: application/x-json-stream
@@ -398,7 +398,7 @@ accessory and a spare part. Use the property compatibleWith to link the accessor
 All products are manually checked, if it does not follow NAVs guidelines it will be rejected. 
 You can check state of the product transfer if it is approved or rejected using this:
 ```
-GET https://finnhjelpemiddel-api.nav.no/import/api/v1/products/import/{supplierId}/{supplierRef}
+GET https://finnhjelpemiddel-api.nav.no/import/api/v1/products/import/{identifier}/{supplierRef}
 Accept: application/json
 Content-Type: application/json
 Cache-Control: no-cache
@@ -431,7 +431,7 @@ To deactivate a product, use the product supplierRef to deactivate it.
 For example:
 
 ```
-DELETE https://finnhjelpemiddel-api.nav.no/import/api/v1/products/transfer/{supplierId}/{supplierRef}
+DELETE https://finnhjelpemiddel-api.nav.no/import/api/v1/products/transfer/{identifier}/{supplierRef}
 Accept: application/json
 Content-Type: application/json
 Cache-Control: no-cache
@@ -440,7 +440,7 @@ Authorization: Bearer <your secret key>
 Deactivate meaning the product is expired but still searchable, if you want to remove the product completely and 
 not available for search, you can add "?delete=true" as query parameter in the request.
 ```
-DELETE https://finnhjelpemiddel-api.nav.no/import/api/v1/products/transfer/{supplierId}/{supplierRef}?delete=true
+DELETE https://finnhjelpemiddel-api.nav.no/import/api/v1/products/transfer/{identifier}/{supplierRef}?delete=true
 ```
 
 # Definitions:
