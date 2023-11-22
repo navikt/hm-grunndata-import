@@ -4,10 +4,12 @@ import io.micronaut.data.model.Pageable
 import io.micronaut.data.model.Sort
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
+import io.micronaut.security.authentication.Authentication
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import no.nav.hm.grunndata.importapi.productImport.ProductImportController.Companion.API_V1_PRODUCT_IMPORT
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
+import no.nav.hm.grunndata.importapi.security.supplierId
 import org.slf4j.LoggerFactory
 import java.util.*
 
@@ -21,14 +23,14 @@ class ProductImportController(private val importService: ProductImportService) {
         const val API_V1_PRODUCT_IMPORT = "/api/v1/product/import"
     }
 
-    @Get("/{supplierId}/{supplierRef}")
-    suspend fun getProductImportBySupplierIdAndSupplierRef(supplierId: UUID, supplierRef: String) =
-        importService.getProductImportBySupplierIdAndSupplierRef(supplierId,supplierRef)?.toProductImportResponse()
+    @Get("/{identifier}/{supplierRef}")
+    suspend fun getProductImportBySupplierIdAndSupplierRef(identifier: String, supplierRef: String, authentication: Authentication) =
+        importService.getProductImportBySupplierIdAndSupplierRef(authentication.supplierId(),supplierRef)?.toProductImportResponse()
 
-    @Get("/{supplierId}/series/{seriesId}")
-    suspend fun getProductImportBySupplierIdAndSeriesId(supplierId: UUID, seriesId: UUID, pageable: Pageable =
+    @Get("/{identifier}/series/{seriesId}")
+    suspend fun getProductImportBySupplierIdAndSeriesId(identifier: String, seriesId: UUID, authentication: Authentication, pageable: Pageable =
             Pageable.from(0, 100, Sort.of(Sort.Order("updated"))))
-        = importService.getProductImportBySupplierIdAndSeriesId(supplierId,seriesId,pageable).map { it.toProductImportResponse() }
+        = importService.getProductImportBySupplierIdAndSeriesId(authentication.supplierId(),seriesId,pageable).map { it.toProductImportResponse() }
 
 }
 
@@ -47,3 +49,4 @@ private fun ProductImportDTO.toProductImportResponse() = ProductImportResponse (
     updated = updated,
     version = version
 )
+

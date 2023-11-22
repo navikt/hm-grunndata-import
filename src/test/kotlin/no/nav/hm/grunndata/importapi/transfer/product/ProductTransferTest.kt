@@ -79,7 +79,7 @@ class ProductTransferTest(private val client: ProductTransferClient,
     fun productTransferTest() {
         runBlocking {
             val product = objectMapper.readTree(ProductTransferTest::class.java.classLoader.getResourceAsStream("json/product.json"))
-            val response = client.productStream(supplierId = supplier!!.id, authorization = token, json = Publishers.just(product))
+            val response = client.productStream(identifier = supplier!!.identifier, authorization = token, json = Publishers.just(product))
             var md5: String? = null
             var productId: UUID? = null
             var transferId: UUID? = null
@@ -90,15 +90,15 @@ class ProductTransferTest(private val client: ProductTransferClient,
                 it.transferStatus shouldBe TransferStatus.RECEIVED
                 transferId = it.transferId
             }.collect()
-            val transfers = client.getTransfersBySupplierIdSupplierRef(authorization = token, supplier!!.id, supplierRef = "1500-1530")
+            val transfers = client.getTransfersBySupplierIdSupplierRef(authorization = token, identifier = supplier!!.identifier, supplierRef = "1500-1530")
             transfers.totalSize shouldBe 1
 
-            val transfer = client.getTransferBySupplierIdAndTransferId(authorization = token, supplierId = supplier!!.id, transferId = transferId!!)
+            val transfer = client.getTransferBySupplierIdAndTransferId(authorization = token, identifier = supplier!!.identifier, transferId = transferId!!)
             transfer?.md5 shouldBe md5
 
             // test identical product
             val product2 = objectMapper.readTree(ProductTransferTest::class.java.classLoader.getResourceAsStream("json/product.json"))
-            val response2 = client.productStream(supplierId = supplier!!.id, authorization = token, json = Publishers.just(product2))
+            val response2 = client.productStream(identifier = supplier!!.identifier, authorization = token, json = Publishers.just(product2))
             response2.asFlow().onEach {
                 LOG.info(it.md5)
                 it.md5 shouldBe md5
@@ -106,9 +106,9 @@ class ProductTransferTest(private val client: ProductTransferClient,
             }.collect()
 
             // test "delete" product
-            val deactivate = client.deleteProduct(authorization = token, supplierId = supplier!!.id, supplierRef = "1500-1530")
+            val deactivate = client.deleteProduct(authorization = token, identifier = supplier!!.identifier, supplierRef = "1500-1530")
             deactivate.body().message shouldBe "Deactivated by supplier"
-            val delete = client.deleteProduct(authorization = token, supplierId = supplier!!.id, supplierRef = "1500-1530", delete = true)
+            val delete = client.deleteProduct(authorization = token, identifier = supplier!!.identifier, supplierRef = "1500-1530", delete = true)
             delete.body().message shouldBe "Deleted by supplier"
         }
 

@@ -10,6 +10,8 @@ class ProductImportService(private val productImportRepository: ProductImportRep
     suspend fun getProductImportBySupplierIdAndSupplierRef(supplierId: UUID, supplierRef: String) =
         productImportRepository.findBySupplierIdAndSupplierRef(supplierId, supplierRef)?.toDTO()
 
+
+
     suspend fun getProductImportBySupplierIdAndSeriesId(supplierId: UUID, seriesId: UUID, pageable: Pageable) =
         productImportRepository.findBySupplierIdAndSeriesId(supplierId, seriesId, pageable).map { it.toDTO() }
 

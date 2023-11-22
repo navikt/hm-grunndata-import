@@ -84,7 +84,7 @@ class ProductAccessoryTransferTest(private val client: ProductTransferClient,
     fun testAccessoryTransfer() {
         runBlocking {
             val accessory = objectMapper.readTree(ProductAccessoryTransferTest::class.java.classLoader.getResourceAsStream("json/tilbehoer.json"))
-            val response = client.productStream(supplierId = supplier!!.id, authorization = token, json = Publishers.just(accessory))
+            val response = client.productStream(identifier = supplier!!.identifier, authorization = token, json = Publishers.just(accessory))
             var md5: String? = null
             var productId: UUID? = null
             var transferId: UUID? = null
@@ -94,10 +94,10 @@ class ProductAccessoryTransferTest(private val client: ProductTransferClient,
                 it.transferStatus shouldBe TransferStatus.RECEIVED
                 transferId = it.transferId
             }.collect()
-            val transfers = client.getTransfersBySupplierIdSupplierRef(authorization = token, supplier!!.id, supplierRef = "625067")
+            val transfers = client.getTransfersBySupplierIdSupplierRef(authorization = token, identifier = supplier!!.identifier, supplierRef = "625067")
             transfers.totalSize shouldBe 1
 
-            val transfer = client.getTransferBySupplierIdAndTransferId(authorization = token, supplierId = supplier!!.id, transferId = transferId!!)
+            val transfer = client.getTransferBySupplierIdAndTransferId(authorization = token, identifier = supplier!!.identifier, transferId = transferId!!)
             transfer?.md5 shouldBe md5
         }
     }

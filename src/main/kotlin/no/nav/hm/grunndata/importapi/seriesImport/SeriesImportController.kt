@@ -2,9 +2,11 @@ package no.nav.hm.grunndata.importapi.seriesImport
 
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
+import io.micronaut.security.authentication.Authentication
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
+import no.nav.hm.grunndata.importapi.security.supplierId
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportController.Companion.API_V1_SERIES_IMPORT
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -19,11 +21,11 @@ class SeriesImportController(private val seriesImportService: SeriesImportServic
         const val API_V1_SERIES_IMPORT = "/api/v1/series/import"
     }
 
-    @Get("/{supplierId}/{seriesId}")
-    suspend fun getImportedSeriesBySupplierIdAndSupplierRef(supplierId: UUID, seriesId: UUID) =
-        seriesImportService.findBySupplierIdAndSeriesId(supplierId, seriesId)
+    @Get("/{identifier}/{seriesId}")
+    suspend fun getImportedSeriesBySupplierIdAndSupplierRef(identifier: String, authentication: Authentication, seriesId: UUID) =
+        seriesImportService.findBySupplierIdAndSeriesId(authentication.supplierId(), seriesId)
 
-    @Get("/{supplierId}")
-    suspend fun GetImportedSeriesBySupplierId(supplierId: UUID) = seriesImportService.findBySupplierId(supplierId)
+    @Get("/{identifier}")
+    suspend fun getImportedSeriesBySupplierId(identifier: String, authentication: Authentication) = seriesImportService.findBySupplierId(authentication.supplierId())
 
 }

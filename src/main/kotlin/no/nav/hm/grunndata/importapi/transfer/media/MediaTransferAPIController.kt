@@ -7,6 +7,7 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.multipart.CompletedFileUpload
+import io.micronaut.security.authentication.Authentication
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
@@ -17,6 +18,7 @@ import no.nav.hm.grunndata.importapi.productImport.ProductImport
 import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
+import no.nav.hm.grunndata.importapi.security.supplierId
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.supplier.toDTO
 import no.nav.hm.grunndata.importapi.toMD5Hex
@@ -41,21 +43,22 @@ class MediaTransferAPIController(private val mediaUploadService: MediaUploadServ
         private val LOG = LoggerFactory.getLogger(MediaTransferAPIController::class.java)
     }
 
-    @Get("/{supplierId}/{supplierRef}")
-    suspend fun getMediaList(supplierId: UUID, supplierRef: String, pageable: Pageable): Page<MediaTransferResponse> =
-        mediaTransferRepository.findBySupplierIdAndSupplierRef(supplierId, supplierRef, pageable).map {
+    @Get("/{identifier}/{supplierRef}")
+    suspend fun getMediaList(identifier: String, authentication: Authentication, supplierRef: String, pageable: Pageable): Page<MediaTransferResponse> =
+        mediaTransferRepository.findBySupplierIdAndSupplierRef(authentication.supplierId(), supplierRef, pageable).map {
             it.toTransferResponse()
         }
 
 
 
     @Post(
-        value = "/files/{supplierId}/{supplierRef}",
+        value = "/files/{identifier}/{supplierRef}",
         consumes = [io.micronaut.http.MediaType.MULTIPART_FORM_DATA],
         produces = [io.micronaut.http.MediaType.APPLICATION_JSON]
     )
-    suspend fun uploadFiles(supplierId: UUID, supplierRef: String,
+    suspend fun uploadFiles(identifier: String, authentication: Authentication, supplierRef: String,
                             files: Publisher<CompletedFileUpload>): HttpResponse<List<MediaTransferResponse>>  {
+        val supplierId = authentication.supplierId()
         LOG.info("Upload media files for supplier $supplierId supplierRef: $supplierRef")
         productImportRepository.findBySupplierIdAndSupplierRef(supplierId, supplierRef)?.let { p ->
             return HttpResponse.created(files.asFlow().map {

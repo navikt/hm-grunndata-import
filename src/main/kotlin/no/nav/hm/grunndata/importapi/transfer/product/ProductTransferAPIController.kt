@@ -6,6 +6,7 @@ import io.micronaut.data.model.Pageable
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
+import io.micronaut.security.authentication.Authentication
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
@@ -15,6 +16,7 @@ import no.nav.hm.grunndata.importapi.error.ImportApiError
 import no.nav.hm.grunndata.importapi.iso.IsoCategoryService
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
+import no.nav.hm.grunndata.importapi.security.supplierId
 import no.nav.hm.grunndata.importapi.techdata.TechDataLabelService
 import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferAPIController.Companion.API_V1_PRODUCT_TRANSFERS
@@ -39,20 +41,21 @@ class ProductTransferAPIController(private val productTransferRepository: Produc
 
     }
 
-    @Get(value="/{supplierId}/{supplierRef}")
-    suspend fun getTransfersBySupplierIdSupplierRef(supplierId: UUID, supplierRef: String, pageable: Pageable): Page<ProductTransferResponse> =
-        productTransferRepository.findBySupplierIdAndSupplierRef(supplierId, supplierRef,pageable).map {
+    @Get(value="/{identifier}/{supplierRef}")
+    suspend fun getTransfersBySupplierIdSupplierRef(identifier: String, authentication: Authentication, supplierRef: String, pageable: Pageable): Page<ProductTransferResponse> =
+        productTransferRepository.findBySupplierIdAndSupplierRef(authentication.supplierId(), supplierRef,pageable).map {
             it.toResponseDTO()
         }
 
-    @Get(value="/{supplierId}/transfer/{transferId}")
-    suspend fun getTransfersBySupplierIdAndTransferId(supplierId: UUID, transferId: UUID): ProductTransferResponse? =
-        productTransferRepository.findBySupplierIdAndTransferId(supplierId, transferId)?.toResponseDTO()
+    @Get(value="/{identifier}/transfer/{transferId}")
+    suspend fun getTransfersBySupplierIdAndTransferId(identifier: String, authentication: Authentication, transferId: UUID): ProductTransferResponse? =
+        productTransferRepository.findBySupplierIdAndTransferId(authentication.supplierId(), transferId)?.toResponseDTO()
 
-    @Post(value = "/{supplierId}", processes = [MediaType.APPLICATION_JSON_STREAM])
-    suspend fun productStream(@PathVariable supplierId: UUID, @Body transfers: Publisher<ProductTransferDTO>): Publisher<ProductTransferResponse> =
+    @Post(value = "/{identifier}", processes = [MediaType.APPLICATION_JSON_STREAM])
+    suspend fun productStream(identifier: String, authentication: Authentication, @Body transfers: Publisher<ProductTransferDTO>): Publisher<ProductTransferResponse> =
         transfers.asFlow().map { transfer ->
             val md5 = objectMapper.writeValueAsString(transfer).toMD5Hex()
+            val supplierId = authentication.supplierId()
             LOG.info("Got product stream from $supplierId with supplierRef: ${transfer.supplierRef}")
             productTransferRepository.findBySupplierIdAndMd5(supplierId, md5)?.let { identical ->
                 LOG.info("Identical product ${identical.md5} with previous transfer ${identical.transferId}")
@@ -80,8 +83,9 @@ class ProductTransferAPIController(private val productTransferRepository: Produc
         }
     }
 
-    @Delete("/{supplierId}/{supplierRef}")
-    suspend fun delete(supplierId: UUID, supplierRef: String, @QueryValue(defaultValue = "false") delete: Boolean): HttpResponse<ProductTransferResponse>  {
+    @Delete("/{identifier}/{supplierRef}")
+    suspend fun delete(identifier: String, authentication: Authentication, supplierRef: String, @QueryValue(defaultValue = "false") delete: Boolean): HttpResponse<ProductTransferResponse>  {
+        val supplierId = authentication.supplierId()
         LOG.info("delete has been called for $supplierId and $supplierRef")
         return productTransferRepository.findOneBySupplierIdAndSupplierRefOrderByCreatedDesc(supplierId, supplierRef)?.let {
             val expiredPayload = it.json_payload.copy(expired = LocalDateTime.now().minusMinutes(1), status = ProductStatus.DELETED)
