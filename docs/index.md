@@ -281,9 +281,11 @@ Then linking the uri to the product json within the media array:
 
 ## Series of products
 A series of products is a group of products that are similar, but have different variants. 
-Product variants in a series share the same title, iso category and text. They will be grouped together in the search result.
-To group the variants to a series, you can either create a new series, or use the seriesId of an existing series.
-All products will have a seriesId, you can see the seriesId by using of the product using the product state endpoint:
+Product variants in a series share the same title, iso category and text. They will be grouped together in the search result
+and make it easier for the user to compare between the variants. It is a requirement that all variants will be grouped in series,
+especially if the product is in a framework agreement.
+To group the variants to a series, you first get the product seriesId generated from previous transfers.
+All products transferred have a seriesId, you can see the seriesId of the product using the product endpoint:
 ```
 GET https://finnhjelpemiddel-api.nav.no/import/api/v1/products/import/{supplierId}/{supplierRef}
 Accept: application/json
@@ -311,31 +313,7 @@ Response:
 }
 ```
 
-### Creating a new series
-```
-POST https://finnhjelpemiddel-api.nav.no/import/api/v1/product/series/{supplierId}
-Accept: application/json
-Content-Type: application/json
-Cache-Control: no-cache
-Authorization: Bearer <your secret key>
-{
-  "seriesId": "603474bc-a8e8-471c-87ef-09bdc57bea59",
-  "title": "Mini Crosser",
-  "text": "En felles beskrivelse av serien",
-  "isoCategory": "12230301",
-  "status": "ACTIVE"
-}
-```
-
-| Name    | Type         | Required | Norwegian translation | Description                                                                                                     | Example                              |
-|:--------|:-------------|:---------|:----------------------|:----------------------------------------------------------------------------------------------------------------|:-------------------------------------|
-| seriesId| UUID         | No       | Serie ID              | A unique id for a series of products, this id linked the products into a series                                 | 603474bc-a8e8-471c-87ef-09bdc57bea59 |
-| title   | String (255) | Yes      | Serie tittel          | Title or name of the series, product variants that are connected in a series will have this as the series title | Mini crosser X1                      |
-| status  | String (255) | Yes      | Status                | The status of the series, ACTIVE or INACTIVE                                                                    | ACTIVE, INACTIVE                     |
-| text    | TEXT         | Yes      | Serie beskrivelse     | A describing text, html must be welformed. We only support basic html tags                                      | A describing text                    |
-| isoCategory | String (8)   | Yes      | ISO Kategori          | The ISO category for the series, categories can be found [here](https://finnhjelpemiddel-api.nav.no/import/api/v1/isocategories) | 12230301                             |
-
-### Posting a product variant of a series
+### Posting a product variant to a series 
 Posting a variant is exactly the same as product, and use seriesId to tell which series the variant belongs to.
 
 ```
