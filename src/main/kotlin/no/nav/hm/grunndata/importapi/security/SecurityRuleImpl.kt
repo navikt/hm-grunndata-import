@@ -42,17 +42,17 @@ class SecurityRuleImpl(rolesFinder: RolesFinder,
                 val values = routeMatch.getValue(SecuritySupplierRule::class.java, Array<String>::class.java).get().toMutableList()
                 val roles = getRoles(authentication)
                 if (values.contains(Roles.ROLE_ADMIN) && roles.contains(Roles.ROLE_ADMIN)) {
-                    LOG.debug("Admin request allow")
+                    LOG.info("Admin request allow")
                     return just(SecurityRuleResult.ALLOWED)
                 }
                 val identifier = routeMatch.variableValues["identifier"].toString()
-                if (identifier != authentication.identifier()) {
-                    LOG.warn("Rejected because identifier does not match with claims")
+                val supplierId = authentication.supplierId()
+                val supplier = supplierService.findByIdentifier(identifier)
+                if (supplierId != supplier?.id ) {
+                    LOG.info("identifier $identifier $supplierId not allow")
                     return just(SecurityRuleResult.REJECTED)
                 }
-                val supplierId = authentication.supplierId()
                 return runBlocking {
-                    val supplier = supplierService.findById(supplierId)
                     if (authentication.attributes["jti"] != supplier?.jwtid || SupplierStatus.ACTIVE != supplier?.status ) {
                         LOG.warn("Rejected because jwt id does not match with claims, or supplier $supplierId is no longer active")
                         just(SecurityRuleResult.REJECTED)

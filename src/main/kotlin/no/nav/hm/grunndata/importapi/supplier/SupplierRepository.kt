@@ -9,5 +9,6 @@ import java.util.*
 // Use this service class to get correct caching.
 @JdbcRepository(dialect = Dialect.POSTGRES)
 interface SupplierRepository: CoroutineCrudRepository<Supplier, UUID> {
+    suspend fun findByIdentifier(identifier: String): Supplier?
 
 }

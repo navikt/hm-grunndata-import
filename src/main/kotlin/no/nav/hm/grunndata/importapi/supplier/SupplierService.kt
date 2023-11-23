@@ -21,5 +21,6 @@ open class SupplierService(private val supplierRepository: SupplierRepository) {
 
     @CacheInvalidate(parameters = ["id"])
     open  fun save(supplier: Supplier, id: UUID = supplier.id) = runBlocking{ supplierRepository.save(supplier) }
-
+    @CacheInvalidate(parameters = ["identifier"])
+    open fun findByIdentifier(identifier: String) = runBlocking { supplierRepository.findByIdentifier(identifier) }
 }
