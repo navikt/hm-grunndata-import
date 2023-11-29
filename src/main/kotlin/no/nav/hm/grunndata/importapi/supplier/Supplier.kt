@@ -25,6 +25,7 @@ data class Supplier(
 
 data class TokenResponseDTO(
     val id: UUID = UUID.randomUUID(),
+    val identifier: String,
     val name: String,
     val jwtid: String = UUID.randomUUID().toString(),
     val token: String,
@@ -41,4 +42,4 @@ fun Supplier.toDTO(): SupplierDTO = SupplierDTO (
 )
 
 fun Supplier.toTokenResponseDTO(token: String): TokenResponseDTO =
-    TokenResponseDTO( id = id, name = name, jwtid = jwtid, token = token)
+    TokenResponseDTO( id = id, name = name, jwtid = jwtid, identifier = identifier, token = token)
