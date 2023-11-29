@@ -50,6 +50,8 @@ spec:
       value: "http://hm-grunndata-db"
     - name: MEDIA_UPLOAD_URL
       value: "http://hm-grunndata-media"
+    - name: SERVER_PORT
+      value: "8080"
   gcp:
     sqlInstances:
       - name: hm-grunndata-import
