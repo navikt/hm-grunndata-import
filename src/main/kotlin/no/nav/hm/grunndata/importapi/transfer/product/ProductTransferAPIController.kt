@@ -67,13 +67,6 @@ class ProductTransferAPIController(private val productTransferRepository: Produc
         }.asPublisher()
 
     private fun validate(transfer: ProductTransferDTO) {
-        if (transfer.techData.isNotEmpty()) {
-            transfer.techData.forEach {
-                val label = techDataLabelService.fetchTechDataLabelByKeyName(it.key)
-                if (label == null ||  label.unit != it.unit)
-                    throw ImportApiError("Wrong techlabel key ${it.key} and unit: ${it.unit}", ErrorType.INVALID_VALUE)
-            }
-        }
         if ((transfer.accessory || transfer.sparePart) && transfer.compatibleWith == null) {
             throw ImportApiError("It is accessory or sparePart, must set compatibleWidth", ErrorType.MISSING_PARAMETER)
         }

@@ -1,6 +1,7 @@
 package no.nav.hm.grunndata.importapi.iso
 
 import jakarta.inject.Singleton
+import kotlinx.coroutines.runBlocking
 import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
 import no.nav.hm.grunndata.rapid.dto.IsoCategoryDTO
 import org.slf4j.LoggerFactory
@@ -8,14 +9,16 @@ import org.slf4j.LoggerFactory
 @Singleton
 class IsoCategoryService(gdbApiClient: GdbApiClient) {
 
-    private val isoCategories: Map<String, IsoCategoryDTO> =
-        gdbApiClient.retrieveIsoCategories().associateBy { it.isoCode }
+    private var isoCategories: Map<String, IsoCategoryDTO>
 
     companion object {
         private val LOG = LoggerFactory.getLogger(IsoCategoryService::class.java)
     }
 
     init {
+        runBlocking {
+            isoCategories =  gdbApiClient.retrieveIsoCategories().associateBy { it.isoCode }
+        }
         LOG.info("Got isoCategories: ${isoCategories.size}")
     }
 

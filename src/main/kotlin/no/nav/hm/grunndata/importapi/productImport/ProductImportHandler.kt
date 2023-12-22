@@ -89,7 +89,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
         return productImport
     }
 
-    private fun createProductDTO(productId: UUID, transfer: ProductTransfer): ProductRapidDTO {
+    private suspend fun createProductDTO(productId: UUID, transfer: ProductTransfer): ProductRapidDTO {
         val seriesId = transfer.json_payload.seriesId ?: productId // if seriesId not given, use productId as seriesId
         val series = seriesImportService.findByIdCacheable(seriesId) ?: run {
                 LOG.info("Series $seriesId not found in cache, fetching from GDB")

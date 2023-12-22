@@ -6,6 +6,7 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.security.authentication.Authentication
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import kotlinx.coroutines.runBlocking
 import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
 import no.nav.hm.grunndata.importapi.gdb.SeriesDTO
 import no.nav.hm.grunndata.importapi.security.Roles
@@ -32,7 +33,7 @@ open class SeriesLookupController(private val gdbApiClient: GdbApiClient) {
     open fun getSeriesBySupplierId(identifier: String, authentication: Authentication): List<SeriesDTO> {
         val supplierId = authentication.supplierId()
         LOG.info("Looking up series for supplierId: ${supplierId}")
-        return gdbApiClient.getSeriesBySupplierId(supplierId)
+        return runBlocking { gdbApiClient.getSeriesBySupplierId(supplierId) }
     }
 
 }

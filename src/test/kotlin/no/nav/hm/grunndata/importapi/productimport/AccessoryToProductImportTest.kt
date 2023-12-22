@@ -7,6 +7,7 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
@@ -42,7 +43,7 @@ class AccessoryToProductImportTest(private val productTransferToProductImport: P
     @MockBean(GdbApiClient::class)
     fun gdbApiClient(): GdbApiClient {
         val mock = mockk<GdbApiClient>(relaxed = true)
-        every { mock.getProductBySupplierIdAndSupplierRef(any(), any()) } answers {null}
+        coEvery { mock.getProductBySupplierIdAndSupplierRef(any(), any()) } answers {null}
         return mock
     }
 

@@ -6,6 +6,7 @@ import io.kotest.matchers.shouldBe
 import io.micronaut.core.async.publisher.Publishers
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.collect
@@ -15,8 +16,9 @@ import kotlinx.coroutines.runBlocking
 import no.nav.hm.grunndata.importapi.supplier.Supplier
 import no.nav.hm.grunndata.importapi.supplier.SupplierService
 import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
-import no.nav.hm.grunndata.importapi.techdata.TechDataLabelDTO
+
 import no.nav.hm.grunndata.importapi.security.TokenService
+import no.nav.hm.grunndata.importapi.techdata.TechLabelDTO
 import no.nav.hm.grunndata.rapid.dto.IsoCategoryDTO
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -35,23 +37,23 @@ class ProductAccessoryTransferTest(private val client: ProductTransferClient,
     @MockBean(GdbApiClient::class)
     fun gdbApiClient(): GdbApiClient {
         val mock = mockk<GdbApiClient>(relaxed = true)
-        every { mock.fetchAllTechLabels() } answers {
+        coEvery { mock.fetchAllTechLabels() } answers {
             listOf(
-                TechDataLabelDTO(
+                TechLabelDTO(
                     identifier = "HMDB-20674",
                     label = "Farge",
                     guide = "Farge",
                     isocode = "24091802",
                     type = "C",
                     unit = ""),
-                TechDataLabelDTO(
+                TechLabelDTO(
                     identifier = "HMDB-20675",
                     label = "Materiale",
                     guide = "Materiale",
                     isocode = "04481502",
                     type = "C",
                     unit = ""),
-                TechDataLabelDTO(
+                TechLabelDTO(
                     identifier = "HMDB-20675",
                     label = "Belastning maks",
                     guide = "Belastning maks",
@@ -61,7 +63,7 @@ class ProductAccessoryTransferTest(private val client: ProductTransferClient,
 
             )
         }
-        every { mock.retrieveIsoCategories() } answers {
+        coEvery { mock.retrieveIsoCategories() } answers {
             listOf(
                 IsoCategoryDTO(
                     isoCode = "12230301", isoTitle = "Test title", isoText = "Test text", isoLevel = 4
