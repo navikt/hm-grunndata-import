@@ -31,4 +31,4 @@ jobs:
         env:
           CLUSTER: ${{ inputs.cluster }}
           RESOURCE: .nais/nais.yml
-          VARS: .nais/nais-${{ inputs.cluster }}.json
+          VARS: .nais/nais_${{ inputs.cluster }}.json
