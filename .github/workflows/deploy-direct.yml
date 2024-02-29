@@ -20,6 +20,11 @@ env:
   IMAGE: europe-north1-docker.pkg.dev/${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}/teamdigihot/${{ github.repository }}:${{ inputs.version }}
 jobs:
   deploy-direct:
+    permissions:
+      contents: write
+      id-token: write
+      security-events: write
+      actions: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
