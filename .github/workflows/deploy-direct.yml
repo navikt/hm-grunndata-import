@@ -17,7 +17,7 @@ on:
 env:
   VERSION_TAG: ${{ inputs.version }}
   CLUSTER: ${{ inputs.cluster }}
-  IMAGE: europe-north1-docker.pkg.dev/${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}/teamdigihot/${{ github.repository }}:${{ inputs.version }}
+  IMAGE: europe-north1-docker.pkg.dev/${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}/teamdigihot/${{ github.event.repository.name }}:${{ inputs.version }}
 jobs:
   deploy-direct:
     permissions:
@@ -37,3 +37,4 @@ jobs:
           CLUSTER: ${{ inputs.cluster }}
           RESOURCE: .nais/nais.yml
           VARS: .nais/nais_${{ inputs.cluster }}.json
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
