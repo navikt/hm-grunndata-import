@@ -26,13 +26,9 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ env.VERSION_TAG }}
-      - run: |
-          echo "Cluster: $CLUSTER"
-          echo "VERSION_TAG: $VERSION_TAG"
-          echo "IMAGE: $IMAGE"
-#      - uses: nais/deploy/actions/deploy@v2
-#        name: deploy to ${{ inputs.cluster }}
-#        env:
-#          CLUSTER: ${{ inputs.CLUSTER }}
-#          RESOURCE: .nais/nais.yml
-#          VARS: .nais/nais-${{ inputs.cluster }}.json
+      - uses: nais/deploy/actions/deploy@v2
+        name: deploy to ${{ inputs.cluster }}
+        env:
+          CLUSTER: ${{ inputs.cluster }}
+          RESOURCE: .nais/nais.yml
+          VARS: .nais/nais-${{ inputs.cluster }}.json
