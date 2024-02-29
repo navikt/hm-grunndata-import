@@ -61,7 +61,7 @@ spec:
         highAvailability: true
         diskSize: {{ disk_size }}
         diskAutoresize: true
-        autoBackupTime: "03:00"
+        autoBackupHour: 3
         databases:
           - name: importapi
             envVarPrefix: DB
