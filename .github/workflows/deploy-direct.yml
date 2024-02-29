@@ -1,0 +1,38 @@
+name: deploy-direct
+on:
+  workflow_dispatch:
+    inputs:
+      cluster:
+        description: 'What cluster?'
+        required: true
+        default: 'dev-gcp'
+        type: choice
+        options:
+          - dev-gcp
+          - prod-gcp
+      version:
+        description: 'What version?'
+        required: true
+        type: string
+env:
+  VERSION_TAG: ${{ inputs.version }}
+  CLUSTER: ${{ inputs.cluster }}
+  IMAGE: europe-north1-docker.pkg.dev/${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}/teamdigihot/${{ github.repository }}:${{ inputs.version }}
+jobs:
+  deploy-direct:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ env.VERSION_TAG }}
+      - run: |
+          echo "Cluster: $CLUSTER"
+          echo "VERSION_TAG: $VERSION_TAG"
+          echo "IMAGE: $IMAGE"
+#      - uses: nais/deploy/actions/deploy@v2
+#        name: deploy to ${{ inputs.cluster }}
+#        env:
+#          CLUSTER: ${{ inputs.CLUSTER }}
+#          RESOURCE: .nais/nais.yml
+#          VARS: .nais/nais-${{ inputs.cluster }}.json
