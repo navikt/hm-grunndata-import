@@ -2,7 +2,7 @@ name: deploy-rollback
 on:
   workflow_dispatch:
     inputs:
-      cluster:
+      CLUSTER:
         description: 'Cluster:'
         required: true
         default: 'dev-gcp'
@@ -10,7 +10,7 @@ on:
         options:
           - dev-gcp
           - prod-gcp
-      version:
+      VERSION:
         description: 'Version:'
         required: true
         type: string
