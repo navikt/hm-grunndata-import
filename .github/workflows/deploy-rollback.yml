@@ -10,8 +10,8 @@ on:
           - dev-gcp
           - prod-gcp
       VERSION:
+        description: "Version"
         type: string
-        default: "latest"
 
 jobs:
   call-workflow:
@@ -24,3 +24,5 @@ jobs:
       NAIS_RESOURCE: ".nais/nais.yml"
       NAIS_VARS: '.nais/nais_${{ inputs.CLUSTER }}.json'
       TEAM: "teamdigihot"
+      CLUSTER: ${{ inputs.CLUSTER }}
+      VERSION: ${{ inputs.VERSION }}
