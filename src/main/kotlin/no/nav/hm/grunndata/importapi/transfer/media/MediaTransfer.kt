@@ -31,7 +31,7 @@ data class MediaInfoDTO (
     val priority: Int = -1,
     val type: MediaType = MediaType.IMAGE,
     val text:   String?=null,
-    val source: MediaSourceType = MediaSourceType.HMDB,
+    val source: MediaSourceType = MediaSourceType.IMPORT,
     val updated: LocalDateTime? = LocalDateTime.now(),
 ) {
     override fun hashCode(): Int {

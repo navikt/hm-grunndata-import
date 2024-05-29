@@ -16,7 +16,6 @@ import kotlinx.coroutines.reactive.asPublisher
 import no.nav.hm.grunndata.importapi.error.ErrorType
 import no.nav.hm.grunndata.importapi.error.ImportApiError
 import no.nav.hm.grunndata.importapi.iso.IsoCategoryService
-import no.nav.hm.grunndata.importapi.openapi.OpenApiPageable
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
 import no.nav.hm.grunndata.importapi.security.supplierId
