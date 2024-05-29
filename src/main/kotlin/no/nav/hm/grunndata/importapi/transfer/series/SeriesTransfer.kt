@@ -38,6 +38,8 @@ data class SeriesTransferDTO(
 ){
     init {
         require(title.isNotBlank() && title.length < 256) { "name is blank or name size > 255" }
+        require(isoCategory.isNotBlank()) { "isoCategory is blank"}
+
     }
 }
 
