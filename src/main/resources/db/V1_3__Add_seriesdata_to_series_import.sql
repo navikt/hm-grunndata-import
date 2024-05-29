@@ -1,0 +1,1 @@
+ALTER TABLE series_import_v1 ADD COLUMN series_data JSONB NOT NULL default '{}';

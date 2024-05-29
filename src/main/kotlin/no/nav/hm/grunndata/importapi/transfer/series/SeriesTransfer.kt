@@ -6,7 +6,6 @@ import io.micronaut.data.model.DataType
 import jakarta.persistence.Id
 import no.nav.hm.grunndata.importapi.transfer.media.MediaInfoDTO
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
-import no.nav.hm.grunndata.rapid.dto.Attributes
 import no.nav.hm.grunndata.rapid.dto.SeriesAttributes
 import no.nav.hm.grunndata.rapid.dto.SeriesStatus
 import java.time.LocalDateTime

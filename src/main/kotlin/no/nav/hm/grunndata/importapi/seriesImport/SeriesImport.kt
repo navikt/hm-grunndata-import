@@ -2,8 +2,10 @@ package no.nav.hm.grunndata.importapi.seriesImport
 
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
+import io.micronaut.data.annotation.TypeDef
 import io.micronaut.data.annotation.Version
-import no.nav.hm.grunndata.importapi.IMPORT
+import io.micronaut.data.model.DataType
+import no.nav.hm.grunndata.importapi.transfer.media.MediaInfoDTO
 import no.nav.hm.grunndata.rapid.dto.*
 import java.time.LocalDateTime
 import java.util.*
@@ -18,6 +20,8 @@ data class SeriesImport (
     val title: String,
     val text: String,
     val status: SeriesStatus,
+    @field:TypeDef(type = DataType.JSON)
+    val seriesData: SeriesDataDTO = SeriesDataDTO(),
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now(),
     val expired : LocalDateTime = LocalDateTime.now().plusYears(15),
@@ -34,10 +38,16 @@ data class SeriesImportDTO (
     val title: String,
     val text: String,
     val status: SeriesStatus = SeriesStatus.ACTIVE,
+    val seriesData: SeriesDataDTO = SeriesDataDTO(),
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now(),
     val expired: LocalDateTime,
     val version: Long? = 0L
+)
+
+data class SeriesDataDTO(
+    val media: Set<MediaInfoDTO> = emptySet(),
+    val attributes: SeriesAttributes = SeriesAttributes(),
 )
 
 fun SeriesImport.toDTO(): SeriesImportDTO = SeriesImportDTO(
