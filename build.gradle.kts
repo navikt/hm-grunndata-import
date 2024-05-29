@@ -13,6 +13,7 @@ val mockkVersion = "1.13.4"
 val kotestVersion = "5.5.5"
 val rapidsRiversVersion = "202401101532"
 val grunndataDtoVersion = "202405271558"
+val leaderElectionVersion = "202405291312"
 
 group = "no.nav.hm"
 version = properties["version"] ?: "local-build"
@@ -85,6 +86,9 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.2")
     testImplementation("org.testcontainers:postgresql:${tcVersion}")
+
+    // micronaut-leaderelection
+    implementation("com.github.navikt:hm-micronaut-leaderelection:$leaderElectionVersion")
 }
 
 micronaut {

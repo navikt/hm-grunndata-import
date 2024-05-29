@@ -22,7 +22,8 @@ class SeriesTransferRepositoryTest(private val seriesTransferRepository: SeriesT
             seriesId = seriesId,
             json_payload = SeriesTransferDTO(
                 seriesId = seriesId,
-                title = seriesName
+                title = seriesName,
+                isoCategory = "12345678"
             ),
             md5 = "hexvaluemd5"
         )

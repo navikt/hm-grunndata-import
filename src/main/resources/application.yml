@@ -140,3 +140,6 @@ grunndata:
 media:
   upload:
     url: ${MEDIA_UPLOAD_URL:`http://localhost:8081`}
+
+elector:
+  path: ${ELECTOR_PATH:localhost}
