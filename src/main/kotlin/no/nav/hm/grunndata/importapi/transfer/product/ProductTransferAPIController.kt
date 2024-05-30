@@ -72,10 +72,6 @@ class ProductTransferAPIController(private val productTransferRepository: Produc
         if ((transfer.accessory || transfer.sparePart) && transfer.compatibleWith == null) {
             throw ImportApiError("It is accessory or sparePart, must set compatibleWidth", ErrorType.MISSING_PARAMETER)
         }
-
-        if (isoCategoryService.lookUpCode(transfer.isoCategory) == null) {
-            throw ImportApiError("Isocategory ${transfer.isoCategory} does not exist", ErrorType.INVALID_VALUE)
-        }
     }
 
     @Delete("/{identifier}/{supplierRef}")

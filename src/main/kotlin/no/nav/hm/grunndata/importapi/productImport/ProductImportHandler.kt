@@ -4,8 +4,6 @@ import jakarta.inject.Singleton
 import jakarta.transaction.Transactional
 import no.nav.hm.grunndata.importapi.*
 import no.nav.hm.grunndata.importapi.agreement.AgreementService
-import no.nav.hm.grunndata.importapi.error.ErrorType
-import no.nav.hm.grunndata.importapi.error.ImportApiError
 import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportDTO
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportService
@@ -90,60 +88,32 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
     }
 
     private suspend fun createProductDTO(productId: UUID, transfer: ProductTransfer): ProductRapidDTO {
-        val seriesId = transfer.json_payload.seriesId ?: productId // if seriesId not given, use productId as seriesId
-        val series = seriesImportService.findByIdCacheable(seriesId) ?: run {
-                LOG.info("Series $seriesId not found in cache, fetching from GDB")
-                gdbApiClient.getSeriesById(seriesId)?.let { SeriesImportDTO(seriesId = it.id,
-                    title = it.title, text = it.text, expired = it.expired,
-                    isoCategory = it.isoCategory, supplierId = it.supplierId, transferId = UUID.randomUUID())
-                } ?: run {
-                    val dto =   SeriesImportDTO(
-                        seriesId = seriesId,
-                        title = transfer.json_payload.title,
-                        text = transfer.json_payload.text,
-                        isoCategory = transfer.json_payload.isoCategory,
-                        supplierId = transfer.supplierId,
-                        transferId = UUID.randomUUID(),
-                        expired = LocalDateTime.now().plusYears(15)
-                    )
-
-                    if (seriesId != productId) {
-                        LOG.info("SeriesId $seriesId not found in GDB, creating new series cause it is a main product")
-                        seriesImportService.save(dto)
-                        importRapidPushService.pushDTOToKafka(dto.toRapidDTO(), EventName.importedSeriesV1)
-                    }
-                    dto
-                }
-        }
-        return transfer.json_payload.toProductRapidDTO(productId, transfer.supplierId, series)
+        return transfer.json_payload.toProductRapidDTO(productId, transfer.supplierId)
     }
 
 
 
-    private fun ProductTransferDTO.toProductRapidDTO(productId: UUID, supplierId: UUID, series: SeriesImportDTO): ProductRapidDTO {
+    private fun ProductTransferDTO.toProductRapidDTO(productId: UUID, supplierId: UUID): ProductRapidDTO {
         val nPublished = published ?: LocalDateTime.now().minusMinutes(1)
         val nExpired = expired ?: LocalDateTime.now().plusYears(10)
         return ProductRapidDTO (
             id = productId,
             supplier = supplierService.findById(supplierId)!!.toDTO(),
-            title = series.title, // use series title, text and iso, if products are connected in a series, they have to be the same.
+            title = "", // series title will be merged later.
             articleName = articleName,
             supplierRef = supplierRef,
+            isoCategory = "",
             attributes = Attributes (
-                shortdescription = shortDescription,
-                text = series.text, //
-                url = url,
+                shortdescription = articleDescription,
                 compatibleWidth = if (this.compatibleWith!=null) CompatibleWith(
                     seriesIds = compatibleWith.seriesIds) else null
             ),
             identifier = productId.toString(),
-            isoCategory = series.isoCategory,
             accessory = accessory,
             sparePart = sparePart,
-            seriesUUID = series.seriesId,
-            seriesId =  series.seriesId.toString(),
+            seriesUUID = seriesId,
+            seriesId =  seriesId.toString(),
             techData = techData.map { TechData(key = it.key, unit = it.unit, value = it.value ) },
-            media = media.map { mapMedia(it)}.toSet(),
             published = nPublished,
             expired = nExpired,
             status = mapStatus(nPublished, nExpired, this),
