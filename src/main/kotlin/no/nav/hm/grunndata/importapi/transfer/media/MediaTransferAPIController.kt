@@ -7,6 +7,7 @@ import io.micronaut.http.annotation.Post
 import io.micronaut.http.multipart.CompletedFileUpload
 import io.micronaut.security.authentication.Authentication
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import io.swagger.v3.oas.annotations.tags.Tag
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.asFlow
@@ -27,6 +28,7 @@ import java.util.*
 @SecuritySupplierRule(value = [Roles.ROLE_SUPPLIER])
 @Controller(API_V1_MEDIA_TRANSFERS)
 @SecurityRequirement(name = "bearer-auth")
+@Tag(name = "Media Transfers")
 class MediaTransferAPIController(private val mediaUploadService: MediaUploadService,
                                  private val productImportRepository: ProductImportRepository,
                                  private val seriesImportService: SeriesImportService,

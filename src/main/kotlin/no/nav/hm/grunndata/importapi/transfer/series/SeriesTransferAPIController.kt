@@ -10,6 +10,7 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
 import io.micronaut.security.authentication.Authentication
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import io.swagger.v3.oas.annotations.tags.Tag
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.asPublisher
@@ -30,6 +31,7 @@ import java.util.*
 @SecuritySupplierRule(value = [Roles.ROLE_SUPPLIER])
 @Controller(API_V1_SERIES_TRANSFERS)
 @SecurityRequirement(name = "bearer-auth")
+@Tag(name = "Series Transfers")
 class SeriesTransferAPIController(private val seriesTransferRepository: SeriesTransferRepository,
                                   private val isoCategoryService: IsoCategoryService,
                                   private val objectMapper: ObjectMapper) {

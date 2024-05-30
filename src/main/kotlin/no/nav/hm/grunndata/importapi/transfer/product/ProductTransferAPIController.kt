@@ -8,6 +8,7 @@ import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.security.authentication.Authentication
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import io.swagger.v3.oas.annotations.tags.Tag
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.asPublisher
@@ -29,6 +30,7 @@ import java.util.UUID
 @SecuritySupplierRule(value = [Roles.ROLE_SUPPLIER])
 @Controller(API_V1_PRODUCT_TRANSFERS)
 @SecurityRequirement(name = "bearer-auth")
+@Tag(name = "Product Variant Transfers")
 class ProductTransferAPIController(private val productTransferRepository: ProductTransferRepository,
                                    private val techDataLabelService: TechDataLabelService,
                                    private val objectMapper: ObjectMapper,
