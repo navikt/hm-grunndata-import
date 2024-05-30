@@ -4,7 +4,7 @@ import io.kotest.common.runBlocking
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import no.nav.hm.grunndata.importapi.transfer.media.MediaInfoDTO
+import no.nav.hm.grunndata.rapid.dto.MediaInfo
 import no.nav.hm.grunndata.rapid.dto.MediaSourceType
 import no.nav.hm.grunndata.rapid.dto.SeriesAttributes
 import no.nav.hm.grunndata.rapid.dto.SeriesStatus
@@ -24,8 +24,9 @@ class SeriesImportRepositoryTest(private val repository: SeriesImportRepository)
         val import2 = SeriesImport(seriesId = id2, text = "series text 2", isoCategory = "12324567", supplierId = UUID.randomUUID(), transferId = UUID.randomUUID(),
             title = "Unik navn på serien +${UUID.randomUUID()}", status = SeriesStatus.ACTIVE, seriesData = SeriesDataDTO(
                 media = setOf(
-                    MediaInfoDTO(uri = "123.jog", text = "bilde 1", source = MediaSourceType.IMPORT, sourceUri = "https://localhost/123.jpg", updated = LocalDateTime.now()),
-                    MediaInfoDTO(uri = "124.jog", text = "bilde 2", source = MediaSourceType.IMPORT, sourceUri = "https://localhost/124.jpg", updated = LocalDateTime.now())),
+                    MediaInfo(uri = "123.jog", text = "bilde 1", source = MediaSourceType.IMPORT, sourceUri = "https://localhost/123.jpg", updated = LocalDateTime.now()),
+                    MediaInfo(uri = "124.jog", text = "bilde 2", source = MediaSourceType.IMPORT, sourceUri = "https://localhost/124.jpg", updated = LocalDateTime.now())
+                ),
                 attributes = SeriesAttributes(keywords = listOf("keyword1", "keyword2"))
             )
         )

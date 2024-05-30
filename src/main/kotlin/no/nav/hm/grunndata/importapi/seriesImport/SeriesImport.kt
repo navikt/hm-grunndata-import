@@ -5,7 +5,6 @@ import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.TypeDef
 import io.micronaut.data.annotation.Version
 import io.micronaut.data.model.DataType
-import no.nav.hm.grunndata.importapi.transfer.media.MediaInfoDTO
 import no.nav.hm.grunndata.rapid.dto.*
 import java.time.LocalDateTime
 import java.util.*
@@ -46,7 +45,7 @@ data class SeriesImportDTO (
 )
 
 data class SeriesDataDTO(
-    val media: Set<MediaInfoDTO> = emptySet(),
+    val media: Set<MediaInfo> = emptySet(),
     val attributes: SeriesAttributes = SeriesAttributes(),
 )
 
@@ -69,6 +68,7 @@ fun SeriesImportDTO.toRapidDTO(): SeriesImportRapidDTO = SeriesImportRapidDTO (
     text = text,
     isoCategory = isoCategory,
     status = status,
+    seriesData = SeriesData(media = seriesData.media, attributes = seriesData.attributes),
     created = created,
     updated = updated,
     expired = expired,

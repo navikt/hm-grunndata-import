@@ -4,8 +4,8 @@ import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.TypeDef
 import io.micronaut.data.model.DataType
 import jakarta.persistence.Id
-import no.nav.hm.grunndata.importapi.transfer.media.MediaInfoDTO
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
+import no.nav.hm.grunndata.rapid.dto.MediaInfo
 import no.nav.hm.grunndata.rapid.dto.SeriesAttributes
 import no.nav.hm.grunndata.rapid.dto.SeriesStatus
 import java.time.LocalDateTime
@@ -31,7 +31,7 @@ data class SeriesTransferDTO(
     val title: String,
     val text: String = "",
     val isoCategory: String = "",
-    val media: Set<MediaInfoDTO> = emptySet(),
+    val media: Set<MediaInfo> = emptySet(),
     val seriesAttributes: SeriesAttributes = SeriesAttributes(),
     val status: SeriesStatus = SeriesStatus.ACTIVE
 ){
