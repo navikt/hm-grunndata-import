@@ -12,29 +12,36 @@ import java.util.*
 
 
 @MicronautTest
-class TokenAPIControllerTest(private val tokenAPIClient: TokenAPIClient,
-                             private val tokenService: TokenService,
-                             private val supplierService: SupplierService) {
+class TokenAPIControllerTest(
+    private val tokenAPIClient: TokenAPIClient,
+    private val tokenService: TokenService,
+    private val supplierService: SupplierService
+) {
 
     val supplierId: UUID = UUID.randomUUID()
+
     init {
         supplierService.save(
-            Supplier(id= supplierId, name = UUID.randomUUID().toString(),
+            Supplier(
+                id = supplierId, name = UUID.randomUUID().toString(),
                 identifier = UUID.randomUUID().toString(),
-                jwtid = UUID.randomUUID().toString())
+                jwtid = UUID.randomUUID().toString()
+            )
         )
     }
+
     @Test
     fun tokenApiTest() {
 
-            val bearerToken = "bearer ${tokenService.adminToken("hm-grunndata-register")}"
-            val supplierToken = tokenAPIClient.createSupplierToken(supplierId, bearerToken)
-            val adminToken = tokenAPIClient.createAdminToken("hm-grunndata-register", bearerToken)
-            supplierToken.status shouldBe HttpStatus.OK
-            supplierToken.body().id shouldBe supplierId
-            supplierToken.body().token.shouldNotBeNull()
-            adminToken.status shouldBe  HttpStatus.OK
-            println(adminToken.body().token)
+        val bearerToken = "bearer ${tokenService.adminToken("hm-grunndata-register")}"
+        val supplierToken = tokenAPIClient.createSupplierToken(supplierId, bearerToken)
+        val adminToken = tokenAPIClient.createAdminToken("hm-grunndata-register", bearerToken)
+        supplierToken.status shouldBe HttpStatus.OK
+        supplierToken.body().id shouldBe supplierId
+        supplierToken.body().token.shouldNotBeNull()
+        adminToken.status shouldBe HttpStatus.OK
+        println(adminToken.body().token)
+        println(bearerToken)
 
     }
 }
