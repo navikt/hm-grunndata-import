@@ -147,23 +147,12 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
             published = nPublished,
             expired = nExpired,
             status = mapStatus(nPublished, nExpired, this),
-            agreements = agreements.map { mapProductAgreement(it) },
-            hasAgreement = false,
             createdBy = IMPORT,
             updatedBy = IMPORT,
         )
     }
 
 
-    private fun mapProductAgreement(agree: ProductAgreement): AgreementInfo {
-        val byRef = agreementService.getAgreementByReference(agree.reference)
-            ?: throw ImportApiError("Agreement with reference ${agree.reference} could not be found or is no longer active", ErrorType.NOT_FOUND)
-        val post = byRef.posts.find { it.nr == agree.postNr }
-            ?: throw ImportApiError("Agreement with postnr ${agree.postNr} does not exists", ErrorType.INVALID_VALUE)
-        return AgreementInfo(id = byRef.id, identifier = byRef.identifier, title = byRef.title, rank = agree.rank, postNr = post.nr,
-            postIdentifier = post.identifier, postTitle = post.title, reference = byRef.reference, expired = byRef.expired
-        )
-    }
 
     private fun mapStatus(published: LocalDateTime, expired: LocalDateTime, prodctTransferDTO: ProductTransferDTO): ProductStatus {
         return if (prodctTransferDTO.status == ProductStatus.DELETED) ProductStatus.DELETED // DELETED means it is deleted, don't care about published and expired

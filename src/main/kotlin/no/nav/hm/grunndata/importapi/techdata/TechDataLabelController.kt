@@ -12,12 +12,12 @@ import io.swagger.v3.oas.annotations.tags.Tag
 class TechDataLabelController(private val techDataLabelService: TechDataLabelService) {
 
     @Get("/")
-    fun fetchTechLabels() = techDataLabelService.fetchAllTechDataLabels()
+    suspend fun fetchTechLabels() = techDataLabelService.fetchAllTechDataLabels()
 
     @Get("/{isocode}")
-    fun fetchTechLabelsByIsocode(isocode: String) = techDataLabelService.fetchTechDataLabelsByIsoCode(isocode)
+    suspend fun fetchTechLabelsByIsocode(isocode: String) = techDataLabelService.fetchTechDataLabelsByIsoCode(isocode)
 
     @Get("/name/{name}")
-    fun fetchTechLabelsByName(name: String) = techDataLabelService.fetchTechDataLabelByKeyName(name)
+    suspend fun fetchTechLabelsByName(name: String) = techDataLabelService.fetchTechDataLabelByKeyName(name)
 
 }

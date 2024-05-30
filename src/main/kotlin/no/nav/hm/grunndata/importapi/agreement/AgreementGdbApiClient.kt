@@ -11,7 +11,7 @@ import no.nav.hm.grunndata.rapid.dto.AgreementDTO
 interface AgreementGdbApiClient {
 
     @Get(uri="/api/v1/agreements{?params*}", consumes = [MediaType.APPLICATION_JSON])
-    fun findAgreements(@QueryValue params: Map<String, String>?=null,
+    suspend fun findAgreements(@QueryValue params: Map<String, String>?=null,
                        @QueryValue("size") size: Int? = null,
                        @QueryValue("page") page: Int?=null,
                        @QueryValue("sort") sort: String? = null): Page<AgreementDTO>

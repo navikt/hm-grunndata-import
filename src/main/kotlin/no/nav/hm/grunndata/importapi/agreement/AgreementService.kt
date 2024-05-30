@@ -9,21 +9,19 @@ import java.time.LocalDateTime
 import java.util.*
 
 @Singleton
-@CacheConfig("agreements")
 open class AgreementService(private val agreementGdbApiClient: AgreementGdbApiClient) {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(AgreementService::class.java)
     }
 
-    @Cacheable
-    open fun getAllActiveAgreements(): List<AgreementDTO> {
+    suspend fun getAllActiveAgreements(): List<AgreementDTO> {
         LOG.info("Getting all active agreements from grunndata db")
         val params = mapOf("status" to "ACTIVE")
         return agreementGdbApiClient.findAgreements(params).content
     }
 
-    fun getAgreementByReference(reference: String): AgreementDTO?
+    suspend fun getAgreementByReference(reference: String): AgreementDTO?
         = getAllActiveAgreements().find { it.reference == reference }
 
 }
