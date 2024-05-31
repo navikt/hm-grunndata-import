@@ -57,16 +57,16 @@ class MediaTransferAPIController(private val mediaUploadService: MediaUploadServ
     suspend fun uploadFiles(identifier: String, authentication: Authentication, seriesId: UUID,
                             files: Publisher<CompletedFileUpload>): HttpResponse<List<MediaTransferResponse>>  {
         val supplierId = authentication.supplierId()
-        LOG.info("Upload media files for supplier $supplierId seriesId: $seriesId")
+        LOG.info("Upload media files for supplier: $identifier id: $supplierId seriesId: $seriesId")
         seriesImportService.findBySupplierIdAndSeriesId(supplierId, seriesId)?.let { s ->
             return HttpResponse.created(files.asFlow().map {
-                createMediaTransferResponse(it, s.seriesId, supplierId)
+                uploadMedia(it, s.seriesId, supplierId)
             }.toList())
         } ?: run {
             gdbApiClient.getSeriesById(seriesId)?.let { dto ->
                 LOG.info("Supplier $supplierId and seriesId found in GDB ${dto.id} ")
                 return HttpResponse.created(files.asFlow().map {
-                    createMediaTransferResponse(it, dto.id, supplierId)
+                    uploadMedia(it, dto.id, supplierId)
                 }.toList())
             } ?: run {
                 LOG.info("Supplier $supplierId and seriesId not found in GDB")
@@ -77,18 +77,18 @@ class MediaTransferAPIController(private val mediaUploadService: MediaUploadServ
 
 
 
-    private suspend fun createMediaTransferResponse(
+    private suspend fun uploadMedia(
         upload: CompletedFileUpload,
         seriesId: UUID,
         supplierId: UUID
     ): MediaTransferResponse {
         val transferId = UUID.randomUUID()
-        LOG.info("Storing file ${upload.name} size: ${upload.size} for transferId: $transferId")
+        LOG.info("Storing file name ${upload.name} size: ${upload.size} for transferId: $transferId")
         val mediaDTO = mediaUploadService.uploadMedia(upload, seriesId)
             val mediaTransfer = MediaTransferResponse(
                 transferId = UUID.randomUUID(),
                 supplierId = supplierId,
-                oid = seriesId,
+                seriesId = seriesId,
                 filename = upload.filename,
                 md5 = mediaDTO.md5,
                 sourceUri = mediaDTO.sourceUri,

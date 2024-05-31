@@ -6,7 +6,6 @@ import io.kotest.matchers.longs.shouldBeGreaterThanOrEqual
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.micronaut.data.model.Pageable
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import no.nav.hm.grunndata.rapid.dto.MediaInfo
 import no.nav.hm.grunndata.rapid.dto.MediaType
 import org.junit.jupiter.api.Test
 import java.util.*
@@ -30,9 +29,7 @@ class SeriesTransferRepositoryTest(
                 title = seriesName,
                 text = "En beskrivelse for serien",
                 media = setOf(
-                    MediaInfo(
-                        sourceUri = "http://uri.to/image.jpg",
-                        filename = "image.jpg",
+                    SeriesMediaInfo(
                         uri = "http://uri.to/image.jpg",
                         priority = 1,
                         type = MediaType.IMAGE,

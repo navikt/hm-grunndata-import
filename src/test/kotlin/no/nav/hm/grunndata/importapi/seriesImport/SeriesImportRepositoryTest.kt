@@ -27,7 +27,7 @@ class SeriesImportRepositoryTest(private val repository: SeriesImportRepository)
                     MediaInfo(uri = "123.jog", text = "bilde 1", source = MediaSourceType.IMPORT, sourceUri = "https://localhost/123.jpg", updated = LocalDateTime.now()),
                     MediaInfo(uri = "124.jog", text = "bilde 2", source = MediaSourceType.IMPORT, sourceUri = "https://localhost/124.jpg", updated = LocalDateTime.now())
                 ),
-                attributes = SeriesAttributes(keywords = listOf("keyword1", "keyword2"))
+                attributes = SeriesAttributes(keywords = setOf("keyword1", "keyword2"))
             )
         )
         runBlocking {
