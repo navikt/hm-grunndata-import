@@ -1,0 +1,1 @@
+ALTER TABLE media_transfer_v1 ADD COLUMN object_type VARCHAR(32);

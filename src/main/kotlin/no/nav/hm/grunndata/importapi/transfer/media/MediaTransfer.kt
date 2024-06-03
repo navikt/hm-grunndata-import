@@ -17,6 +17,7 @@ data class MediaTransfer (
     val filename: String,
     val sourceUri: String,
     val uri: String,
+    val objectType: ObjectType?= ObjectType.SERIES,
     val transferStatus: TransferStatus = TransferStatus.RECEIVED,
     val message: String?=null,
     val created: LocalDateTime = LocalDateTime.now(),
@@ -40,3 +41,18 @@ data class MediaTransferResponse(
     val updated: LocalDateTime,
 )
 
+fun MediaTransfer.toResponse() = MediaTransferResponse(
+    transferId = transferId,
+    seriesId = seriesId,
+    supplierId = supplierId,
+    md5 = md5,
+    filesize = filesize,
+    filename = filename,
+    sourceUri = sourceUri,
+    objectType = objectType,
+    uri = uri,
+    transferStatus = transferStatus,
+    message = message,
+    created = created,
+    updated = updated,
+)

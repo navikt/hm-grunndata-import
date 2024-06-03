@@ -18,6 +18,7 @@ class MediaTransferRepositoryTest(private val mediaTransferRepository: MediaTran
             seriesId = UUID.randomUUID(),
             md5 = "12345",
             filename = "12345.jpg",
+            objectType = ObjectType.SERIES,
             sourceUri = "http://localhost/12345.jpg",
             uri= "12345.jpg",
             filesize = 1234L
@@ -34,6 +35,7 @@ class MediaTransferRepositoryTest(private val mediaTransferRepository: MediaTran
             update.shouldNotBeNull()
             update.transferStatus shouldBe TransferStatus.DONE
             update.filesize shouldBe 1234L
+            update.objectType shouldBe ObjectType.SERIES
         }
     }
 }

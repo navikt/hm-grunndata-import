@@ -30,7 +30,7 @@ import java.util.*
 @SecurityRequirement(name = "bearer-auth")
 @Tag(name = "Media Transfers")
 class MediaTransferAPIController(private val mediaUploadService: MediaUploadService,
-                                 private val productImportRepository: ProductImportRepository,
+                                 private val mediaTransferRepository: MediaTransferRepository,
                                  private val seriesImportService: SeriesImportService,
                                  private val gdbApiClient: GdbApiClient,
                                  private val supplierService: SupplierService) {
@@ -43,10 +43,11 @@ class MediaTransferAPIController(private val mediaUploadService: MediaUploadServ
 
 
     @Get("/{identifier}/series/{seriesId}")
-    suspend fun getMediaList(identifier: String, authentication: Authentication, seriesId: UUID): HttpResponse<List<MediaDTO>> =
-        seriesImportService.findBySupplierIdAndSeriesId(authentication.supplierId(), seriesId).let {
-            HttpResponse.ok(mediaUploadService.getMediaList(seriesId))
-        }
+    suspend fun getMediaList(identifier: String, authentication: Authentication, seriesId: UUID): HttpResponse<List<MediaTransferResponse>> =
+        HttpResponse.ok(seriesImportService.findBySupplierIdAndSeriesId(authentication.supplierId(), seriesId).let {
+            mediaTransferRepository.findBySupplierIdAndSeriesId(authentication.supplierId(), seriesId)
+                .map { it.toResponse() }.toList()
+        })
 
 
     @Post(
@@ -85,7 +86,7 @@ class MediaTransferAPIController(private val mediaUploadService: MediaUploadServ
         val transferId = UUID.randomUUID()
         LOG.info("Storing file name ${upload.name} size: ${upload.size} for transferId: $transferId")
         val mediaDTO = mediaUploadService.uploadMedia(upload, seriesId)
-            val mediaTransfer = MediaTransferResponse(
+            val mediaTransfer = MediaTransfer(
                 transferId = UUID.randomUUID(),
                 supplierId = supplierId,
                 seriesId = seriesId,
@@ -99,7 +100,8 @@ class MediaTransferAPIController(private val mediaUploadService: MediaUploadServ
                 created = LocalDateTime.now(),
                 updated = LocalDateTime.now()
             )
-            return mediaTransfer
+            mediaTransferRepository.save(mediaTransfer)
+            return mediaTransfer.toResponse()
         }
     }
 
