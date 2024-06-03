@@ -24,16 +24,19 @@ import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.*
+import no.nav.hm.grunndata.importapi.toMD5Hex
 
 @SecuritySupplierRule(value = [Roles.ROLE_SUPPLIER])
 @Controller(API_V1_MEDIA_TRANSFERS)
 @SecurityRequirement(name = "bearer-auth")
 @Tag(name = "Media Transfers")
-class MediaTransferAPIController(private val mediaUploadService: MediaUploadService,
-                                 private val mediaTransferRepository: MediaTransferRepository,
-                                 private val seriesImportService: SeriesImportService,
-                                 private val gdbApiClient: GdbApiClient,
-                                 private val supplierService: SupplierService) {
+class MediaTransferAPIController(
+    private val mediaUploadService: MediaUploadService,
+    private val mediaTransferRepository: MediaTransferRepository,
+    private val seriesImportService: SeriesImportService,
+    private val gdbApiClient: GdbApiClient,
+    private val supplierService: SupplierService
+) {
 
     companion object {
         const val API_V1_MEDIA_TRANSFERS = "/api/v1/media/transfers"
@@ -41,9 +44,12 @@ class MediaTransferAPIController(private val mediaUploadService: MediaUploadServ
     }
 
 
-
     @Get("/{identifier}/series/{seriesId}")
-    suspend fun getMediaList(identifier: String, authentication: Authentication, seriesId: UUID): HttpResponse<List<MediaTransferResponse>> =
+    suspend fun getMediaList(
+        identifier: String,
+        authentication: Authentication,
+        seriesId: UUID
+    ): HttpResponse<List<MediaTransferResponse>> =
         HttpResponse.ok(seriesImportService.findBySupplierIdAndSeriesId(authentication.supplierId(), seriesId).let {
             mediaTransferRepository.findBySupplierIdAndSeriesId(authentication.supplierId(), seriesId)
                 .map { it.toResponse() }.toList()
@@ -55,8 +61,10 @@ class MediaTransferAPIController(private val mediaUploadService: MediaUploadServ
         consumes = [io.micronaut.http.MediaType.MULTIPART_FORM_DATA],
         produces = [io.micronaut.http.MediaType.APPLICATION_JSON]
     )
-    suspend fun uploadFiles(identifier: String, authentication: Authentication, seriesId: UUID,
-                            files: Publisher<CompletedFileUpload>): HttpResponse<List<MediaTransferResponse>>  {
+    suspend fun uploadFiles(
+        identifier: String, authentication: Authentication, seriesId: UUID,
+        files: Publisher<CompletedFileUpload>
+    ): HttpResponse<List<MediaTransferResponse>> {
         val supplierId = authentication.supplierId()
         LOG.info("Upload media files for supplier: $identifier id: $supplierId seriesId: $seriesId")
         seriesImportService.findBySupplierIdAndSeriesId(supplierId, seriesId)?.let { s ->
@@ -77,35 +85,36 @@ class MediaTransferAPIController(private val mediaUploadService: MediaUploadServ
     }
 
 
-
     private suspend fun uploadMedia(
         upload: CompletedFileUpload,
         seriesId: UUID,
         supplierId: UUID
     ): MediaTransferResponse {
         val transferId = UUID.randomUUID()
-        LOG.info("Storing file name ${upload.name} size: ${upload.size} for transferId: $transferId")
+        LOG.info("Storing file name ${upload.name} size: ${upload.size} for transferId: $transferId with md5: ${upload.md5}")
         val mediaDTO = mediaUploadService.uploadMedia(upload, seriesId)
-            val mediaTransfer = MediaTransfer(
-                transferId = UUID.randomUUID(),
-                supplierId = supplierId,
-                seriesId = seriesId,
-                filename = upload.filename,
-                md5 = mediaDTO.md5,
-                sourceUri = mediaDTO.sourceUri,
-                uri = mediaDTO.uri,
-                transferStatus = TransferStatus.DONE,
-                filesize = upload.size,
-                objectType = mediaDTO.objectType,
-                created = LocalDateTime.now(),
-                updated = LocalDateTime.now()
-            )
-            mediaTransferRepository.save(mediaTransfer)
-            return mediaTransfer.toResponse()
-        }
+        LOG.info("Upload to storage got response md5: ${mediaDTO.md5}")
+        val mediaTransfer = MediaTransfer(
+            transferId = UUID.randomUUID(),
+            supplierId = supplierId,
+            seriesId = seriesId,
+            filename = upload.filename,
+            md5 = mediaDTO.md5,
+            sourceUri = mediaDTO.sourceUri,
+            uri = mediaDTO.uri,
+            transferStatus = TransferStatus.DONE,
+            filesize = upload.size,
+            objectType = mediaDTO.objectType,
+            created = LocalDateTime.now(),
+            updated = LocalDateTime.now()
+        )
+        mediaTransferRepository.save(mediaTransfer)
+        return mediaTransfer.toResponse()
     }
+}
 
 
 val CompletedFileUpload.extension: String
     get() = filename.substringAfterLast('.', "")
 
+val CompletedFileUpload.md5: String get() = bytes.toMD5Hex()

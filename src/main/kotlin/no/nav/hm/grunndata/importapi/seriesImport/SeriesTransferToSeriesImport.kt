@@ -10,13 +10,12 @@ import no.nav.hm.grunndata.rapid.dto.SeriesStatus
 import no.nav.hm.grunndata.rapid.event.EventName
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
-import no.nav.hm.grunndata.importapi.transfer.media.MediaUploadService
+import no.nav.hm.grunndata.importapi.transfer.media.MediaTransferRepository
 
-import no.nav.hm.grunndata.rapid.dto.MediaInfo
 
 @Singleton
 open class SeriesTransferToSeriesImport(private val seriesTransferRepository: SeriesTransferRepository,
-                                        private val MediaUploadService: MediaUploadService,
+                                        private val mediaTransferRepository: MediaTransferRepository,
                                         private val seriesImportService: SeriesImportService,
                                         private val importRapidPushService: ImportRapidPushService,
 ) {
@@ -41,6 +40,7 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
 
     @Transactional
     open suspend fun createSeriesImport(transfer: SeriesTransfer) {
+        val mediaTransferList = mediaTransferRepository.findBySupplierIdAndSeriesId(transfer.supplierId, transfer.seriesId).filter { it.transferStatus == TransferStatus.DONE }
         val seriesImportDTO = seriesImportService
             .findBySupplierIdAndSeriesId(transfer.supplierId, transfer.seriesId)?.let { inDb ->
                 seriesImportService.update(
@@ -68,11 +68,6 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
                     supplierId = transfer.supplierId,
                     status = transfer.json_payload.status,
                     seriesData = SeriesDataDTO(
-                        media = transfer.json_payload.media.map {
-                            MediaInfo(uri = it.uri,
-                                priority =  it.priority,
-                                type = it.type, text = it.text, source = it.source, sourceUri = it.uri)
-                        }.toSet(),
                         attributes = transfer.json_payload.seriesAttributes
                     ),
                     expired = setExpiredIfNotActive(transfer.json_payload.status)
@@ -91,6 +86,8 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
                     "with version $${seriesImportDTO.version}"
         )
     }
+
+
 
     private fun setExpiredIfNotActive(status: SeriesStatus): LocalDateTime =
         if (status != SeriesStatus.ACTIVE) LocalDateTime.now().minusMinutes(1)

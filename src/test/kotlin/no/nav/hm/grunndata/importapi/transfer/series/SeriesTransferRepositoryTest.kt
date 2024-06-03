@@ -28,14 +28,6 @@ class SeriesTransferRepositoryTest(
                 seriesId = seriesId,
                 title = seriesName,
                 text = "En beskrivelse for serien",
-                media = setOf(
-                    SeriesMediaInfo(
-                        uri = "http://uri.to/image.jpg",
-                        priority = 1,
-                        type = MediaType.IMAGE,
-                        text = "Bilde 1"
-                    )
-                ),
                 isoCategory = "12345678"
             ),
             md5 = "hexvaluemd5"
