@@ -7,13 +7,14 @@ import kotlinx.coroutines.runBlocking
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
 import org.junit.jupiter.api.Test
 import java.util.*
+import no.nav.hm.grunndata.rapid.dto.MediaType
 
 @MicronautTest
-class MediaTransferRepositoryTest(private val mediaTransferRepository: MediaTransferRepository) {
+class MediaFileTransferRepositoryTest(private val mediaFileTransferRepository: MediaFileTransferRepository) {
 
     @Test
     fun crudTest() {
-        val media = MediaTransfer(
+        val media = MediaFileTransfer(
             supplierId = UUID.randomUUID(),
             seriesId = UUID.randomUUID(),
             md5 = "12345",
@@ -24,18 +25,19 @@ class MediaTransferRepositoryTest(private val mediaTransferRepository: MediaTran
             filesize = 1234L
         )
         runBlocking {
-            val saved = mediaTransferRepository.save(media)
+            val saved = mediaFileTransferRepository.save(media)
             saved.shouldNotBeNull()
-            val found = mediaTransferRepository.findById(saved.transferId)
+            val found = mediaFileTransferRepository.findById(saved.transferId)
             found.shouldNotBeNull()
             found.supplierId shouldBe saved.supplierId
             found.seriesId shouldBe saved.seriesId
             found.filename shouldBe "12345.jpg"
-            val update = mediaTransferRepository.update(found.copy(transferStatus = TransferStatus.DONE))
+            val update = mediaFileTransferRepository.update(found.copy(transferStatus = TransferStatus.DONE))
             update.shouldNotBeNull()
             update.transferStatus shouldBe TransferStatus.DONE
             update.filesize shouldBe 1234L
             update.objectType shouldBe ObjectType.SERIES
+            update.mediaType shouldBe MediaType.IMAGE
         }
     }
 }
