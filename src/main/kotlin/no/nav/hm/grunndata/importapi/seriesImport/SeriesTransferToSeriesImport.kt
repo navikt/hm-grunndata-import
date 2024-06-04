@@ -10,12 +10,12 @@ import no.nav.hm.grunndata.rapid.dto.SeriesStatus
 import no.nav.hm.grunndata.rapid.event.EventName
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
-import no.nav.hm.grunndata.importapi.transfer.media.MediaTransferRepository
+import no.nav.hm.grunndata.importapi.mediaImport.MediaImportRepository
 
 
 @Singleton
 open class SeriesTransferToSeriesImport(private val seriesTransferRepository: SeriesTransferRepository,
-                                        private val mediaTransferRepository: MediaTransferRepository,
+                                        private val mediaImportRepository: MediaImportRepository,
                                         private val seriesImportService: SeriesImportService,
                                         private val importRapidPushService: ImportRapidPushService,
 ) {
@@ -40,7 +40,6 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
 
     @Transactional
     open suspend fun createSeriesImport(transfer: SeriesTransfer) {
-        val mediaTransferList = mediaTransferRepository.findBySupplierIdAndSeriesId(transfer.supplierId, transfer.seriesId).filter { it.transferStatus == TransferStatus.DONE }
         val seriesImportDTO = seriesImportService
             .findBySupplierIdAndSeriesId(transfer.supplierId, transfer.seriesId)?.let { inDb ->
                 seriesImportService.update(
@@ -60,7 +59,7 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
             } ?: run {
             seriesImportService.save(
                 SeriesImportDTO(
-                    seriesId = transfer.seriesId,
+                    id = transfer.seriesId,
                     transferId = transfer.transferId,
                     title = transfer.json_payload.title,
                     text = transfer.json_payload.text,
@@ -82,7 +81,7 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
             )
         )
         LOG.info(
-            "Series import created for seriesId: ${seriesImportDTO.seriesId} and transfer: ${seriesImportDTO.transferId} " +
+            "Series import created for seriesId: ${seriesImportDTO.id} and transfer: ${seriesImportDTO.transferId} " +
                     "with version $${seriesImportDTO.version}"
         )
     }

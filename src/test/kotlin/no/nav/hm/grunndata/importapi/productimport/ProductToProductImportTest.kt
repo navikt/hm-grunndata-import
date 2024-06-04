@@ -49,7 +49,7 @@ class ProductToProductImportTest(private val productTransferToProductImport: Pro
     @Test
     fun testProductTransferToProductImport() {
         val supplier = Supplier(id= supplierId, name = "Medema AS", identifier = "medema_as", jwtid = UUID.randomUUID().toString())
-        val seriesDTO = SeriesImportDTO(seriesId = seriesId,
+        val seriesDTO = SeriesImportDTO(id = seriesId,
             text = "Series text",
             isoCategory = "12230301",
             supplierId=supplierId,
@@ -74,7 +74,7 @@ class ProductToProductImportTest(private val productTransferToProductImport: Pro
             val savedSup = supplierRepository.save(supplier)
             val savedSeries = seriesImportService.save(seriesDTO)
             savedSup.id shouldBe supplierId
-            savedSeries.seriesId shouldBe seriesId
+            savedSeries.id shouldBe seriesId
             val saved = productTransferRepository.save(transfer)
             saved.transferId.shouldNotBeNull()
             saved.transferStatus shouldBe TransferStatus.RECEIVED

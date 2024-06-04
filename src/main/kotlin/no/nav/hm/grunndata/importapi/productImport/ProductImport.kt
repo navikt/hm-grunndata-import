@@ -9,6 +9,7 @@ import jakarta.persistence.Column
 import no.nav.hm.grunndata.rapid.dto.*
 import java.time.LocalDateTime
 import java.util.*
+import no.nav.hm.grunndata.importapi.rapidevent.EventPayload
 
 @MappedEntity("product_import_v1")
 data class ProductImport(
@@ -32,7 +33,7 @@ data class ProductImport(
 )
 
 data class ProductImportDTO(
-    val id: UUID,
+    override val id: UUID,
     val transferId: UUID,
     val supplierId: UUID,
     val supplierRef: String,
@@ -45,7 +46,18 @@ data class ProductImportDTO(
     val created: LocalDateTime = LocalDateTime.now(),
     val updated: LocalDateTime = LocalDateTime.now(),
     val version: Long?=0L
-)
+):EventPayload {
+    override fun toRapidDTO(): RapidDTO = ProductImportRapidDTO(
+        id = id,
+        transferId = transferId,
+        supplierId = supplierId,
+        supplierRef = supplierRef,
+        productDTO = productDTO,
+        created = created,
+        updated = updated,
+        version = version!!
+    )
+}
 
 data class ProductImportResponse(
     val id: UUID,
@@ -77,7 +89,7 @@ fun ProductImport.toDTO(): ProductImportDTO  = ProductImportDTO (
     productDTO = productDTO,
     created = created,
     updated = updated,
-    version = version
+    version = version,
 )
 
 fun ProductImport.toRapidDTO(): ProductImportRapidDTO = ProductImportRapidDTO(

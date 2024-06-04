@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.asFlow
 import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
-import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
 import no.nav.hm.grunndata.importapi.security.supplierId
@@ -69,7 +68,7 @@ class MediaTransferAPIController(
         LOG.info("Upload media files for supplier: $identifier id: $supplierId seriesId: $seriesId")
         seriesImportService.findBySupplierIdAndSeriesId(supplierId, seriesId)?.let { s ->
             return HttpResponse.created(files.asFlow().map {
-                uploadMedia(it, s.seriesId, supplierId)
+                uploadMedia(it, s.id, supplierId)
             }.toList())
         } ?: run {
             gdbApiClient.getSeriesById(seriesId)?.let { dto ->

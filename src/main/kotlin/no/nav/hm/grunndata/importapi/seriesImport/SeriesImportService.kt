@@ -21,12 +21,12 @@ open class SeriesImportService(private val seriesImportRepository: SeriesImportR
         seriesImportRepository.findBySupplierIdAndSeriesId(supplierId, seriesId)?.toDTO()
 
     @CacheInvalidate(parameters = ["id"])
-    open fun save(dto: SeriesImportDTO, id: UUID = dto.seriesId): SeriesImportDTO = runBlocking {
+    open fun save(dto: SeriesImportDTO, id: UUID = dto.id): SeriesImportDTO = runBlocking {
         seriesImportRepository.save(dto.toEntity()).toDTO()
     }
 
     @CacheInvalidate(parameters = ["id"])
-    open fun update(dto: SeriesImportDTO, id: UUID = dto.seriesId): SeriesImportDTO? = runBlocking {
+    open fun update(dto: SeriesImportDTO, id: UUID = dto.id): SeriesImportDTO? = runBlocking {
         seriesImportRepository.update(dto.toEntity()).toDTO()
     }
 
