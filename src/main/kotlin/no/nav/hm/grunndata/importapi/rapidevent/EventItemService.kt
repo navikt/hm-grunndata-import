@@ -19,7 +19,7 @@ open class EventItemService(
     private var eventHandlers = mutableMapOf<EventItemType, EventHandler>()
 
 
-    suspend fun getAllPendingStatus() = eventItemRepository.findByStatus(EventItemStatus.PENDING)
+    suspend fun getAllPendingStatus() = eventItemRepository.findByStatus(EventItemStatus.PENDING).sortedBy { it.updated }
 
     private suspend fun setEventItemStatusToSent(eventItem: EventItem) {
         eventItemRepository.update(eventItem.copy(status = EventItemStatus.SENT))
