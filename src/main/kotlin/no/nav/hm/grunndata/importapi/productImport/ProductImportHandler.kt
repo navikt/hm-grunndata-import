@@ -2,31 +2,27 @@ package no.nav.hm.grunndata.importapi.productImport
 
 import jakarta.inject.Singleton
 import jakarta.transaction.Transactional
-import no.nav.hm.grunndata.importapi.*
-import no.nav.hm.grunndata.importapi.agreement.AgreementService
-import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
-import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportDTO
-import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportService
-import no.nav.hm.grunndata.importapi.seriesImport.toRapidDTO
-import no.nav.hm.grunndata.importapi.supplier.SupplierService
-import no.nav.hm.grunndata.importapi.supplier.toDTO
-import no.nav.hm.grunndata.importapi.transfer.product.*
-import no.nav.hm.grunndata.rapid.dto.*
-import no.nav.hm.grunndata.rapid.dto.CompatibleWith
-import no.nav.hm.grunndata.rapid.dto.TechData
-import no.nav.hm.grunndata.rapid.event.EventName
-import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.UUID
+import no.nav.hm.grunndata.importapi.IMPORT
+import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
+import no.nav.hm.grunndata.importapi.supplier.SupplierService
+import no.nav.hm.grunndata.importapi.supplier.toDTO
+import no.nav.hm.grunndata.importapi.transfer.product.ProductTransfer
+import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferDTO
+import no.nav.hm.grunndata.rapid.dto.AdminStatus
+import no.nav.hm.grunndata.rapid.dto.Attributes
+import no.nav.hm.grunndata.rapid.dto.CompatibleWith
+import no.nav.hm.grunndata.rapid.dto.ProductRapidDTO
+import no.nav.hm.grunndata.rapid.dto.ProductStatus
+import no.nav.hm.grunndata.rapid.dto.TechData
+import org.slf4j.LoggerFactory
 
 
 @Singleton
 open class ProductImportHandler(private val productImportRepository: ProductImportRepository,
                                 private val supplierService: SupplierService,
-                                private val seriesImportService: SeriesImportService,
-                                private val agreementService: AgreementService,
-                                private val gdbApiClient: GdbApiClient,
-                                private val importRapidPushService: ImportRapidPushService
+                                private val gdbApiClient: GdbApiClient
 ) {
 
     companion object {
@@ -128,17 +124,5 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
         return if (prodctTransferDTO.status == ProductStatus.DELETED) ProductStatus.DELETED // DELETED means it is deleted, don't care about published and expired
             else if (published.isBefore(LocalDateTime.now()) && expired.isAfter(LocalDateTime.now()))  ProductStatus.ACTIVE
             else ProductStatus.INACTIVE
-    }
-
-
-    private fun mapMedia(media: MediaDTO): MediaInfo {
-        return MediaInfo(
-            sourceUri = media.uri,
-            uri = media.uri,
-            priority = media.priority,
-            source = media.sourceType,
-            text = media.text,
-            type = media.type,
-        )
     }
 }

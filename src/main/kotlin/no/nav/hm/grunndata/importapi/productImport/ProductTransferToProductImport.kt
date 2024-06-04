@@ -14,8 +14,7 @@ import java.time.LocalDateTime
 @Singleton
 open class ProductTransferToProductImport(private val productTransferRepository: ProductTransferRepository,
                                      private val productImportHandler: ProductImportHandler,
-                                     private val importRapidPushService: ImportRapidPushService
-) {
+                                     private val productImportEventHandler: ProductImportEventHandler) {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(ProductTransferToProductImport::class.java)
@@ -39,8 +38,8 @@ open class ProductTransferToProductImport(private val productTransferRepository:
     @Transactional
     open suspend fun createProductImportFromTransfer(it: ProductTransfer) {
         val productImport = productImportHandler.mapSaveTransferToProductImport(it)
+        productImportEventHandler.queueDTORapidEvent(productImport.toDTO(), importedProductV1)
         productTransferRepository.update(it.copy(transferStatus = TransferStatus.DONE, updated = LocalDateTime.now()))
-        importRapidPushService.pushDTOToKafka(productImport.toRapidDTO(), importedProductV1)
         LOG.info("Product import created for ${productImport.id} and transfer: ${productImport.transferId} for supplier ${it.supplierId} and supplierRef: ${it.supplierRef}")
     }
 

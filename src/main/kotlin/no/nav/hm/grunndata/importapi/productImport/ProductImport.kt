@@ -92,14 +92,3 @@ fun ProductImport.toDTO(): ProductImportDTO  = ProductImportDTO (
     version = version,
 )
 
-fun ProductImport.toRapidDTO(): ProductImportRapidDTO = ProductImportRapidDTO(
-    id = id,
-    transferId = transferId,
-    supplierId = supplierId,
-    supplierRef = supplierRef,
-    productDTO = productDTO,
-    created = created,
-    updated = updated,
-    version = version!!
-)
-

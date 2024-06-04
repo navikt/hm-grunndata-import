@@ -75,18 +75,3 @@ fun SeriesImportDTO.toEntity(): SeriesImport = SeriesImport (
     seriesId = id, supplierId = supplierId,  title = title, status = status, text = text, isoCategory = isoCategory,
     version = version, created = created, updated = updated, transferId = transferId, expired = expired
 )
-
-fun SeriesImportDTO.toRapidDTO(): SeriesImportRapidDTO = SeriesImportRapidDTO (
-    id = id,
-    supplierId = supplierId,
-    transferId = transferId,
-    title = title,
-    text = text,
-    isoCategory = isoCategory,
-    status = status,
-    seriesData = SeriesData(media = seriesData.media, attributes = seriesData.attributes),
-    created = created,
-    updated = updated,
-    expired = expired,
-    version = version!!
-)

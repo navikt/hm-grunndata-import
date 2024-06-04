@@ -2,22 +2,23 @@ package no.nav.hm.grunndata.importapi.seriesImport
 
 import io.micronaut.transaction.annotation.Transactional
 import jakarta.inject.Singleton
-import no.nav.hm.grunndata.importapi.ImportRapidPushService
+import java.time.LocalDateTime
+import no.nav.hm.grunndata.importapi.mediaImport.MediaImportRepository
+import no.nav.hm.grunndata.importapi.mediaImport.MediaImportStatus
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
 import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransfer
 import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransferRepository
+import no.nav.hm.grunndata.rapid.dto.MediaInfo
 import no.nav.hm.grunndata.rapid.dto.SeriesStatus
 import no.nav.hm.grunndata.rapid.event.EventName
 import org.slf4j.LoggerFactory
-import java.time.LocalDateTime
-import no.nav.hm.grunndata.importapi.mediaImport.MediaImportRepository
 
 
 @Singleton
 open class SeriesTransferToSeriesImport(private val seriesTransferRepository: SeriesTransferRepository,
                                         private val mediaImportRepository: MediaImportRepository,
                                         private val seriesImportService: SeriesImportService,
-                                        private val importRapidPushService: ImportRapidPushService,
+                                        private val seriesImportEventHandler: SeriesImportEventHandler
 ) {
     companion object {
         private val LOG = LoggerFactory.getLogger(SeriesTransferToSeriesImport::class.java)
@@ -40,6 +41,9 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
 
     @Transactional
     open suspend fun createSeriesImport(transfer: SeriesTransfer) {
+        val mediaList = mediaImportRepository.findBySupplierIdAndSeriesId(transfer.supplierId, transfer.seriesId).filter {
+            it.status == MediaImportStatus.ACTIVE
+        }
         val seriesImportDTO = seriesImportService
             .findBySupplierIdAndSeriesId(transfer.supplierId, transfer.seriesId)?.let { inDb ->
                 seriesImportService.update(
@@ -50,7 +54,19 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
                         text = transfer.json_payload.text,
                         isoCategory = transfer.json_payload.isoCategory,
                         seriesData = SeriesDataDTO(
-                            attributes = transfer.json_payload.seriesAttributes
+                            attributes = transfer.json_payload.seriesAttributes,
+                            media = mediaList.map { media ->
+                                MediaInfo(
+                                    uri = media.uri,
+                                    type = media.type,
+                                    text = media.text,
+                                    sourceUri = media.sourceUri,
+                                    source = media.sourceType,
+                                    priority = media.priority,
+                                    filename = media.filename,
+                                    updated = media.updated
+                                )
+                            }.toSet()
                         ),
                         updated = LocalDateTime.now(),
                         expired = setExpiredIfNotActive(transfer.json_payload.status)
@@ -67,13 +83,25 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
                     supplierId = transfer.supplierId,
                     status = transfer.json_payload.status,
                     seriesData = SeriesDataDTO(
-                        attributes = transfer.json_payload.seriesAttributes
+                        attributes = transfer.json_payload.seriesAttributes,
+                        media = mediaList.map { media ->
+                            MediaInfo(
+                                uri = media.uri,
+                                type = media.type,
+                                text = media.text,
+                                sourceUri = media.sourceUri,
+                                source = media.sourceType,
+                                priority = media.priority,
+                                filename = media.filename,
+                                updated = media.updated
+                            )
+                        }.toSet()
                     ),
                     expired = setExpiredIfNotActive(transfer.json_payload.status)
                 )
             )
         }
-        importRapidPushService.pushDTOToKafka(seriesImportDTO.toRapidDTO(), EventName.importedSeriesV1)
+        seriesImportEventHandler.queueDTORapidEvent(seriesImportDTO, EventName.importedSeriesV1)
         seriesTransferRepository.update(
             transfer.copy(
                 transferStatus = TransferStatus.DONE,
