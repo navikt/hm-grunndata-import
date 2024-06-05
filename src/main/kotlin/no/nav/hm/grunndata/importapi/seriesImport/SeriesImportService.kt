@@ -8,11 +8,9 @@ import kotlinx.coroutines.runBlocking
 import java.util.*
 
 @Singleton
-@CacheConfig("series")
-open class SeriesImportService(private val seriesImportRepository: SeriesImportRepository) {
+class SeriesImportService(private val seriesImportRepository: SeriesImportRepository) {
 
-    @Cacheable
-    open fun findByIdCacheable(id: UUID): SeriesImportDTO? =
+    fun findByIdCacheable(id: UUID): SeriesImportDTO? =
         runBlocking { seriesImportRepository.findById(id)?.toDTO() }
 
     suspend fun findBySupplierId(supplierId: UUID) = seriesImportRepository.findBySupplierId(supplierId).map { it.toDTO() }
@@ -20,14 +18,13 @@ open class SeriesImportService(private val seriesImportRepository: SeriesImportR
     suspend fun findBySupplierIdAndSeriesId(supplierId: UUID, seriesId: UUID) =
         seriesImportRepository.findBySupplierIdAndSeriesId(supplierId, seriesId)?.toDTO()
 
-    @CacheInvalidate(parameters = ["id"])
-    open fun save(dto: SeriesImportDTO, id: UUID = dto.id): SeriesImportDTO = runBlocking {
+    suspend fun save(dto: SeriesImportDTO, id: UUID = dto.id): SeriesImportDTO =
         seriesImportRepository.save(dto.toEntity()).toDTO()
-    }
 
-    @CacheInvalidate(parameters = ["id"])
-    open fun update(dto: SeriesImportDTO, id: UUID = dto.id): SeriesImportDTO? = runBlocking {
+
+    suspend fun update(dto: SeriesImportDTO, id: UUID = dto.id): SeriesImportDTO =
         seriesImportRepository.update(dto.toEntity()).toDTO()
-    }
+
+    suspend fun findBySeriesId(seriesId: UUID) = seriesImportRepository.findById(seriesId)?.toDTO()
 
 }

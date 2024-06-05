@@ -10,4 +10,5 @@ interface MediaImportRepository: CoroutineCrudRepository<MediaImport, UUID> {
     suspend fun findBySupplierIdAndSeriesId(supplierId: UUID, seriesId: UUID): List<MediaImport>
     suspend fun findBySupplierIdAndId(supplierId: UUID?, id: UUID): MediaImport?
     suspend fun findByUriAndSeriesId(uri: String, seriesId: UUID): MediaImport?
+    suspend fun findBySeriesIdAndStatus(seriesId: UUID, status: MediaImportStatus): List<MediaImport>
 }

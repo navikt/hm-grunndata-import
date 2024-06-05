@@ -12,4 +12,5 @@ interface SeriesImportRepository: CoroutineCrudRepository<SeriesImport, UUID> {
 
     suspend fun findBySupplierId(supplierId: UUID): List<SeriesImport>
 
+
 }

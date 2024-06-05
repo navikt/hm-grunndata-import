@@ -14,9 +14,9 @@ open class MediaMetaTransferToMediaImport(private val mediaMetaTransferRepositor
     companion object { private val LOG = org.slf4j.LoggerFactory.getLogger(MediaMetaTransferToMediaImport::class.java) }
 
     @Transactional
-    open suspend fun mediaMetaTransferToMediaImport() {
+    open suspend fun mediaMetaTransferToMediaImport(): List<MediaMetaTransfer> {
         val transfers = mediaMetaTransferRepository.findByTransferStatus(TransferStatus.RECEIVED)
-        transfers.forEach {
+        return transfers.map {
             try {
                 createMediaImport(it)
             } catch (e: Exception) {
@@ -26,7 +26,7 @@ open class MediaMetaTransferToMediaImport(private val mediaMetaTransferRepositor
         }
     }
 
-    private suspend fun createMediaImport(metaTransfer: MediaMetaTransfer) {
+    private suspend fun createMediaImport(metaTransfer: MediaMetaTransfer): MediaMetaTransfer {
         mediaImportRepository.findByUriAndSeriesId(metaTransfer.uri, metaTransfer.seriesId)?.let { mediaImport ->
             mediaImportRepository.update(
                 mediaImport.copy(
@@ -38,7 +38,7 @@ open class MediaMetaTransferToMediaImport(private val mediaMetaTransferRepositor
             )
         } ?: LOG.error("Media import not found for uri ${metaTransfer.uri} and seriesId ${metaTransfer.seriesId}")
 
-        mediaMetaTransferRepository.update(
+        return mediaMetaTransferRepository.update(
             metaTransfer.copy(transferStatus = TransferStatus.DONE, updated = LocalDateTime.now())
         )
     }

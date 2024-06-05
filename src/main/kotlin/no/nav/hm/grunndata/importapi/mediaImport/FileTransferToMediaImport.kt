@@ -18,9 +18,9 @@ open class FileTransferToMediaImport(
     }
 
     @Transactional
-    open suspend fun fileTransferToMediaImport() {
+    open suspend fun fileTransferToMediaImport(): List<MediaFileTransfer> {
         val transfers = mediaFileTransferRepository.findByTransferStatus(TransferStatus.RECEIVED)
-        transfers.forEach {
+        return transfers.map {
             try {
                 createMediaImport(it)
             } catch (e: Exception) {
@@ -31,7 +31,7 @@ open class FileTransferToMediaImport(
     }
 
 
-     open suspend fun createMediaImport(transfer: MediaFileTransfer) {
+     open suspend fun createMediaImport(transfer: MediaFileTransfer): MediaFileTransfer {
         val mediaList = mediaImportRepository.findBySupplierIdAndSeriesId(transfer.supplierId, transfer.seriesId)
         val mediaImport = MediaImport(
             uri = transfer.uri,
@@ -48,6 +48,7 @@ open class FileTransferToMediaImport(
         )
         LOG.info("Created new media import ${transfer.uri} from transfer ${transfer.transferId}")
         mediaImportRepository.save(mediaImport)
+        return mediaFileTransferRepository.update(transfer.copy(transferStatus = TransferStatus.DONE))
     }
 
 }
