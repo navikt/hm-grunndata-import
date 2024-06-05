@@ -11,8 +11,8 @@ a place where you can search for, find information, and apply for assistive devi
 * Connect product variants to series
 * Linking accessories and spare parts to main products
 * Upload media or documents (images, pdf)
-* Using external media in products (video)
-* Know the state of each product
+* Linking external video to products (vimeo, youtube)
+* Get the approval state of each product
 * Get stock number (Hms number) for products in framework agreements
 * Information about [framework agreements](https://finnhelpemidler-api.nav.no/import/api/v1/agreements) (rammeavtale)
 * Download [Iso categories](https://finnhjelpemiddel-api.nav.no/import/api/v1/isocategories) and [techdata labels](https://finnhjelpemiddel-api.nav.no/import/api/v1/techlabels)
@@ -58,6 +58,19 @@ You can also download kotlin code for the DTOs
 
 ### Json properties
 
+### Series 
+
+| Name        | Type          | Required | Norwegian translation | Description                                                                                                                      | Example                              |
+|:------------|:--------------|:---------|:----------------------|:---------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------|
+| seriesId    | UUID          | No       | Serie ID              | A unique id for a series of products, this id linked the products into a series                                                  | 603474bc-a8e8-471c-87ef-09bdc57bea59 |
+| title       | String (255)  | Yes      | Tittel                | Title or name of the series, product variants that are connected in a series will have this as the main title                    | Mini crosser X1                      |
+| isoCategory | String (8)    | Yes      | ISO Kategori          | The ISO category for the series, categories can be found [here](https://finnhjelpemiddel-api.nav.no/import/api/v1/isocategories) | 12230301                             |
+| text        | TEXT          | Yes      | Produkt beskrivelse   | A describing text, html must be welformed. We only support basic html tags                                                       | A describing text                    |
+| keywords    | List          | No       | Nøkkelord             | A list of keywords that can be associated with the series, used to search                                                        | "Model 321"                          |
+| url         | String (2048) | No       | URL                   | A link to the product on the vendors website                                                                                     | http://link.to/product               |
+| status      | String (32)   | No       | Status                | The status of the series                                                                                                         | ACTIVE, INACTIVE, DELETED            |
+
+### Product variant
 | Name             | Type         | Required | Norwegian translation         | Description                                                                                                                       | Example                              |
 |:-----------------|:-------------|:---------|:------------------------------|:----------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------|
 | Title            | String (255) | Yes      | Tittel                        | Title or name of the product, product variants that are connected in a series will have this as the series title                  | Mini crosser X1                      |
@@ -102,7 +115,41 @@ Also some products in framework agreements requires techdata to be added, if dat
 | sourceType | String (255) | Yes      | Kilde                 | The source of the media file, "IMPORT" for the ones uploaded, "EXTERNALURL" should be used only for video | IMPORT, EXTERNALURL                                    |
 
 
-More info about Media and how to upload media files below.
+# Series of products
+A series of products is a group of products that are similar, but have different variants.
+Product variants in a series share the same title, iso category and text. They will be grouped together in the search result
+and make it easier for the user to compare between the variants. It is a requirement that all variants will be grouped in series,
+especially if the product is in a framework agreement.
+To group the variants to a series, you first get the product seriesId generated from previous transfers.
+All products transferred have a seriesId, you can see the seriesId of the product using the product endpoint:
+```
+GET https://finnhjelpemiddel-api.nav.no/import/api/v1/products/import/{identifier}/{supplierRef}
+Accept: application/json
+Content-Type: application/json
+Cache-Control: no-cache
+Authorization: Bearer <your secret key>
+
+```
+
+Response:
+```
+{
+  "id": "9c68e99a-a730-4048-ad2c-2ba8ff466b8f",
+  "transferId": "9de89dfe-26d1-45be-97c5-980e4afc389b",
+  "supplierId": "f639825c-2fc6-49cd-82ae-31b8ffa449a6",
+  "supplierRef": "99521146",
+  "hmsArtNr": "124152",
+  "seriesId": "9c68e99a-a730-4048-ad2c-2ba8ff466b8f",
+  "productStatus": "ACTIVE",
+  "adminStatus": "APPROVED",
+  "message": null,
+  "created": "2023-10-19T10:46:36.684414",
+  "updated": "2023-10-19T12:21:37.457247",
+  "version": 1
+}
+```
+
+
 
 ### Posting a Product using stream
 Post products in stream by using Content-Type: application/x-json-stream. products are separated by a newline "\n" for
@@ -279,39 +326,6 @@ Then linking the uri to the product json within the media array:
 * Only jpg, png and pdf files are supported
 * You can not link more than 10 media files per product
 
-## Series of products
-A series of products is a group of products that are similar, but have different variants. 
-Product variants in a series share the same title, iso category and text. They will be grouped together in the search result
-and make it easier for the user to compare between the variants. It is a requirement that all variants will be grouped in series,
-especially if the product is in a framework agreement.
-To group the variants to a series, you first get the product seriesId generated from previous transfers.
-All products transferred have a seriesId, you can see the seriesId of the product using the product endpoint:
-```
-GET https://finnhjelpemiddel-api.nav.no/import/api/v1/products/import/{identifier}/{supplierRef}
-Accept: application/json
-Content-Type: application/json
-Cache-Control: no-cache
-Authorization: Bearer <your secret key>
-
-```
-
-Response:
-```
-{
-  "id": "9c68e99a-a730-4048-ad2c-2ba8ff466b8f",
-  "transferId": "9de89dfe-26d1-45be-97c5-980e4afc389b",
-  "supplierId": "f639825c-2fc6-49cd-82ae-31b8ffa449a6",
-  "supplierRef": "99521146",
-  "hmsArtNr": "124152",
-  "seriesId": "9c68e99a-a730-4048-ad2c-2ba8ff466b8f",
-  "productStatus": "ACTIVE",
-  "adminStatus": "APPROVED",
-  "message": null,
-  "created": "2023-10-19T10:46:36.684414",
-  "updated": "2023-10-19T12:21:37.457247",
-  "version": 1
-}
-```
 
 ### Posting a product variant to a series 
 Posting a variant is exactly the same as product, and use seriesId to tell which series the variant belongs to.

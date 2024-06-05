@@ -1,18 +1,9 @@
 {
-  "title" : "VELA Tango 700F Aktiv",
-  "text" : "Arbeidsstol med manuelt seteløft, uten seterotasjon. Sete og rygg kan høyde- og vinkelreguleres, armlener kan høyde- og breddereguleres. Leveres med sentralbrems og fotstøtte. Stolen kan innstilles i flere starthøyder. Maks. setebredde 50 cm. Maks. belastning: 160 kg",
+  "seriesId" : "106def65-48d2-4152-8e2d-849e68022e1f",
+  "title" : "Unik series - 123",
+  "text" : "En beskrivelse for serien",
   "isoCategory" : "18090302",
-  "seriesAttributes" : {
-    "keywords": ["Arbeidsstol"],
-    "url": "https://www.vela.eu/produkter/vela-tango-700f-aktiv"
-  },
-  "media": [
-    {
-      "filename" : "image.jpg",
-      "uri" : "http://uri.to/image.jpg",
-      "priority" : 1,
-      "type" : "IMAGE",
-      "text" : "Bilde 1"
-    }
-  ]
+  "keywords" : [ "keyword1", "keyword2" ],
+  "url": "http://uri.to/series",
+  "status" : "ACTIVE"
 }

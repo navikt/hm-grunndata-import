@@ -32,7 +32,8 @@ data class SeriesTransferDTO(
     val title: String,
     val text: String = "",
     val isoCategory: String = "",
-    val seriesAttributes: SeriesAttributes = SeriesAttributes(),
+    val keywords: List<String> = emptyList(),
+    val url: String?= null,
     val status: SeriesStatus = SeriesStatus.ACTIVE
 ) {
     init {

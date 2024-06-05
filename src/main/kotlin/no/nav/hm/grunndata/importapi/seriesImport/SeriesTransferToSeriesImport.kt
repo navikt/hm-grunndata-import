@@ -7,8 +7,10 @@ import no.nav.hm.grunndata.importapi.mediaImport.MediaImportRepository
 import no.nav.hm.grunndata.importapi.mediaImport.MediaImportStatus
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
 import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransfer
+import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransferDTO
 import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransferRepository
 import no.nav.hm.grunndata.rapid.dto.MediaInfo
+import no.nav.hm.grunndata.rapid.dto.SeriesAttributes
 import no.nav.hm.grunndata.rapid.dto.SeriesStatus
 import no.nav.hm.grunndata.rapid.event.EventName
 import org.slf4j.LoggerFactory
@@ -54,7 +56,7 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
                         text = transfer.json_payload.text,
                         isoCategory = transfer.json_payload.isoCategory,
                         seriesData = SeriesDataDTO(
-                            attributes = transfer.json_payload.seriesAttributes,
+                            attributes = mapAttributes(transfer.json_payload),
                             media = mediaList.map { media ->
                                 MediaInfo(
                                     uri = media.uri,
@@ -83,7 +85,7 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
                     supplierId = transfer.supplierId,
                     status = transfer.json_payload.status,
                     seriesData = SeriesDataDTO(
-                        attributes = transfer.json_payload.seriesAttributes,
+                        attributes = mapAttributes(transfer.json_payload),
                         media = mediaList.map { media ->
                             MediaInfo(
                                 uri = media.uri,
@@ -114,12 +116,16 @@ open class SeriesTransferToSeriesImport(private val seriesTransferRepository: Se
         )
     }
 
+    private fun mapAttributes(seriesTransfer: SeriesTransferDTO): SeriesAttributes {
+        return SeriesAttributes(
+            keywords = seriesTransfer.keywords.toSet(),
+            url = seriesTransfer.url
+        )
+    }
 
 
     private fun setExpiredIfNotActive(status: SeriesStatus): LocalDateTime =
         if (status != SeriesStatus.ACTIVE) LocalDateTime.now().minusMinutes(1)
         else LocalDateTime.now().plusYears(15)
-
-
 
 }
