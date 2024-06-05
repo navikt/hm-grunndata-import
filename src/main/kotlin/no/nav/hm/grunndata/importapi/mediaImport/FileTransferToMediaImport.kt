@@ -1,13 +1,14 @@
 package no.nav.hm.grunndata.importapi.mediaImport
 
 import jakarta.inject.Singleton
+import jakarta.transaction.Transactional
 import no.nav.hm.grunndata.importapi.transfer.media.MediaFileTransfer
 import no.nav.hm.grunndata.importapi.transfer.media.MediaFileTransferRepository
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
 import no.nav.hm.grunndata.rapid.dto.MediaSourceType
 
 @Singleton
-class FileTransferToMediaImport(
+open class FileTransferToMediaImport(
     private val mediaFileTransferRepository: MediaFileTransferRepository,
     private val mediaImportRepository: MediaImportRepository
 ) {
@@ -16,7 +17,8 @@ class FileTransferToMediaImport(
         private val LOG = org.slf4j.LoggerFactory.getLogger(FileTransferToMediaImport::class.java)
     }
 
-    suspend fun fileTransferToMediaImport() {
+    @Transactional
+    open suspend fun fileTransferToMediaImport() {
         val transfers = mediaFileTransferRepository.findByTransferStatus(TransferStatus.RECEIVED)
         transfers.forEach {
             try {
@@ -29,7 +31,7 @@ class FileTransferToMediaImport(
     }
 
 
-    private suspend fun createMediaImport(transfer: MediaFileTransfer) {
+     open suspend fun createMediaImport(transfer: MediaFileTransfer) {
         val mediaList = mediaImportRepository.findBySupplierIdAndSeriesId(transfer.supplierId, transfer.seriesId)
         val mediaImport = MediaImport(
             uri = transfer.uri,

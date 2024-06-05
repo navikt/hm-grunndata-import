@@ -9,5 +9,5 @@ import java.util.UUID
 interface MediaImportRepository: CoroutineCrudRepository<MediaImport, UUID> {
     suspend fun findBySupplierIdAndSeriesId(supplierId: UUID, seriesId: UUID): List<MediaImport>
     suspend fun findBySupplierIdAndId(supplierId: UUID?, id: UUID): MediaImport?
-    suspend fun findByUri(uri: String): MediaImport?
+    suspend fun findByUriAndSeriesId(uri: String, seriesId: UUID): MediaImport?
 }

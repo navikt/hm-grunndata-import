@@ -22,7 +22,7 @@ class MediaImportPersistListener(private val seriesImportRepository: SeriesImpor
         return PostPersistEventListener { mediaImport: MediaImport ->
             runBlocking {
                 LOG.debug("Media import state inserted for media: ${mediaImport.id} and series: ${mediaImport.seriesId}")
-                updateSeriesMedia(mediaImport)
+                //updateSeriesMedia(mediaImport)
             }
         }
     }
@@ -32,7 +32,7 @@ class MediaImportPersistListener(private val seriesImportRepository: SeriesImpor
         return PostUpdateEventListener { mediaImport: MediaImport ->
             runBlocking {
                 LOG.debug("Media import state updated for media: ${mediaImport.id} and series: ${mediaImport.seriesId}")
-                updateSeriesMedia(mediaImport)
+                //updateSeriesMedia(mediaImport)
             }
         }
     }

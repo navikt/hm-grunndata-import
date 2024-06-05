@@ -36,7 +36,7 @@ data class MediaDTO (
 )
 
 enum class TransferProductStatus {
-    ACTIVE, INACTIVE
+    ACTIVE, INACTIVE, DELETED
 }
 
 data class TechData (

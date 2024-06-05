@@ -47,8 +47,7 @@ class MediaImportRepositoryTest(private val seriesImportRepository: SeriesImport
             found.supplierId shouldBe supplierId
             val updatedSeries = seriesImportRepository.findById(seriesId)
             updatedSeries.shouldNotBeNull()
-            updatedSeries.seriesData.media.size shouldBe 1
-            updatedSeries.seriesData.media.first().uri shouldBe "http://example123.com"
+
         }
     }
 }

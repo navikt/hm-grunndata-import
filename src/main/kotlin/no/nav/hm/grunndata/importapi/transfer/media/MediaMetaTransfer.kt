@@ -1,6 +1,5 @@
 package no.nav.hm.grunndata.importapi.transfer.media
 
-import io.micronaut.data.annotation.DateUpdated
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import java.time.LocalDateTime
