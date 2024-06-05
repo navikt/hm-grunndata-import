@@ -15,16 +15,16 @@ import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
 import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
 import no.nav.hm.grunndata.importapi.security.supplierId
-import no.nav.hm.grunndata.importapi.transfer.media.MediaFileTransferAPIController.Companion.API_V1_MEDIA_TRANSFERS
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.*
 import no.nav.hm.grunndata.importapi.toMD5Hex
+import no.nav.hm.grunndata.importapi.transfer.media.MediaFileTransferAPIController.Companion.API_V1_MEDIA_FILE_TRANSFERS
 
 @SecuritySupplierRule(value = [Roles.ROLE_SUPPLIER])
-@Controller(API_V1_MEDIA_TRANSFERS)
+@Controller(API_V1_MEDIA_FILE_TRANSFERS)
 @SecurityRequirement(name = "bearer-auth")
 @Tag(name = "Media File Transfers")
 class MediaFileTransferAPIController(
@@ -34,13 +34,13 @@ class MediaFileTransferAPIController(
 ) {
 
     companion object {
-        const val API_V1_MEDIA_TRANSFERS = "/api/v1/media/file/transfers"
+        const val API_V1_MEDIA_FILE_TRANSFERS = "/api/v1/media/file/transfers"
         private val LOG = LoggerFactory.getLogger(MediaFileTransferAPIController::class.java)
     }
 
 
     @Get("/{identifier}/series/{seriesId}")
-    suspend fun getMediaList(
+    suspend fun getMediaFileTransferList(
         identifier: String,
         authentication: Authentication,
         seriesId: UUID
@@ -67,44 +67,44 @@ class MediaFileTransferAPIController(
             uploadMedia(it, seriesId, supplierId)
         }.toList()) ?: run {
             gdbApiClient.getSeriesById(seriesId)?.let { dto ->
-            LOG.info("Supplier $supplierId and seriesId found in GDB ${dto.id} ")
-            return HttpResponse.created(files.asFlow().map {
-                uploadMedia(it, dto.id, supplierId)
-        }.toList())
-        } ?: run {
-            LOG.info("Supplier $supplierId and seriesId not found in GDB")
-            return HttpResponse.notFound()
+                LOG.info("Supplier $supplierId and seriesId found in GDB ${dto.id} ")
+                return HttpResponse.created(files.asFlow().map {
+                    uploadMedia(it, dto.id, supplierId)
+                }.toList())
+            } ?: run {
+                LOG.info("Supplier $supplierId and seriesId not found in GDB")
+                return HttpResponse.notFound()
+            }
         }
     }
-}
 
 
-private suspend fun uploadMedia(
-    upload: CompletedFileUpload,
-    seriesId: UUID,
-    supplierId: UUID
-): MediaFileTransferResponse {
-    val transferId = UUID.randomUUID()
-    LOG.info("Storing file name ${upload.name} size: ${upload.size} for transferId: $transferId with md5: ${upload.md5}")
-    val mediaDTO = mediaUploadService.uploadMedia(upload, seriesId)
-    LOG.info("Upload to storage got response md5: ${mediaDTO.md5}")
-    val mediaFileTransfer = MediaFileTransfer(
-        transferId = UUID.randomUUID(),
-        supplierId = supplierId,
-        seriesId = seriesId,
-        filename = upload.filename,
-        md5 = mediaDTO.md5,
-        sourceUri = mediaDTO.sourceUri,
-        uri = mediaDTO.uri,
-        transferStatus = TransferStatus.RECEIVED,
-        filesize = upload.size,
-        objectType = mediaDTO.objectType,
-        created = LocalDateTime.now(),
-        updated = LocalDateTime.now()
-    )
-    mediaFileTransferRepository.save(mediaFileTransfer)
-    return mediaFileTransfer.toResponse()
-}
+    private suspend fun uploadMedia(
+        upload: CompletedFileUpload,
+        seriesId: UUID,
+        supplierId: UUID
+    ): MediaFileTransferResponse {
+        val transferId = UUID.randomUUID()
+        LOG.info("Storing file name ${upload.name} size: ${upload.size} for transferId: $transferId with md5: ${upload.md5}")
+        val mediaDTO = mediaUploadService.uploadMedia(upload, seriesId)
+        LOG.info("Upload to storage got response md5: ${mediaDTO.md5}")
+        val mediaFileTransfer = MediaFileTransfer(
+            transferId = UUID.randomUUID(),
+            supplierId = supplierId,
+            seriesId = seriesId,
+            filename = upload.filename,
+            md5 = mediaDTO.md5,
+            sourceUri = mediaDTO.sourceUri,
+            uri = mediaDTO.uri,
+            transferStatus = TransferStatus.RECEIVED,
+            filesize = upload.size,
+            objectType = mediaDTO.objectType,
+            created = LocalDateTime.now(),
+            updated = LocalDateTime.now()
+        )
+        mediaFileTransferRepository.save(mediaFileTransfer)
+        return mediaFileTransfer.toResponse()
+    }
 }
 
 

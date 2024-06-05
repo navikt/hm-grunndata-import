@@ -22,6 +22,7 @@ class MediaMetaTransferRepositoryTest(private val mediaMetaTransferRepository: M
                 seriesId = seriesId,
                 text = "Dette er en beskrivelse",
                 priority = 2,
+                md5 = "1234567890"
             ))
             saved.shouldNotBeNull()
             saved.transferId.shouldNotBeNull()
@@ -32,6 +33,7 @@ class MediaMetaTransferRepositoryTest(private val mediaMetaTransferRepository: M
             found.text shouldBe "Dette er en beskrivelse"
             found.status shouldBe MediaMetaTranferStatus.ACTIVE
             found.transferStatus shouldBe TransferStatus.RECEIVED
+            found.md5 shouldBe "1234567890"
         }
     }
 }
