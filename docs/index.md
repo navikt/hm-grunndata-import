@@ -180,6 +180,7 @@ Authorization: Bearer <your secret key>
 
 ```
 ### Media metadata properties
+
 | Name     | Type          | Required | Norwegian translation | Description       | Example                                               |
 |:---------|:--------------|:---------|:----------------------|:------------------|:------------------------------------------------------|
 | uri      | String (2048) | Yes      | URI                   | The uri to the media file | imort/12345/1223456.jpg or http:/youtube.com/video123 |
@@ -251,6 +252,7 @@ Authorization: Bearer <your secret key>
 }
 ```
 ### Product variant properties
+
 | Name               | Type         | Required | Norwegian translation         | Description                        | Example            |
 |:-------------------|:-------------|:---------|:------------------------------|:-----------------------------------|:-------------------|
 | articleName        | String (255) | Yes      | Artikkel Navn                 | The name or title of the article   | Mini crosser x1 4w |
