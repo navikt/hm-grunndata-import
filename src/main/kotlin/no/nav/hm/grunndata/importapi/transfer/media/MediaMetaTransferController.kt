@@ -59,15 +59,15 @@ class MediaMetaTransferController(private val mediaMetaTransferRepository: Media
                 identical.toResponse()
             }?: run {
                 validate(transfer)
-                createTransferState(transfer, md5)
+                createTransferState(transfer, md5, supplierId)
             }
         }.asPublisher()
 
-    private suspend fun createTransferState(transfer: MediaMetaTransferDTO, md5: String): MediaMetaTransferResponse {
+    private suspend fun createTransferState(transfer: MediaMetaTransferDTO, md5: String, supplierId: UUID): MediaMetaTransferResponse {
         return mediaMetaTransferRepository.save(
             MediaMetaTransfer(
                 uri = transfer.uri,
-                supplierId = transfer.supplierId,
+                supplierId = supplierId,
                 seriesId = transfer.seriesId,
                 text = transfer.text,
                 priority = transfer.priority,

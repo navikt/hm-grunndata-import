@@ -51,45 +51,198 @@ To test the integration, you can use the OpenAPI specification,
 it is available [here in test](https://finnhjelpemiddel-api.ekstern.dev.nav.no/import/swagger-ui/), and in
 [prod](https://finnhjelpemiddel-api.nav.no/import/swagger-ui/).
 
+## Json properties
+
 The data exchange format is JSON, below is a diagram of the product json structure:
 <img src="./json-example-01.svg">
 You can also download kotlin code for the DTOs
 [here](https://github.com/navikt/hm-grunndata-import/blob/master/src/main/kotlin/no/nav/hm/grunndata/importapi/transfer/)
 
-### Json properties
 
-### Series 
+# Series 
+
+A series of products is a group of products that are similar, but have different variants.
+Product variants in a series share the same title, iso category, description text and images/videos. They will be grouped together in the search result
+and make it easier for the user to compare between the variants. 
+It is a requirement that all variants will be grouped in series. You must first create a series before you can upload the product variants. Here is an example of a series json:
+
+```
+{
+  "seriesId": "603474bc-a8e8-471c-87ef-09bdc57bea59",
+  "title": "Sittemodul x:panda",
+  "isoCategory": "18093901",
+  "text": "Sittemodul med tilpasningsmuligheter. Hel fotplate. Finnes i fire størrelser. Sittebredde 20-46 cm. Sittedybde 22-53 cm. Passer til flere understell (se egen oversikt). Brukervekt opp til 80 kg. ",
+  "keywords": ["xpanda", "R82"],
+  "url": "https://www.etac.com/products/paediatrics/seating/r82-xpanda/",
+  "status": "ACTIVE"
+}
+```
 
 | Name        | Type          | Required | Norwegian translation | Description                                                                                                                      | Example                              |
 |:------------|:--------------|:---------|:----------------------|:---------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------|
 | seriesId    | UUID          | No       | Serie ID              | A unique id for a series of products, this id linked the products into a series                                                  | 603474bc-a8e8-471c-87ef-09bdc57bea59 |
-| title       | String (255)  | Yes      | Tittel                | Title or name of the series, product variants that are connected in a series will have this as the main title                    | Mini crosser X1                      |
+| title       | String (255)  | Yes      | Tittel                | Title or name of the series, product variants that are connected in a series will have this as the main title                    | Sittemodul x:panda                    |
 | isoCategory | String (8)    | Yes      | ISO Kategori          | The ISO category for the series, categories can be found [here](https://finnhjelpemiddel-api.nav.no/import/api/v1/isocategories) | 12230301                             |
 | text        | TEXT          | Yes      | Produkt beskrivelse   | A describing text, html must be welformed. We only support basic html tags                                                       | A describing text                    |
-| keywords    | List          | No       | Nøkkelord             | A list of keywords that can be associated with the series, used to search                                                        | "Model 321"                          |
+| keywords    | List          | No       | Nøkkelord             | A list of keywords that can be associated with the series, keywords can be used in search                                        | "Model 321"                          |
 | url         | String (2048) | No       | URL                   | A link to the product on the vendors website                                                                                     | http://link.to/product               |
 | status      | String (32)   | No       | Status                | The status of the series                                                                                                         | ACTIVE, INACTIVE, DELETED            |
 
-### Product variant
-| Name             | Type         | Required | Norwegian translation         | Description                                                                                                                       | Example                              |
-|:-----------------|:-------------|:---------|:------------------------------|:----------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------|
-| Title            | String (255) | Yes      | Tittel                        | Title or name of the product, product variants that are connected in a series will have this as the series title                  | Mini crosser X1                      |
-| articleName      | String (255) | Yes      | Artikkel Navn                 | The name or title of the article                                                                                                  | Mini crosser x1 4w                   |
-| shortDescription | TEXT         | Yes      | Kort beskrivelse              | A short summary text                                                                                                              | A short summary text                 |
-| text             | TEXT         | Yes      | Produkt beskrivelse           | A describing text, html must be welformed. We only support basic html tags                                                        | A describing text                    |
-| manufacturer     | String (255) | No       | Produsent                     | The name of the company who made this product                                                                                     | Medema                               |
-| supplierRef      | String (255) | Yes      | Leverandør artikkel referanse | A unique reference to identify the product                                                                                        | alphanumber eg: A4231F-132           |
- | isoCategory      | String (8)   | Yes      | ISO Kategori                  | The ISO category for the product, categories can be found [here](https://finnhjelpemiddel-api.nav.no/import/api/v1/isocategories) | 12230301                             |
-| accessory        | Boolean      | Yes      | Tilbehør                      | Is this product an accessory?                                                                                                     | true                                 |
-| sparePart        | Boolean      | Yes      | Reservedel                    | Is this product a spare part?                                                                                                     | false                                |
-| seriesId         | UUID         | No       | Serie ID                      | A unique id for a series of products, this id linked the products into a series                                                   | 603474bc-a8e8-471c-87ef-09bdc57bea59 |
-| techData         | List         | No       | Tekniske data                 | A list of technical data for the product                                                                                          | see techdata table below             |
-| media            | List         | No       | Media                         | A list of media files for the product                                                                                             | see media table below                |
-| published        | Date         | No       | Publisert                     | The date when the product should be published                                                                                     | 2023-08-22T13:39:51.884163           |
-| expired          | Date         | No       | Utløpsdato                    | The date when the product expires                                                                                                 | 2033-08-22T13:39:51.884163           |
-| compatibleWith   | Object       | No       | Kompatibel med/passer til     | A list of seriesId that this accessory/spare part is compatible with                                                              | example below                        |
-| status           | String (255) | No       | Status                        | The status of the product                                                                                                         | ACTIVE, INACTIVE, DELETED            |
-| url              | String (255) | No       | URL                           | A link to the product on the vendors website                                                                                      | https://www.blimo.no/elekriske-kjoretoy/elscootere/blimo-gatsby-x              |
+## Posting a series
+To create a series, you can use the following endpoint:
+```  
+POST https://finnhjelpemiddel-api.nav.no/import/api/v1/series/transfers/{identifier}
+Accept: application/x-json-stream
+Cache-Control: no-cache
+Content-Type: application/x-json-stream
+Authorization: Bearer <your secret key>
+{
+  "seriesId": "603474bc-a8e8-471c-87ef-09bdc57bea59",
+  "title": "Sittemodul x:panda",
+  "isoCategory": "18093901",
+  "text": "Sittemodul med tilpasningsmuligheter. Hel fotplate. Finnes i fire størrelser. Sittebredde 20-46 cm. Sittedybde 22-53 cm. Passer til flere understell (se egen oversikt). Brukervekt opp til 80 kg. ",
+  "keywords": ["xpanda", "R82"],
+  "url": "https://www.etac.com/products/paediatrics/seating/r82-xpanda/",
+  "status": "ACTIVE"
+}
+```
+
+### Response
+You should get a 200 OK and a receipt similar to this:
+```
+{
+  "transferId": "9de89dfe-26d1-45be-97c5-980e4afc389b",
+  "supplierId": "f639825c-2fc6-49cd-82ae-31b8ffa449a6",
+  "seriesId": "603474bc-a8e8-471c-87ef-09bdc57bea59",
+  "md5": "735948868931D5D1640180C0ADA52931",
+  "message": null,
+  "transferStatus": "RECEIVED",
+  "created": "2023-10-31T09:33:22.617676738"
+}
+```
+
+If the series is rejected, you will get an error message in the response telling you why.
+
+## Updating a series
+To update a series you just use the same POST endpoint as above, but with the updated data in the body, remember to use 
+the same seriesId.
+
+## Upload media to series
+We support different types of media files. You can upload images in jpg and png format,
+and pdf document files. The media files are uploaded using multipart/form-data. 
+```
+POST https://finnhjelpemiddel-api.nav.no/import/api/v1/media/file/transfers/{identifier}/{series}/{seriesId}
+Accept: application/json
+Content-Type: multipart/form-data
+Authorization: Bearer <your secret key>
+
+<file1>
+<file2>
+```
+### Response
+You will get a receipt for each file uploaded, and a uri that can be used later for changing metadata for the media file.
+```
+{
+  "transferId": "9de89dfe-26d1-45be-97c5-980e4afc389b",
+  "seriesId": "603474bc-a8e8-471c-87ef-09bdc57bea59",
+  "supplierId": "f639825c-2fc6-49cd-82ae-31b8ffa449a6",
+  "md5": "735948868931D5D1640180C0ADA52931",
+  "filesize": 1057306,
+  "filename": "filename.jpg",
+  "souceUri": "http://uri.to/file.jpg",
+  "uri": "import/9c68e99a-a730-4048-ad2c-2ba8ff466b8f/6db81c58-7d3b-4c42-9c58-fd01497d75d8.jpg",
+  "transferStatus": "RECEIVED",
+  "mediaType": "IMAGE",
+  "message": null,
+  "created": "2023-10-31T09:33:22.617676738"
+  "updated": "2023-10-31T09:33:22.617676738"
+    
+```
+### Media metadata properties
+To change metadata for the media file, you can use the following endpoint and json:
+```
+POST https://finnhjelpemiddel-api.nav.no/import/api/v1/media/meta/transfers/{identifier}/{series}/{seriesId}
+Accept: application/x-json-stream
+Cache-Control: no-cache
+Content-Type: application/x-json-stream
+Authorization: Bearer <your secret key>
+
+{
+  "uri": "import/9c68e99a-a730-4048-ad2c-2ba8ff466b8f/6db81c58-7d3b-4c42-9c58-fd01497d75d8.jpg",
+  "priority": 1,
+  "seriesId": "603474bc-a8e8-471c-87ef-09bdc57bea59",
+  "text": "Main picture showing the standard configuration"
+}
+```
+### Media metadata properties
+| Name     | Type          | Required | Norwegian translation | Description       | Example                                                |
+|:---------|:--------------|:---------|:----------------------|:------------------|:-------------------------------------------------------|
+| uri      | String (2048) | Yes      | URI                   | The uri to the media file | imort/12345/1223456.jpg or https://youtube.com/myvideo |
+| priority | Integer       | Yes      | Prioritet             | The priority of the media file, 1 will always be the main picture | 1                                                      |
+| text     | TEXT          | Yes      | Tekst                 | A describing text for the media file | Main picture showing the standard configuration        |
+|seriesId  | UUID          | Yes      | Serie ID              | The seriesId for the series that the media file belongs to | 603474bc-a8e8-471c-87ef-09bdc57bea59 |
+
+### Response
+You will get a receipt for each change.
+```
+{
+  "transferId": "9de89dfe-26d1-45be-97c5-980e4afc389b",
+  "seriesId": "603474bc-a8e8-471c-87ef-09bdc57bea59",
+  "supplierId": "f639825c-2fc6-49cd-82ae-31b8ffa449a6",
+  "text": "Main picture showing the standard configuration",
+  "priority": 1,
+  "uri": "import/9c68e99a-a730-4048-ad2c-2ba8ff466b8f/6db81c58-7d3b-4c42-9c58-fd01497d75d8.jpg",
+  "transferStatus": "RECEIVED",
+  "message": null,
+  "created": "2023-10-31T09:33:22.617676738"
+  "updated": "2023-10-31T09:33:22.617676738"
+}
+```
+
+## Product variant to a series
+A series does not get published before it has at least one product variant connected to it.
+To connect a product variant to a series, you can post the variant using the seriesId with this endpoint:
+
+```
+POST https://finnhjelpemiddel-api.nav.no/import/api/v1/products/transfers/{identifier}
+Accept: application/x-json-stream
+Cache-Control: no-cache
+Content-Type: application/x-json-stream
+Authorization: Bearer <your secret key>
+{
+  "articleName" : "mini-crosser-x1-x2-4w",
+  "articleDescription" : "4-hjuls scooter med manuell regulering av seteløft, ryggvinkel og seterotasjon. Leveres som standard med Ergo2 sitteenhet.",
+  "supplierRef" : "1500-1530",
+  "seriesId": "603474bc-a8e8-471c-87ef-09bdc57bea59",
+  "status": "ACTIVE",
+  "accessory" : false,
+  "sparePart" : false,
+    "techData" : [ {
+        "key" : "Setebredde min",
+        "value" : "45",
+        "unit" : "cm"
+    }, {
+        "key" : "Kjørelengde maks",
+        "value" : "45",
+        "unit" : "km"
+    } ],
+    "published" : "2023-08-22T13:39:51.884163",
+    "expired" : "2033-08-22T13:39:51.884163"
+}
+```
+### Product variant properties
+| Name               | Type         | Required | Norwegian translation         | Description                        | Example            |
+|:-------------------|:-------------|:---------|:------------------------------|:-----------------------------------|:-------------------|
+| articleName        | String (255) | Yes      | Artikkel Navn                 | The name or title of the article   | Mini crosser x1 4w |
+| articleDescription | TEXT         | Yes      | Kort beskrivelse              | A short description of the article | "Rød modell"       |
+| status             | String (32)  | No       | Status                        | The status of the product           | ACTIVE, INACTIVE   |
+| supplierRef        | String (255) | Yes      | Leverandør artikkel referanse | A unique reference to identify the product | alphanumber eg: A4231F-132 |
+| accessory          | Boolean      | no       | Tilbehør                      | Is this product an accessory?       | true               |
+| sparePart          | Boolean      | no       | Reservedel                    | Is this product a spare part?       | false              |
+| seriesId           | UUID         | Yes      | Serie ID                      | A unique id for a series of products, this id linked the products into a series | 603474bc-a8e8-471c-87ef-09bdc57bea59 |
+| techData           | List         | No       | Tekniske data                 | A list of technical data for the product | see techdata table below |
+| published          | Date         | No       | Publisert                     | The date when the product should be published | 2023-08-22T13:39:51.884163 |
+| expired            | Date         | No       | Utløpsdato                    | The date when the product expires | 2033-08-22T13:39:51.884163 |
 
 ### Techdata
 Valid techdata labels with keys and units is listed [here](https://finnhjelpemiddel-api.nav.no/import/api/v1/techlabels)
@@ -102,26 +255,19 @@ Also some products in framework agreements requires techdata to be added, if dat
 | value | String (255) | Yes      | Verdi                 | The value of the technical data | 45 |
 | unit  | String (255) | No       | Enhet                 | The unit of the technical data | cm |
 
-
-
-### Media
-
-| Name       | Type         | Required | Norwegian translation | Description                                                                                               | Example                                                |
-|:-----------|:-------------|:---------|:----------------------|:----------------------------------------------------------------------------------------------------------|:-------------------------------------------------------|
-| uri        | String (255) | Yes      | URI                   | The uri to the media file                                                                                 | imort/12345/1223456.jpg or https://youtube.com/myvideo |
-| priority   | Integer      | Yes      | Prioritet             | The priority of the media file, 1 will always be the main picture                                         | 1                                                      |
-| type       | String (255) | Yes      | Type                  | The type of the media file                                                                                | IMAGE, PDF, VIDEO                                      |
-| text       | TEXT         | Yes      | Tekst                 | A describing text for the media file                                                                      | Main picture showing the standard configuration        |
-| sourceType | String (255) | Yes      | Kilde                 | The source of the media file, "IMPORT" for the ones uploaded, "EXTERNALURL" should be used only for video | IMPORT, EXTERNALURL                                    |
-
-
-# Series of products
-A series of products is a group of products that are similar, but have different variants.
-Product variants in a series share the same title, iso category and text. They will be grouped together in the search result
-and make it easier for the user to compare between the variants. It is a requirement that all variants will be grouped in series,
-especially if the product is in a framework agreement.
-To group the variants to a series, you first get the product seriesId generated from previous transfers.
-All products transferred have a seriesId, you can see the seriesId of the product using the product endpoint:
+### Response
+You will get a receipt for each product variant posted, similar to this:
+```
+{
+  "transferId": "9de89dfe-26d1-45be-97c5-980e4afc389b",
+  "supplierId": "f639825c-2fc6-49cd-82ae-31b8ffa449a6",
+  "supplierRef": "99521146",
+  "seriesId": "603474bc-a8e8-471c-87ef-09bdc57bea59",
+  "md5": "735948868931D5D1640180C0ADA52931",
+  "transferStatus": "RECEIVED",
+  "message": null,
+  "created": "2023-10-31T09:33:22.617676738",
+}
 ```
 GET https://finnhjelpemiddel-api.nav.no/import/api/v1/products/import/{identifier}/{supplierRef}
 Accept: application/json
@@ -148,6 +294,12 @@ Response:
   "version": 1
 }
 ```
+
+
+
+
+
+
 
 
 

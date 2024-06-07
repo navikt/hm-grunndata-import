@@ -26,7 +26,6 @@ data class MediaMetaTransfer(
 
 data class MediaMetaTransferDTO (
     val uri: String,
-    val supplierId: UUID,
     val seriesId: UUID,
     val text: String? = null,
     val priority: Int = 1

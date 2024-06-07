@@ -1,0 +1,1 @@
+ALTER TABLE product_transfer_v1 ADD COLUMN series_id uuid;

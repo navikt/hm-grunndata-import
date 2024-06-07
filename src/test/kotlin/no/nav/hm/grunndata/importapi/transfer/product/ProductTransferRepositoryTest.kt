@@ -21,6 +21,7 @@ class ProductTransferRepositoryTest(private val productTransferRepository: Produ
     @Test
     fun crudRepositoryTest() {
         val supplier = Supplier(id= supplierId, name = "Medema AS", identifier = "medema_as", jwtid = UUID.randomUUID().toString())
+        val seriesId = UUID.randomUUID()
         val product = ProductTransferDTO(
             articleName = "mini-crosser-x1-x2-4w",
             supplierRef = "mini-crosser-x1-x2-4w",
@@ -34,7 +35,7 @@ class ProductTransferRepositoryTest(private val productTransferRepository: Produ
         )
         val json = objectMapper.writeValueAsString(product)
         val transfer = ProductTransfer(supplierId=supplierId, json_payload = product, md5 = json.toMD5Hex(),
-            supplierRef = product.supplierRef)
+            supplierRef = product.supplierRef, seriesId = seriesId)
 
         runBlocking {
             val savedSup = supplierRepository.save(supplier)

@@ -95,8 +95,10 @@ class ProductTransferAPIController(private val productTransferRepository: Produc
                                             md5: String) =
         productTransferRepository.save(
             ProductTransfer(
-                supplierId = supplierId, supplierRef = productTransfer.supplierRef, md5 = md5,
-                json_payload = productTransfer
+                supplierId = supplierId,
+                supplierRef = productTransfer.supplierRef, md5 = md5,
+                json_payload = productTransfer,
+                seriesId = productTransfer.seriesId
             )
         ).toResponseDTO()
 

@@ -68,7 +68,7 @@ class ProductToProductImportTest(private val productTransferToProductImport: Pro
         val json = objectMapper.writeValueAsString(product)
         println(json)
         val transfer = ProductTransfer(supplierId=supplierId, json_payload = product, md5 = json.toMD5Hex(),
-            supplierRef = product.supplierRef)
+            supplierRef = product.supplierRef, seriesId = seriesId)
 
         runBlocking {
             val savedSup = supplierRepository.save(supplier)

@@ -1,20 +1,18 @@
 package no.nav.hm.grunndata.importapi.transfer.product
 
 
-import no.nav.hm.grunndata.rapid.dto.MediaSourceType
-import no.nav.hm.grunndata.rapid.dto.MediaType
-import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
+import no.nav.hm.grunndata.rapid.dto.ProductStatus
 
 
 data class ProductTransferDTO (
     val articleName: String,
     val articleDescription: String?=null,
-    val status: ProductStatus = ProductStatus.ACTIVE,
     val supplierRef: String,
     val accessory: Boolean = false,
     val sparePart: Boolean = false,
+    val status: ProductStatus = ProductStatus.ACTIVE,
     val compatibleWith: CompatibleWith?=null,
     val seriesId: UUID,
     val techData: List<TechData> = emptyList(),
@@ -27,17 +25,10 @@ data class ProductTransferDTO (
     }
 }
 
-data class MediaDTO (
-    val uri: String,
-    val priority: Int = 1,
-    val type: MediaType = MediaType.IMAGE,
-    val text:   String?=null,
-    val sourceType: MediaSourceType = MediaSourceType.IMPORT
-)
-
-enum class TransferProductStatus {
+enum class ProductTransferStatus {
     ACTIVE, INACTIVE, DELETED
 }
+
 
 data class TechData (
     val key:    String,

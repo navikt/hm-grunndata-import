@@ -13,6 +13,7 @@ data class ProductTransfer (
     val transferId: UUID = UUID.randomUUID(),
     val supplierId: UUID,
     val supplierRef: String,
+    val seriesId: UUID? = null,
     val md5: String,
     @field:TypeDef(type = DataType.JSON)
     val json_payload: ProductTransferDTO,
@@ -30,6 +31,7 @@ data class ProductTransferResponse(
     val transferId: UUID,
     val supplierId: UUID,
     val supplierRef: String,
+    val seriesId: UUID?= null,
     val md5: String,
     val message: String? = null,
     val transferStatus: TransferStatus,
@@ -37,5 +39,5 @@ data class ProductTransferResponse(
 
 fun ProductTransfer.toResponseDTO(): ProductTransferResponse = ProductTransferResponse(
     transferId = transferId, supplierId = supplierId, supplierRef = supplierRef, md5 = md5,
-    message = message, transferStatus = transferStatus, created = created
+    message = message, transferStatus = transferStatus, created = created, seriesId = seriesId
 )

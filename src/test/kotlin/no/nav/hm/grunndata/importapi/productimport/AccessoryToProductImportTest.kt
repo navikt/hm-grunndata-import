@@ -48,13 +48,14 @@ class AccessoryToProductImportTest(private val productTransferToProductImport: P
 
     @Test
     fun testAccessoryToProductState() {
+        val seriesId = UUID.randomUUID()
         val supplier = Supplier(id= supplierId, name = "supplier AS $supplierId", identifier = "supplier_as+$supplierId", jwtid = UUID.randomUUID().toString())
 
         val jsonNode = objectMapper.readTree(AccessoryToProductImportTest::class.java.classLoader.getResourceAsStream("json/tilbehoer.json"))
         val json = objectMapper.writeValueAsString(jsonNode)
         val accessory = objectMapper.treeToValue(jsonNode, ProductTransferDTO::class.java)
         val transfer = ProductTransfer(supplierId=supplierId, json_payload = accessory, md5 = json.toMD5Hex(),
-            supplierRef = accessory.supplierRef)
+            supplierRef = accessory.supplierRef, seriesId = seriesId)
 
         runBlocking {
             val series = seriesImportService.save(SeriesImportDTO(
