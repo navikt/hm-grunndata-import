@@ -73,7 +73,7 @@ It is a requirement that all variants will be grouped in series. You must first 
   "status": "ACTIVE"
 }
 ```
-
+### Series properties
 | Name        | Type          | Required | Norwegian translation | Description                                                                                                                      | Example                              |
 |:------------|:--------------|:---------|:----------------------|:---------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------|
 | seriesId    | UUID          | No       | Serie ID              | A unique id for a series of products, this id linked the products into a series                                                  | 603474bc-a8e8-471c-87ef-09bdc57bea59 |
@@ -168,23 +168,23 @@ Accept: application/x-json-stream
 Cache-Control: no-cache
 Content-Type: application/x-json-stream
 Authorization: Bearer <your secret key>
-
 {
   "uri": "import/9c68e99a-a730-4048-ad2c-2ba8ff466b8f/6db81c58-7d3b-4c42-9c58-fd01497d75d8.jpg",
   "priority": 1,
   "seriesId": "603474bc-a8e8-471c-87ef-09bdc57bea59",
   "text": "Main picture showing the standard configuration", 
 }
+
 ```
 ### Media metadata properties
-| Name     | Type          | Required | Norwegian translation | Description       | Example                                        |
-|:---------|:--------------|:---------|:----------------------|:------------------|:-----------------------------------------------|
-| uri      | String (2048) | Yes      | URI                   | The uri to the media file | imort/12345/1223456.jpg or https://youtube.com/myvideo |
-| priority | Integer       | Yes      | Prioritet             | The priority of the media file, 1 will always be the main picture | 1                                              |
-| text     | TEXT          | Yes      | Tekst                 | A describing text for the media file | Main picture showing the standard configuration |
-|seriesId  | UUID          | Yes      | Serie ID              | The seriesId for the series that the media file belongs to | 603474bc-a8e8-471c-87ef-09bdc57bea59           |
-| mediaType| String (32)   | No       | Mediatype             | The type of media file, IMAGE, VIDEO, PDF | IMAGE, VIDEO, PDF                              |
-| sourceType| String (32)  | No       | Kilde                 | The source of the media file, IMPORT, EXTERNALURL | IMPORT, EXTERNALURL                            |
+| Name     | Type          | Required | Norwegian translation | Description       | Example                                               |
+|:---------|:--------------|:---------|:----------------------|:------------------|:------------------------------------------------------|
+| uri      | String (2048) | Yes      | URI                   | The uri to the media file | imort/12345/1223456.jpg or http:/youtube.com/video123 |
+| priority | Integer       | Yes      | Prioritet             | The priority of the media file, 1 will always be the main picture | 1                                                     |
+| text     | TEXT          | Yes      | Tekst                 | A describing text for the media file | Main picture showing the standard configuration       |
+|seriesId  | UUID          | Yes      | Serie ID              | The seriesId for the series that the media file belongs to | 603474bc-a8e8-471c-87ef-09bdc57bea59                  |
+| mediaType| String (32)   | No       | Mediatype             | The type of media file, IMAGE, VIDEO, PDF | IMAGE, VIDEO, PDF                                     |
+| sourceType| String (32)  | No       | Kilde                 | The source of the media file, IMPORT, EXTERNALURL | IMPORT, EXTERNALURL                                   |
 
 
 ### Response
