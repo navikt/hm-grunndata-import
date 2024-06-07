@@ -73,7 +73,9 @@ It is a requirement that all variants will be grouped in series. You must first 
   "status": "ACTIVE"
 }
 ```
+
 ### Series properties
+
 | Name        | Type          | Required | Norwegian translation | Description                                                                                                                      | Example                              |
 |:------------|:--------------|:---------|:----------------------|:---------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------|
 | seriesId    | UUID          | No       | Serie ID              | A unique id for a series of products, this id linked the products into a series                                                  | 603474bc-a8e8-471c-87ef-09bdc57bea59 |
@@ -83,6 +85,7 @@ It is a requirement that all variants will be grouped in series. You must first 
 | keywords    | List          | No       | Nøkkelord             | A list of keywords that can be associated with the series, keywords can be used in search                                        | "Model 321"                          |
 | url         | String (2048) | No       | URL                   | A link to the product on the vendors website                                                                                     | http://link.to/product               |
 | status      | String (32)   | No       | Status                | The status of the series                                                                                                         | ACTIVE, INACTIVE, DELETED            |
+
 
 ## Posting a series
 To create a series, you can use the following endpoint:
