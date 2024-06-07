@@ -51,15 +51,11 @@ To test the integration, you can use the OpenAPI specification,
 it is available [here in test](https://finnhjelpemiddel-api.ekstern.dev.nav.no/import/swagger-ui/), and in
 [prod](https://finnhjelpemiddel-api.nav.no/import/swagger-ui/).
 
-## Json properties
+# Json properties
 
-The data exchange format is JSON, below is a diagram of the product json structure:
-<img src="./json-example-01.svg">
-You can also download kotlin code for the DTOs
-[here](https://github.com/navikt/hm-grunndata-import/blob/master/src/main/kotlin/no/nav/hm/grunndata/importapi/transfer/)
+The data exchange format is JSON, and the properties are described in the following tables.
 
-
-# Series 
+## Series 
 
 A series of products is a group of products that are similar, but have different variants.
 Product variants in a series share the same title, iso category, description text and images/videos. They will be grouped together in the search result
@@ -158,6 +154,12 @@ You will get a receipt for each file uploaded, and a uri that can be used later 
   "updated": "2023-10-31T09:33:22.617676738"
     
 ```
+
+### Media limitations
+* Maximum file size is 10MB
+* Only jpg, png and pdf files are supported
+* You can not have more than 10 media files per series
+
 ### Media metadata properties
 To change metadata for the media file, you can use the following endpoint and json:
 ```
@@ -171,7 +173,7 @@ Authorization: Bearer <your secret key>
   "uri": "import/9c68e99a-a730-4048-ad2c-2ba8ff466b8f/6db81c58-7d3b-4c42-9c58-fd01497d75d8.jpg",
   "priority": 1,
   "seriesId": "603474bc-a8e8-471c-87ef-09bdc57bea59",
-  "text": "Main picture showing the standard configuration"
+  "text": "Main picture showing the standard configuration", 
 }
 ```
 ### Media metadata properties
@@ -181,6 +183,9 @@ Authorization: Bearer <your secret key>
 | priority | Integer       | Yes      | Prioritet             | The priority of the media file, 1 will always be the main picture | 1                                                      |
 | text     | TEXT          | Yes      | Tekst                 | A describing text for the media file | Main picture showing the standard configuration        |
 |seriesId  | UUID          | Yes      | Serie ID              | The seriesId for the series that the media file belongs to | 603474bc-a8e8-471c-87ef-09bdc57bea59 |
+| mediaType| String (32)   | No       | Mediatype             | The type of media file, IMAGE, VIDEO, PDF | IMAGE, VIDEO, PDF                                      |
+| sourceType| String (32)  | No       | Kilde                 | The source of the media file, IMPORT, EXTERNALURL | IMPORT, EXTERNALURL                                   |
+
 
 ### Response
 You will get a receipt for each change.
@@ -199,6 +204,18 @@ You will get a receipt for each change.
 }
 ```
 
+### linking a external video (youtube, vimeo)
+To link an external video to a series, you can use the same endpoint as above, but with the uri pointing to the video.
+```
+{
+  "uri": "https://youtube.com/123.mp4",
+  "priority": 2,
+  "seriesId": "603474bc-a8e8-471c-87ef-09bdc57bea59",
+  "text": "Video showing the product",
+  "mediaType": "VIDEO",
+  "sourceType": "EXTERNALURL"
+}
+```
 ## Product variant to a series
 A series does not get published before it has at least one product variant connected to it.
 To connect a product variant to a series, you can post the variant using the seriesId with this endpoint:
@@ -473,10 +490,7 @@ Then linking the uri to the product json within the media array:
 
 ```
 
-### Media limitations
-* Maximum file size is 10MB
-* Only jpg, png and pdf files are supported
-* You can not link more than 10 media files per product
+
 
 
 ### Posting a product variant to a series 

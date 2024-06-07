@@ -5,6 +5,8 @@ import io.micronaut.data.annotation.MappedEntity
 import java.time.LocalDateTime
 import java.util.UUID
 import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
+import no.nav.hm.grunndata.rapid.dto.MediaSourceType
+import no.nav.hm.grunndata.rapid.dto.MediaType
 
 
 @MappedEntity("media_meta_transfer_v1")
@@ -28,7 +30,9 @@ data class MediaMetaTransferDTO (
     val uri: String,
     val seriesId: UUID,
     val text: String? = null,
-    val priority: Int = 1
+    val priority: Int = 1,
+    val mediaType: MediaType = MediaType.IMAGE,
+    val sourceType: MediaSourceType =  MediaSourceType.IMPORT
 )
 
 data class MediaMetaTransferResponse(
@@ -53,7 +57,7 @@ fun MediaMetaTransfer.toResponse() = MediaMetaTransferResponse(
     text = text,
     priority = priority,
     status = status,
-    transferStatus = transferStatus,
+//    transferStatus = transferStatus,
     message = message,
     created = created,
     updated = updated
