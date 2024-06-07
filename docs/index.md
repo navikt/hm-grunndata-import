@@ -177,14 +177,14 @@ Authorization: Bearer <your secret key>
 }
 ```
 ### Media metadata properties
-| Name     | Type          | Required | Norwegian translation | Description       | Example                                                |
-|:---------|:--------------|:---------|:----------------------|:------------------|:-------------------------------------------------------|
+| Name     | Type          | Required | Norwegian translation | Description       | Example                                        |
+|:---------|:--------------|:---------|:----------------------|:------------------|:-----------------------------------------------|
 | uri      | String (2048) | Yes      | URI                   | The uri to the media file | imort/12345/1223456.jpg or https://youtube.com/myvideo |
-| priority | Integer       | Yes      | Prioritet             | The priority of the media file, 1 will always be the main picture | 1                                                      |
-| text     | TEXT          | Yes      | Tekst                 | A describing text for the media file | Main picture showing the standard configuration        |
-|seriesId  | UUID          | Yes      | Serie ID              | The seriesId for the series that the media file belongs to | 603474bc-a8e8-471c-87ef-09bdc57bea59 |
-| mediaType| String (32)   | No       | Mediatype             | The type of media file, IMAGE, VIDEO, PDF | IMAGE, VIDEO, PDF                                      |
-| sourceType| String (32)  | No       | Kilde                 | The source of the media file, IMPORT, EXTERNALURL | IMPORT, EXTERNALURL                                   |
+| priority | Integer       | Yes      | Prioritet             | The priority of the media file, 1 will always be the main picture | 1                                              |
+| text     | TEXT          | Yes      | Tekst                 | A describing text for the media file | Main picture showing the standard configuration |
+|seriesId  | UUID          | Yes      | Serie ID              | The seriesId for the series that the media file belongs to | 603474bc-a8e8-471c-87ef-09bdc57bea59           |
+| mediaType| String (32)   | No       | Mediatype             | The type of media file, IMAGE, VIDEO, PDF | IMAGE, VIDEO, PDF                              |
+| sourceType| String (32)  | No       | Kilde                 | The source of the media file, IMPORT, EXTERNALURL | IMPORT, EXTERNALURL                            |
 
 
 ### Response
@@ -289,31 +289,25 @@ You will get a receipt for each product variant posted, similar to this:
 
 
 ## Accessory and spare part
-To upload a product that is an accessory or spare part, you must first upload the main product and connect it to a series.
-Then you can upload the accessory or spare part, and link it to the main product by using the seriesId.
+An accessory or sparepart is a product that is connected to a main product series, and can be used as an extra part or replacement part.
+A sparepart or accessory follows the same properties as a product variant, but with the addition of the accessory and sparepart, compatibleWith property.
+You must first create a series for the sparepart or accessory, upload media (images/video/pdf) and link it to the main product series 
+by using the seriesId.
+
 Set the flag accessory or sparePart to true, both parameters can be true at the same time if the product is both an 
 accessory and a spare part. Use the property compatibleWith to link the accessory or spare part to the main series.
-
 ```
 {
-  "title" : "Lader 24 V 8 Amp, X-1400",
   "articleName" : "Lader 24 V 8 Amp, X-1400",
-  "shortDescription" : "Lader for Blimo",
-  "text" : "Smart vedlikeholdslader som slår seg av når batteriene er fulladet. Hvis spenningen i batteriene synker, går laderen inn og vedlikeholder automatisk vedlikeholdskostnadene. MERK! Kun beregnet på bruk med blybatterier (AGM). Å ha en ekstra lader kan være bra hvis du bruker scooteren din forskjellige steder. Kanskje det kan være praktisk å ha en på landsbygda og en i byen eller en hjemme og en på jobb, hvis du tar med deg din scooter mellom disse stedene. Når du bestiller dette produktet sammen med en promenadescooter, kommer ingen ekstra fraktkostnader til. Passer: Blimo X-1400 Blimo Kabinscooter Blimo Gatsby",
+  "articleDescription" : "Lader for Blimo",
   "supplierRef" : "52970102",
   "isoCategory" : "12230301",
+  "seriesId": "seriesId for the sparepart or accessory",
   "accessory" : false,
   "sparePart" : true,
   "compatibleWith": {
-    "seriesIds": ["603474bc-a8e8-471c-87ef-09bdc57bea59"] <--- link it to the main product by using the seriesId
+    "seriesIds": ["603474bc-a8e8-471c-87ef-09bdc57bea59"]
   },
-  "techData" : [],
-  "media" : [ {
-    "uri" : "import/d22094a7-25b2-45b0-aeb8-82eec928531e/80247d3b-19ac-4ab0-909f-6ab4086fcc90.jpg",
-    "priority" : 1,
-    "type" : "IMAGE",
-    "text": "Lader 24 V 8 Amp, X-1400"
-  } ],
   "published" : "2023-08-22T13:39:51.884163",
   "expired" : "2033-08-22T13:39:51.884163"
 }
