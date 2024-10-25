@@ -44,7 +44,7 @@ spec:
       value: "{{ rapidsandrivers_enabled }}"
     - name: SCHEDULERS_ENABLED
       value: "{{ schedulers_enabled }}"
-    - name: JAVA_OPTS
+    - name: JDK_JAVA_OPTIONS
       value: "{{ java_opts }}"
     - name: GRUNNDATA_DB_URL
       value: "http://hm-grunndata-db"
