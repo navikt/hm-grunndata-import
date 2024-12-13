@@ -1,5 +1,6 @@
 # hm-grunndata-import
-
+## Leverandør API
+Link to the doc is here: https://navikt.github.io/hm-grunndata-import/
 ## Development
 
 Create a new test supplier: 
