@@ -3,8 +3,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val jvmTarget = "17"
 val micronautVersion="4.5.0"
-val micrometerRegistryPrometheusVersion = "1.9.1"
-val junitJupiterVersion = "5.9.0"
 val logbackClassicVersion = "1.4.12"
 val logbackEncoderVersion = "7.3"
 val postgresqlVersion= "42.7.2"
@@ -19,11 +17,12 @@ group = "no.nav.hm"
 version = properties["version"] ?: "local-build"
 
 plugins {
-    kotlin("jvm") version "1.9.20"
-    kotlin("kapt") version "1.9.20"
+    id("org.jetbrains.kotlin.jvm") version "1.9.25"
+    id("org.jetbrains.kotlin.kapt") version "1.9.25"
     id("java")
-    id("com.github.johnrengelman.shadow") version "7.1.0"
-    id("io.micronaut.application") version "4.3.8"
+    id("com.gradleup.shadow") version "8.3.6"
+    id("io.micronaut.application") version "4.5.4"
+    id("io.micronaut.aot") version "4.5.4"
 }
 
 configurations.all {
