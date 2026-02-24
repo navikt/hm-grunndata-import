@@ -1,7 +1,7 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val jvmTarget = "17"
+val jvmTarget = "21"
 val micronautVersion="4.5.0"
 val logbackClassicVersion = "1.4.12"
 val logbackEncoderVersion = "7.3"
