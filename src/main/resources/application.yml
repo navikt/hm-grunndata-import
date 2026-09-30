@@ -105,7 +105,7 @@ datasources:
     driverClassName: ${DB_DRIVER:org.testcontainers.jdbc.ContainerDatabaseDriver}
     username: ${DB_USERNAME:importapi}
     password: ${DB_PASSWORD:importapi}
-    maximum-pool-size: 10
+    maximum-pool-size: 5
     minimum-idle: 0
     pool-name: default
 
