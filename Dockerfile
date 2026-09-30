@@ -1,6 +1,6 @@
-FROM gcr.io/distroless/java17-debian12:nonroot
+FROM eclipse-temurin:25-jre-alpine
 WORKDIR /app
 ENV TZ="Europe/Oslo"
 EXPOSE 8080
 COPY build/libs/hm-grunndata-import-all.jar ./app.jar
-CMD ["-jar", "app.jar"]
+CMD ["java", "-jar", "app.jar"]
