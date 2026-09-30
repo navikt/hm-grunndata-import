@@ -1,7 +1,7 @@
 package no.nav.hm.grunndata.importapi.productimport
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import io.kotest.common.runBlocking
+import tools.jackson.databind.ObjectMapper
+
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -9,6 +9,7 @@ import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
 import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.importapi.productImport.ProductTransferToProductImport
@@ -71,8 +72,6 @@ class AccessoryToProductImportTest(private val productTransferToProductImport: P
             productImport.id.shouldNotBeNull()
             productImport.productDTO.id shouldBe productImport.id
             productImport.productDTO.accessory shouldBe true
-            productImport.productDTO.attributes.compatibleWidth.shouldNotBeNull()
-            productImport.productDTO.attributes.compatibleWidth!!.seriesIds.shouldNotBeEmpty()
         }
     }
 }

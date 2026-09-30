@@ -1,10 +1,5 @@
 package no.nav.hm.grunndata.importapi.error
 
-import com.fasterxml.jackson.core.JsonParseException
-import com.fasterxml.jackson.core.JsonProcessingException
-import com.fasterxml.jackson.databind.exc.InvalidFormatException
-import com.fasterxml.jackson.databind.exc.ValueInstantiationException
-import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import io.micronaut.context.annotation.Replaces
 import io.micronaut.core.convert.exceptions.ConversionErrorException
 import io.micronaut.http.*
@@ -15,6 +10,11 @@ import io.micronaut.http.server.exceptions.JsonExceptionHandler
 import org.slf4j.LoggerFactory
 import java.util.*
 import jakarta.inject.Singleton
+import tools.jackson.core.JacksonException
+import tools.jackson.core.exc.StreamReadException
+import tools.jackson.databind.exc.InvalidFormatException
+import tools.jackson.databind.exc.ValueInstantiationException
+import tools.jackson.module.kotlin.KotlinInvalidNullException
 
 @Produces
 @Singleton
@@ -37,10 +37,14 @@ class ImportApiErrorHandler : ExceptionHandler<ImportApiError, HttpResponse<Erro
 @Singleton
 @Replaces(ConversionErrorHandler::class)
 class ConversionExceptionHandler : ExceptionHandler<ConversionErrorException, HttpResponse<ErrorMessage>> {
-    override fun handle(request: HttpRequest<*>?, error: ConversionErrorException): HttpResponse<ErrorMessage> {
-        val response = when (error.cause) {
-            is JsonProcessingException -> handleJsonProcessingException(error.cause as JsonProcessingException)
-            else -> HttpResponse.serverError(ErrorMessage(error.message!!, ErrorType.UNKNOWN))
+
+    override fun handle(
+        request: HttpRequest<*>,
+        exception: ConversionErrorException
+    ): HttpResponse<ErrorMessage> {
+        val response = when (exception.cause) {
+            is JacksonException -> handleJacksonException(exception.cause as JacksonException)
+            else -> HttpResponse.serverError(ErrorMessage(exception.message, ErrorType.UNKNOWN))
         }
         LOG.error(response.body().toString())
         return response
@@ -50,22 +54,26 @@ class ConversionExceptionHandler : ExceptionHandler<ConversionErrorException, Ht
 @Produces
 @Singleton
 @Replaces(JsonExceptionHandler::class)
-class ApiJsonErrorHandler : ExceptionHandler<JsonProcessingException, HttpResponse<ErrorMessage>> {
+class ApiJsonErrorHandler : ExceptionHandler<JacksonException, HttpResponse<ErrorMessage>> {
 
-    override fun handle(request: HttpRequest<*>?, error: JsonProcessingException): HttpResponse<ErrorMessage> {
-        val response = handleJsonProcessingException(error)
+
+    override fun handle(
+        request: HttpRequest<*>,
+        exception: JacksonException
+    ): HttpResponse<ErrorMessage> {
+        val response = handleJacksonException(exception)
         LOG.error(response.body().toString())
         return response
     }
 
 }
 
-private fun handleJsonProcessingException(error: JsonProcessingException): HttpResponse<ErrorMessage> {
+private fun handleJacksonException(error: JacksonException): HttpResponse<ErrorMessage> {
     return when (error) {
-        is JsonParseException -> HttpResponse
+        is StreamReadException -> HttpResponse
                 .badRequest(ErrorMessage("Parse error: at ${error.location}", ErrorType.PARSE_ERROR))
-        is MissingKotlinParameterException -> HttpResponse
-                .badRequest(ErrorMessage("Missing parameter: ${error.parameter.name}", ErrorType.MISSING_PARAMETER))
+        is KotlinInvalidNullException -> HttpResponse
+                .badRequest(ErrorMessage("Missing parameter: ${error.propertyName}", ErrorType.MISSING_PARAMETER))
         is InvalidFormatException -> HttpResponse
                 .badRequest(ErrorMessage("Invalid value: ${error.value} at ${error.pathReference}",
                     ErrorType.INVALID_VALUE

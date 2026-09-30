@@ -1,6 +1,5 @@
 package no.nav.hm.grunndata.importapi.transfer.media
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Body
@@ -21,6 +20,7 @@ import no.nav.hm.grunndata.importapi.toMD5Hex
 import no.nav.hm.grunndata.importapi.transfer.media.MediaMetaTransferController.Companion.API_V1_MEDIA_META_TRANSFERS
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
+import tools.jackson.databind.ObjectMapper
 
 
 @SecuritySupplierRule(value = [Roles.ROLE_SUPPLIER])
@@ -28,7 +28,8 @@ import org.slf4j.LoggerFactory
 @SecurityRequirement(name = "bearer-auth")
 @Tag(name = "Media File Transfers")
 class MediaMetaTransferController(private val mediaMetaTransferRepository: MediaMetaTransferRepository,
-                                  private val objectMapper: ObjectMapper) {
+                                  private val objectMapper: ObjectMapper
+) {
 
     companion object {
         const val API_V1_MEDIA_META_TRANSFERS = "/api/v1/media/meta/transfers"

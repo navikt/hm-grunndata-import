@@ -1,10 +1,10 @@
 package no.nav.hm.grunndata.importapi.rapidevent
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import io.kotest.common.runBlocking
+import tools.jackson.databind.ObjectMapper
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import kotlinx.coroutines.runBlocking
 import java.util.UUID
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesDataDTO
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesImportDTO

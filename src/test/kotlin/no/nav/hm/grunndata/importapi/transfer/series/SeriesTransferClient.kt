@@ -1,11 +1,11 @@
 package no.nav.hm.grunndata.importapi.transfer.series
 
-import com.fasterxml.jackson.databind.JsonNode
 import io.micronaut.data.model.Page
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.http.client.annotation.Client
 import org.reactivestreams.Publisher
+import tools.jackson.databind.JsonNode
 import java.util.*
 
 @Client("\${micronaut.server.context-path}${SeriesTransferAPIController.API_V1_SERIES_TRANSFERS}")

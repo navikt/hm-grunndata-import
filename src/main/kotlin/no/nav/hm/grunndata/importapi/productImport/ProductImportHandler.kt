@@ -100,9 +100,7 @@ open class ProductImportHandler(private val productImportRepository: ProductImpo
             supplierRef = supplierRef,
             isoCategory = "", // isocategory will be merged later
             attributes = Attributes (
-                shortdescription = articleDescription,
-                compatibleWidth = if (this.compatibleWith!=null) CompatibleWith(
-                    seriesIds = compatibleWith.seriesIds) else null
+                shortdescription = articleDescription
             ),
             identifier = productId.toString(),
             accessory = accessory,

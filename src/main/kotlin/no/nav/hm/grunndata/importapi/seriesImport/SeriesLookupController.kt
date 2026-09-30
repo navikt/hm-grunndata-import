@@ -13,9 +13,8 @@ import no.nav.hm.grunndata.importapi.security.Roles
 import no.nav.hm.grunndata.importapi.security.SecuritySupplierRule
 import no.nav.hm.grunndata.importapi.security.supplierId
 import no.nav.hm.grunndata.importapi.seriesImport.SeriesLookupController.Companion.API_V1_SERIES_LOOKUP
-import org.checkerframework.checker.signature.qual.Identifier
 import org.slf4j.LoggerFactory
-import java.util.UUID
+
 
 @Controller(API_V1_SERIES_LOOKUP)
 @SecuritySupplierRule(value = [Roles.ROLE_SUPPLIER])

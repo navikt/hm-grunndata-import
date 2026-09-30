@@ -1,6 +1,5 @@
 package no.nav.hm.grunndata.importapi.supplier
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.context.annotation.Context
 import io.micronaut.context.annotation.Requires
 import kotlinx.coroutines.runBlocking
@@ -9,10 +8,11 @@ import no.nav.helse.rapids_rivers.KafkaRapid
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.River
 import no.nav.hm.grunndata.rapid.dto.SupplierDTO
-import no.nav.hm.grunndata.rapid.dto.rapidDTOVersion
 import no.nav.hm.grunndata.rapid.event.EventName
+import no.nav.hm.grunndata.rapid.version.rapidDTOVersion
 import no.nav.hm.rapids_rivers.micronaut.RiverHead
 import org.slf4j.LoggerFactory
+import tools.jackson.databind.ObjectMapper
 
 @Context
 @Requires(bean = KafkaRapid::class)
@@ -26,7 +26,7 @@ class SupplierSyncRiver(river: RiverHead,
     }
     init {
         river
-            .validate { it.demandAny("eventName", listOf(EventName.hmdbsuppliersyncV1, EventName.syncedRegisterSupplierV1))}
+            .validate { it.demandAny("eventName", listOf(EventName.syncedRegisterSupplierV1))}
             .validate { it.demandKey("payload")}
             .validate { it.demandKey("eventId")}
             .validate { it.demandKey( "dtoVersion")}

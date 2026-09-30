@@ -1,6 +1,5 @@
 package no.nav.hm.grunndata.importapi.transfer.product
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.data.model.Page
 import io.micronaut.data.model.Pageable
 import io.micronaut.http.HttpResponse
@@ -24,6 +23,7 @@ import no.nav.hm.grunndata.importapi.transfer.product.ProductTransferAPIControll
 import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
+import tools.jackson.databind.ObjectMapper
 import java.time.LocalDateTime
 import java.util.UUID
 

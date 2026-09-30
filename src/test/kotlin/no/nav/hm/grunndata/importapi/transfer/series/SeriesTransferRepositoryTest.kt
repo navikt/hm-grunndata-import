@@ -1,11 +1,11 @@
 package no.nav.hm.grunndata.importapi.transfer.series
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import io.kotest.common.runBlocking
+import tools.jackson.databind.ObjectMapper
 import io.kotest.matchers.longs.shouldBeGreaterThanOrEqual
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.micronaut.data.model.Pageable
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import java.util.*
 

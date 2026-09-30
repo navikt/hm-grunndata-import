@@ -1,6 +1,6 @@
 package no.nav.hm.grunndata.importapi.transfer.product
 
-import com.fasterxml.jackson.databind.JsonNode
+
 import io.micronaut.data.model.Page
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
@@ -8,6 +8,7 @@ import io.micronaut.http.annotation.*
 import io.micronaut.http.client.annotation.Client
 
 import org.reactivestreams.Publisher
+import tools.jackson.databind.JsonNode
 import java.util.*
 
 @Client("\${micronaut.server.context-path}${ProductTransferAPIController.API_V1_PRODUCT_TRANSFERS}")

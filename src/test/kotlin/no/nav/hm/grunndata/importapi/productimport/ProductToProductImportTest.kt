@@ -1,7 +1,6 @@
 package no.nav.hm.grunndata.importapi.productimport
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import io.kotest.common.runBlocking
+import tools.jackson.databind.ObjectMapper
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -9,6 +8,7 @@ import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import no.nav.hm.grunndata.importapi.gdb.GdbApiClient
 import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.importapi.productImport.ProductTransferToProductImport

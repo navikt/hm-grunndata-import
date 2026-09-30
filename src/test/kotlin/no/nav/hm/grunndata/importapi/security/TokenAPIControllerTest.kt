@@ -37,10 +37,10 @@ class TokenAPIControllerTest(
         val supplierToken = tokenAPIClient.createSupplierToken(supplierId, bearerToken)
         val adminToken = tokenAPIClient.createAdminToken("hm-grunndata-register", bearerToken)
         supplierToken.status shouldBe HttpStatus.OK
-        supplierToken.body().id shouldBe supplierId
-        supplierToken.body().token.shouldNotBeNull()
+        supplierToken.body()?.id shouldBe supplierId
+        supplierToken.body()?.token.shouldNotBeNull()
         adminToken.status shouldBe HttpStatus.OK
-        println(adminToken.body().token)
+        println(adminToken.body()?.token)
         println(bearerToken)
 
     }

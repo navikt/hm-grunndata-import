@@ -1,13 +1,12 @@
 package no.nav.hm.grunndata.importapi.transfer.product
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import tools.jackson.databind.ObjectMapper
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.micronaut.core.async.publisher.Publishers
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
@@ -108,9 +107,9 @@ class ProductTransferTest(private val client: ProductTransferClient,
 
             // test "delete" product
             val deactivate = client.deleteProduct(authorization = token, identifier = supplier!!.identifier, supplierRef = "1500-1530")
-            deactivate.body().message shouldBe "Deactivated by supplier"
+            deactivate.body()?.message shouldBe "Deactivated by supplier"
             val delete = client.deleteProduct(authorization = token, identifier = supplier!!.identifier, supplierRef = "1500-1530", delete = true)
-            delete.body().message shouldBe "Deleted by supplier"
+            delete.body()?.message shouldBe "Deleted by supplier"
         }
 
     }

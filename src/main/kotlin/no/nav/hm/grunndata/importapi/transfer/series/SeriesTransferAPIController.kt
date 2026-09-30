@@ -1,6 +1,5 @@
 package no.nav.hm.grunndata.importapi.transfer.series
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.data.model.Page
 import io.micronaut.data.model.Pageable
 import io.micronaut.http.MediaType
@@ -25,6 +24,7 @@ import no.nav.hm.grunndata.importapi.transfer.product.TransferStatus
 import no.nav.hm.grunndata.importapi.transfer.series.SeriesTransferAPIController.Companion.API_V1_SERIES_TRANSFERS
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
+import tools.jackson.databind.ObjectMapper
 import java.time.LocalDateTime
 import java.util.*
 
@@ -34,7 +34,8 @@ import java.util.*
 @Tag(name = "Series Transfers")
 class SeriesTransferAPIController(private val seriesTransferRepository: SeriesTransferRepository,
                                   private val isoCategoryService: IsoCategoryService,
-                                  private val objectMapper: ObjectMapper) {
+                                  private val objectMapper: ObjectMapper
+) {
 
     companion object {
         private val lOG = LoggerFactory.getLogger(SeriesTransferAPIController::class.java)

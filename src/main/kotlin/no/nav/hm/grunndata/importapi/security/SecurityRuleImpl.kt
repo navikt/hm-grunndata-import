@@ -9,6 +9,7 @@ import io.micronaut.security.rules.SecuredAnnotationRule
 import io.micronaut.security.rules.SecurityRuleResult
 import io.micronaut.security.token.RolesFinder
 import io.micronaut.web.router.MethodBasedRouteMatch
+import io.micronaut.web.router.RouteAttributes
 import io.micronaut.web.router.RouteMatch
 import jakarta.inject.Singleton
 import kotlinx.coroutines.runBlocking
@@ -35,8 +36,13 @@ class SecurityRuleImpl(rolesFinder: RolesFinder,
     }
 
     override fun getOrder(): Int = ORDER
-    override fun check(request: HttpRequest<*>, authentication: Authentication?): Publisher<SecurityRuleResult> {
-        val routeMatch = request.getAttribute(HttpAttributes.ROUTE_MATCH, RouteMatch::class.java).orElse(null)
+
+
+    override fun check(
+        request: HttpRequest<*>?,
+        authentication: Authentication?
+    ): Publisher<SecurityRuleResult>? {
+        val routeMatch = request?.let { RouteAttributes.getRouteMatch(it) }?.orElse(null)
         if (routeMatch!=null && routeMatch is MethodBasedRouteMatch<*, *> && authentication!=null ) {
             if (routeMatch.hasAnnotation(SecuritySupplierRule::class.java)) {
                 val values = routeMatch.getValue(SecuritySupplierRule::class.java, Array<String>::class.java).get().toMutableList()

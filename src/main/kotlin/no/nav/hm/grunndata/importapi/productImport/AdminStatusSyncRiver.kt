@@ -1,6 +1,6 @@
 package no.nav.hm.grunndata.importapi.productImport
 
-import com.fasterxml.jackson.databind.ObjectMapper
+
 import io.micronaut.context.annotation.Context
 import io.micronaut.context.annotation.Requires
 import kotlinx.coroutines.runBlocking
@@ -8,14 +8,14 @@ import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.KafkaRapid
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.River
-import no.nav.hm.grunndata.importapi.IMPORT
 import no.nav.hm.grunndata.rapid.dto.DraftStatus
 import no.nav.hm.grunndata.rapid.dto.ProductRegistrationRapidDTO
-import no.nav.hm.grunndata.rapid.dto.rapidDTOVersion
 import no.nav.hm.grunndata.rapid.event.EventName
 import no.nav.hm.grunndata.rapid.event.RapidApp
+import no.nav.hm.grunndata.rapid.version.rapidDTOVersion
 import no.nav.hm.rapids_rivers.micronaut.RiverHead
 import org.slf4j.LoggerFactory
+import tools.jackson.databind.ObjectMapper
 import java.time.LocalDateTime
 import java.util.*
 

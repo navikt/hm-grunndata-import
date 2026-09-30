@@ -1,9 +1,9 @@
 package no.nav.hm.grunndata.importapi.productimport
 
-import io.kotest.common.runBlocking
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import kotlinx.coroutines.runBlocking
 import no.nav.hm.grunndata.importapi.productImport.ProductImport
 import no.nav.hm.grunndata.importapi.productImport.ProductImportRepository
 import no.nav.hm.grunndata.rapid.dto.*

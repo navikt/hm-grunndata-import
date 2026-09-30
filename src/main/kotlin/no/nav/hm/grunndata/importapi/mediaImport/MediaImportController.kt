@@ -36,9 +36,14 @@ class MediaImportController(private val mediaImportRepository: MediaImportReposi
     }
 
     @Get("/{identifier}/{id}")
-    suspend fun getMediaImportStateById(identifier: String, id: UUID, authentication: Authentication): HttpResponse<MediaImportDTO?> {
+    suspend fun getMediaImportStateById(identifier: String, id: UUID, authentication: Authentication): HttpResponse<MediaImportDTO> {
         LOG.info("Looking up media import state for $identifier id: ${id}")
-        return HttpResponse.ok(mediaImportRepository.findBySupplierIdAndId(authentication.supplierId(), id)?.toDTO())
+        val dto = mediaImportRepository.findBySupplierIdAndId(authentication.supplierId(), id)?.toDTO()
+        return if (dto != null) {
+            HttpResponse.ok(dto)
+        } else {
+            HttpResponse.notFound()
+        }
     }
 
     @Post("/{identifier}/series/{seriesId}")

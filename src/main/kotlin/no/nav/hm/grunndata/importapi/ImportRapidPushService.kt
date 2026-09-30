@@ -2,8 +2,8 @@ package no.nav.hm.grunndata.importapi
 
 import jakarta.inject.Singleton
 import no.nav.hm.grunndata.rapid.dto.RapidDTO
-import no.nav.hm.grunndata.rapid.dto.rapidDTOVersion
 import no.nav.hm.grunndata.rapid.event.RapidApp
+import no.nav.hm.grunndata.rapid.version.rapidDTOVersion
 import no.nav.hm.rapids_rivers.micronaut.RapidPushService
 
 @Singleton
