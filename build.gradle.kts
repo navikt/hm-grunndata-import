@@ -21,7 +21,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "2.3.21"
     id("org.jetbrains.kotlin.kapt") version "2.3.21"
     id("java")
-    id("com.gradleup.shadow") version "9.3.1"
+    id("com.gradleup.shadow") version "9.6.1"
     id("io.micronaut.application") version "5.0.2"
     id("io.micronaut.aot") version "5.0.2"
 }
@@ -132,7 +132,7 @@ tasks.withType<Test> {
 }
 
 tasks.withType<Wrapper> {
-    gradleVersion = "9.3.1"
+    gradleVersion = "9.6.1"
 }
 
 repositories {
